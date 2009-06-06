@@ -124,8 +124,8 @@ public class RangeAttribute extends PointAttribute {
 	
 
 	@Override
-	public int compareTo(Object o){
-		double diff = getStart() -((RangeAttribute)o).getStart();
+	public int compareTo(Attribute attr){
+		double diff = getStart() -((RangeAttribute)attr).getStart();
 		if(diff > 0) return 1;
 		else if( diff ==0) return 0;
 		else return -1;

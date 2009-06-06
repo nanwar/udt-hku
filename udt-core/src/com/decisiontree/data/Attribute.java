@@ -28,7 +28,7 @@ package com.decisiontree.data;
  * @version 26 May 2009
  *
  */
-public interface Attribute extends Comparable{
+public interface Attribute extends Comparable<Attribute>{
 	
 
 }

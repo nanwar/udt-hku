@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
  * @version 26 May 2009
  *
  */
-public class SampleAttribute extends RangeAttribute implements Comparable {
+public class SampleAttribute extends RangeAttribute {
 	
 	public static Logger log = Logger.getLogger(SampleAttribute.class);
 
@@ -347,8 +347,8 @@ public class SampleAttribute extends RangeAttribute implements Comparable {
 	}
 
 	@Override
-	public int compareTo(Object o) {
-		double diff = getStart() - ((SampleAttribute) o).getStart();
+	public int compareTo(Attribute attr) {
+		double diff = getStart() - ((SampleAttribute) attr).getStart();
 		if (diff > 0)
 			return 1;
 		else if (diff == 0)

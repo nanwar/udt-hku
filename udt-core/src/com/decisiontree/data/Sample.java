@@ -42,8 +42,8 @@ public class Sample extends PointAttribute{
 	}
 	
 	@Override
-	public int compareTo(Object o){
-		double diff = getValue() - ((Sample)o).getValue();
+	public int compareTo(Attribute attr){
+		double diff = getValue() - ((Sample)attr).getValue();
 		if(diff > 0) return 1;
 		else if( diff ==0) return 0;
 		else return -1;

@@ -63,10 +63,10 @@ public class PointAttribute implements Attribute {
 
 	/**
 	 * Compare with a given object
-	 * @param object the object to be compare
+	 * @param attr the object to be compare
 	 */
-	public int compareTo(Object object){
-		double diff = value -((PointAttribute)object).value;
+	public int compareTo(Attribute attr){
+		double diff = value -((PointAttribute)attr).value;
 		if(diff > 0) return 1;
 		else if( diff ==0) return 0;
 		else return -1;
