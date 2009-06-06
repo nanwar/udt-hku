@@ -1,0 +1,19 @@
+opel, saab, bus, van.
+COMPACTNESS: continuous.
+CIRCULARITY: continuous.
+DISTANCE CIRCULARITY: continuous.
+RADIUS RATIO: continuous.
+PR.AXIS ASPECT RATIO: continuous.
+MAX.LENGTH ASPECT RATIO: continuous.
+SCATTER RATIO: continuous.
+ELONGATEDNESS: continuous.
+PR.AXIS RECTANGULARITY: continuous.
+MAX.LENGTH RECTANGULARITY : continuous.
+SCALED VARIANCE ALONG MAJOR AXIS: continuous.
+SCALED VARIANCE ALONG MINOR AXIS : continuous.
+SCALED RADIUS OF GYRATION: continuous.
+SKEWNESS ABOUT MAJOR AXIS: continuous.
+SKEWNESS ABOUT MINOR AXIS: continuous.
+KURTOSIS ABOUT MINOR AXIS: continuous.
+KURTOSIS ABOUT MAJOR AXIS: continuous.
+HOLLOWS RATIO: continuous.
