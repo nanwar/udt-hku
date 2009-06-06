@@ -1,0 +1,171 @@
+Decision Tree Classification With Uncertain Data (UDT) Version 0.9
+Copyright (C) 2009, The Database Group, 
+Department of Computer Science, The University of Hong Kong
+
+The software is developed by Smith Tsang for the following paper (in Bibtex).
+
+   @inproceedings{DBLP:conf/icde/TsangKYHL09,
+     author    = {Smith Tsang and
+                  Ben Kao and
+                  Kevin Y. Yip and
+                  Wai-Shing Ho and
+                  Sau Dan Lee},
+     title     = {Decision Trees for Uncertain Data},
+     booktitle = {ICDE},
+     year      = {2009},
+     pages     = {441-444},
+     ee        = {http://dx.doi.org/10.1109/ICDE.2009.26},
+     crossref  = {DBLP:conf/icde/2009},
+     bibsource = {DBLP, http://dblp.uni-trier.de}
+   }
+
+   @proceedings{DBLP:conf/icde/2009,
+     title     = {Proceedings of the 25th International Conference on Data
+                  Engineering, ICDE 2009, March 29 2009 - April 2 2009, Shanghai,
+                  China},
+     booktitle = {ICDE},
+     publisher = {IEEE},
+     year      = {2009},
+     isbn      = {978-0-7695-3545-6},
+     bibsource = {DBLP, http://dblp.uni-trier.de}
+   }
+
+
+For enquires on the software, you can contant Smith Tsang by 	
+pktsang@cs.hku.hk or smithtsang@gmail.com
+
+
+====System Requirements====
+The software is recommended to run on a system of the following requirements
+- Intel Pentinum 4 PC or above
+- 2GB or above of main memory
+- Linux System, e.g. Ubuntu Linux 8.04.
+- Sun JavaSE 6.0
+If you experience out of memory error during execution for Java VM, you may increse 
+the heap size of the Java VM using -Xms and -Xmx VM arguments.
+For details, please refer to Sun JavaSE documentations.
+
+====Running the Software====
+The software currently consists of a command-line version.
+The program can be execute in a terminal by the following commands:
+java -classpath lib/log4j-1.2.15.jar:udt_0.9.jar com.decisiontree.ui.UDTComApp
+
+
+The followings are the commands o the software:
+
+ -mode <value>  	The decision tree building mode. The available mode include:
+					gen		- 	Generate uncertain data.
+					build   - 	Build decision tree.
+					clean   - 	Clean generated uncertain data 
+								(The operation cannot be rollbacked!)
+					overall - 	Generate uncertain data and build the decision tree. 
+                           	  	This mode allow result to be save in files.
+                           	  
+ -m <value>			Same as -mode.            
+ 
+ -dataset <value>	Specify the dataset. The command must be use for the software to run.
+ 					Noted that you need NOT to specify the file extension.
+ 
+ -d <value>			Same as -dataset.
+
+ -test <value>		Specify the testing set.
+ 
+ -t <value>			Same as -test
+ 
+ -sample <value>	Specify number of sample 	(for generate/build/clean interval-valued 
+ 												 sample-distributed data ONLY)		
+
+ -s <value>			Same as -sample
+ 
+ -algorithm <value>	The algorithm to be used for finding the best split.
+ 						
+ 						The followings are for interval-valued sample-distributed data.
+ 						UDT 	- 	No Pruning Mode for Sampled interval data.
+ 						UDTBP	-	Basic Pruning Mode for Sampled interval data.
+ 						UDTLP	-	Local Pruning Mode for Sampled interval data.
+ 						UDTGP	-	Global Pruning Mode for Sampled interval data.
+ 						UDTES	-	End-point Sampling Mode for Sampled interval data.
+ 						AVG		-	Averaging Mode for Sampled interval data.
+ 						
+ 						The followings are for interval-valued data and point data.
+ 						UDTUD	-	Basic Pruning for interval-valued data
+ 						AVGUD	-	Averaging Mode for interval-valued data.
+ 						POINT	-	POINT data decision tree. (Not exactly C4.5)
+ 						
+ -a <value>			Same as -algorithm.
+ 
+
+The commands for build and overall mode.
+
+ -type <value>		The build type of the software
+ 					xfold 			- 	Doing cross-fold validation for dataset and return the accuracy
+ 					accuracy 		- 	Build the decision tree using the dataset 
+ 										and get the accuracy using the training set.
+ 					time (or build) - 	Build the decision tree, record the building time informations 
+ 										and number of entropy calculations.  
+ 										(Printing and store the decision tree is currently NOT available.)
+ 
+ -t <value>			Same as -type
+ 										
+ -nodesize <value>	The pruning node size of pre-pruning. The decision tree building would stop if 
+ 					the node size is smaller than or equal to the given value.
+
+ -n <value>			Same as -nodesize.
+
+ -purity <value>	The pruning purity of the node of pre-pruning. The decision tree building would stop if
+ 					the node purity is higher thanof equal to the given value.
+
+ -p <value>			Same as -purity.
+
+The commands for gen and overall mode.	
+
+ -width <value>		The width of the generated interval, relative to the domain size of each attribute.
+ 
+ -w <value>			Same as -width. 	
+					
+ -seed <value>		The seed value to generate the Gaussian samples for the intervals. 
+ 
+ -e <value>			Same as -seed.
+
+The commands for overall mode ONLY.
+
+ -trial <value>		The number of trials of tree building to be run at the same time. 
+ 					Different trials would use different seed to generate the samples (if needed).
+ 					
+ -t <value>			Same as -trial.
+ 
+ -save <value>		Saving the result in a file given.
+
+====Datasets====
+There 10 pre-structured datasets.
+JapaneseVowel is a "uncertain data" which includes pre-structured sampled data. 
+Each interval contains 30 samples.
+All others are point datasets.
+PenDigit and Satellite includes testing test in form of test.data.
+
+
+====File Extension for dataset====
+.name = the dataset property file
+.data = the dataset file (POINT data)
+.range = the dataset file (RANGE data)
+.error = the dataset file (SAMPLE data). The samples are stored under <filename>_PDF/ directory.
+
+====Examples of running====
+
+Generating interval-valued sample-distributed data for iris dataset of relative width of 0.1 and of 100 samples: 
+	-dataset datasets/iris/iris -mode gen -width 0.1 -algorithmn UDT -sample 100 -seed 20
+
+Building interval-valued sample-distributed data for iris dataset (of 100 samples) using cross-fold validation.
+	-dataset datasets/iris/iris -mode build -type xfold -algorithm UDTES -nodesize 1 -threshold 0.99
+
+Cleaning interval-valued sample-distributed data for iris dataset using cross-fold validation
+	-dataset datasets/iris/iris -mode clean -algorithm UDT
+
+Overall mode for interval-valued sample-distributed data for vehicle dataset using accuracy running 50 times 
+and store the result in file
+	-dataset datasets/vehicle/vehicle -test datasets/vehicle/vehicle -mode overall -type accuracy -algorithm UDT 
+	-sample 100 -nodesize 1 -threshold 0.99 -seed 500 -width 0.05 -trial 50 -save result/result.rst
+	
+	
+Note: 	Please make sure the commands are type correctly before executing the program. 
+		Otherwise, it is possible to corrupt your data and results.
