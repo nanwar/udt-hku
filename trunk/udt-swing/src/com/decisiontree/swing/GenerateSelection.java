@@ -85,7 +85,7 @@ public class GenerateSelection extends javax.swing.JPanel {
         sampleField = new javax.swing.JTextField();
         sampleLabel = new javax.swing.JLabel();
         widthField = new javax.swing.JTextField();
-        WidthLabel = new javax.swing.JLabel();
+        widthLabel = new javax.swing.JLabel();
         descriptionLabel = new javax.swing.JLabel();
         typeDetailLabel = new javax.swing.JLabel();
         sampleValidLabel = new javax.swing.JLabel();
@@ -171,14 +171,14 @@ public class GenerateSelection extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         add(widthField, gridBagConstraints);
 
-        WidthLabel.setText("Interval Width (%):");
+        widthLabel.setText("Interval Width (%):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
-        add(WidthLabel, gridBagConstraints);
+        add(widthLabel, gridBagConstraints);
 
         descriptionLabel.setText("Please select the following options for data generation.");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -196,7 +196,7 @@ public class GenerateSelection extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 3);
         add(typeDetailLabel, gridBagConstraints);
 
-        sampleValidLabel.setFont(new java.awt.Font("新細明體", 1, 12)); // NOI18N
+        sampleValidLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -206,7 +206,7 @@ public class GenerateSelection extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 9, 5, 3);
         add(sampleValidLabel, gridBagConstraints);
 
-        widthValidLabel.setFont(new java.awt.Font("新細明體", 1, 12)); // NOI18N
+        widthValidLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         widthValidLabel.setFocusable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -270,7 +270,6 @@ public class GenerateSelection extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel WidthLabel;
     private javax.swing.JLabel descriptionLabel;
     private javax.swing.JButton generateButton;
     private javax.swing.JLabel jLabel1;
@@ -282,6 +281,7 @@ public class GenerateSelection extends javax.swing.JPanel {
     private javax.swing.JLabel typeDetailLabel;
     private javax.swing.JLabel typeLabel;
     private javax.swing.JTextField widthField;
+    private javax.swing.JLabel widthLabel;
     private javax.swing.JLabel widthValidLabel;
     // End of variables declaration//GEN-END:variables
 
