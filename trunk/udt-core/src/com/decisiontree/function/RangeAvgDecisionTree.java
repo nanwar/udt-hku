@@ -1,0 +1,62 @@
+/**
+ * Decision Tree Classification With Uncertain Data (UDT)
+ * Copyright (C) 2009, The Database Group, 
+ * Department of Computer Science, The University of Hong Kong
+ * 
+ * This file is part of UDT.
+ *
+ * UDT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * UDT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package com.decisiontree.function;
+
+import com.decisiontree.build.PointClassification;
+import com.decisiontree.data.PointDataSet;
+import com.decisiontree.data.RangeDataSetInit;
+import com.decisiontree.operation.SplitSearch;
+
+/**
+ * 
+ * RangeAvgDecisionTree - builds a decision tree for given interval value dataset files with averaging techniques.
+ *
+ * @author Smith Tsang
+ * @version 28 May 2009
+ *
+ */
+public class RangeAvgDecisionTree extends PointDecisionTree {
+
+	public RangeAvgDecisionTree(SplitSearch splitSearch, double nodeSize, double pruningThreshold) {
+		super(splitSearch, nodeSize, pruningThreshold);
+	}
+
+	public RangeAvgDecisionTree(SplitSearch splitSearch) {
+		super(splitSearch);
+	}
+
+	@Override
+	protected PointDataSet generateDataSet(String training) {
+		RangeDataSetInit init = new RangeDataSetInit(training);
+		return init.getDataSet();
+	}
+	
+	@Override
+	public double crossFold(String training) {
+
+		PointDataSet dataSet = generateDataSet(training);
+		
+		PointClassification classification = new PointClassification(dataSet, splitSearch);
+		return classification.crossAllFold(nodeSize, purity);
+		
+	}
+
+}
