@@ -1,14 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * BuildSetting.java
- *
- * Created on 2009/6/6, 下午 09:55:51
- */
-
 package com.decisiontree.swing;
 
 /**

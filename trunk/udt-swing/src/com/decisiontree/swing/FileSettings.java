@@ -1,14 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * FileSettings.java
- *
- * Created on 2009/6/6, 下午 09:18:04
- */
-
 package com.decisiontree.swing;
 
 import java.io.File;
