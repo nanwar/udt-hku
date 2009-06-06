@@ -25,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import com.decisiontree.param.GlobalParam;
+import javax.swing.JOptionPane;
 
 /**
  * GenerateSelection
@@ -33,9 +34,13 @@ import com.decisiontree.param.GlobalParam;
  */
 public class GenerateSelection extends javax.swing.JPanel {
 
+    private static final String INVALID = "Invalid!";
+    private static final String NOT_AVAILABLE = "Not Available!";
+
     private int noSamples = GlobalParam.DEFAULT_NO_SAMPLES;
     private double intervalWidth = GlobalParam.DEFAULT_WIDTH;
     private String type = DataGen.SAMPLE_GEN;
+    private long seed = GlobalParam.DEFAULT_SEED;
 
     public int getNoSamples() {
         return noSamples;
@@ -61,11 +66,21 @@ public class GenerateSelection extends javax.swing.JPanel {
         this.intervalWidth = intervalWidth;
     }
 
+        public long getSeed() {
+        return seed;
+    }
+
+    public void setSeed(long seed) {
+        this.seed = seed;
+    }
+
+
     /** Creates new form GenerateSelection */
     public GenerateSelection() {
         initComponents();
         widthField.setText(intervalWidth +"");
         sampleField.setText(noSamples +"");
+        seedField.setText(seed+"");
         initTypeBox();
     }
 
@@ -92,6 +107,9 @@ public class GenerateSelection extends javax.swing.JPanel {
         widthValidLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        seedLabel = new javax.swing.JLabel();
+        seedField = new javax.swing.JTextField();
+        seedValidLabel = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("Generate Uncertain Data"));
         setMinimumSize(new java.awt.Dimension(400, 200));
@@ -106,7 +124,7 @@ public class GenerateSelection extends javax.swing.JPanel {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         add(generateButton, gridBagConstraints);
@@ -141,7 +159,7 @@ public class GenerateSelection extends javax.swing.JPanel {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
@@ -150,7 +168,7 @@ public class GenerateSelection extends javax.swing.JPanel {
         sampleLabel.setText("Number of Samples:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
@@ -165,7 +183,7 @@ public class GenerateSelection extends javax.swing.JPanel {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
@@ -174,7 +192,7 @@ public class GenerateSelection extends javax.swing.JPanel {
         widthLabel.setText("Interval Width (%):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
@@ -196,18 +214,7 @@ public class GenerateSelection extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 3);
         add(typeDetailLabel, gridBagConstraints);
 
-        sampleValidLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 9, 5, 3);
-        add(sampleValidLabel, gridBagConstraints);
-
-        widthValidLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        widthValidLabel.setFocusable(false);
+        sampleValidLabel.setFont(new java.awt.Font("Arial", 1, 12));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -215,10 +222,21 @@ public class GenerateSelection extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 3);
+        add(sampleValidLabel, gridBagConstraints);
+
+        widthValidLabel.setFont(new java.awt.Font("Arial", 1, 12));
+        widthValidLabel.setFocusable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 3);
         add(widthValidLabel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -226,10 +244,42 @@ public class GenerateSelection extends javax.swing.JPanel {
         add(jLabel1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         add(jLabel2, gridBagConstraints);
+
+        seedLabel.setText("Random Seed:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
+        add(seedLabel, gridBagConstraints);
+
+        seedField.setText("0");
+        seedField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                seedFieldKeyTyped(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        add(seedField, gridBagConstraints);
+
+        seedValidLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 9, 3);
+        add(seedValidLabel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void setTypeDetailLabel(String type) {
@@ -242,6 +292,18 @@ public class GenerateSelection extends javax.swing.JPanel {
     private void typeBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeBoxActionPerformed
         type = (String)typeBox.getSelectedItem();
         setTypeDetailLabel(type);
+        if(type.equals(DataGen.RANGE_GEN)){
+            sampleField.setEnabled(false);
+            seedField.setEnabled(false);
+            sampleValidLabel.setText(NOT_AVAILABLE);
+            seedValidLabel.setText(NOT_AVAILABLE);
+        }else{
+            sampleField.setEnabled(true);
+            seedField.setEnabled(true);
+            sampleValidLabel.setText("");
+            seedValidLabel.setText("");
+        }
+
     }//GEN-LAST:event_typeBoxActionPerformed
 
     private void widthFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_widthFieldKeyTyped
@@ -249,7 +311,7 @@ public class GenerateSelection extends javax.swing.JPanel {
             intervalWidth = Double.parseDouble(widthField.getText());
             widthValidLabel.setText("");
         }catch(NumberFormatException e){
-            widthValidLabel.setText("Invalid!");
+            widthValidLabel.setText(INVALID);
         }
 
     }//GEN-LAST:event_widthFieldKeyTyped
@@ -259,13 +321,25 @@ public class GenerateSelection extends javax.swing.JPanel {
             noSamples = Integer.parseInt(sampleField.getText());
             sampleValidLabel.setText("");
         }catch(NumberFormatException e){
-            sampleValidLabel.setText("Invalid!");
+            sampleValidLabel.setText(INVALID);
         }
     }//GEN-LAST:event_sampleFieldKeyTyped
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        // TODO add your handling code here:
+        if(widthValidLabel.getText().equals(INVALID) || seedValidLabel.getText().equals(INVALID)
+                || sampleValidLabel.getText().equals(INVALID))
+            JOptionPane.showMessageDialog(this, "Please Enter valid values", "Warning", JOptionPane.WARNING_MESSAGE);
+        
     }//GEN-LAST:event_generateButtonActionPerformed
+
+    private void seedFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_seedFieldKeyTyped
+        try{
+            seed = Long.parseLong(seedField.getText());
+            seedValidLabel.setText("");
+        }catch(NumberFormatException e){
+            seedValidLabel.setText(INVALID);
+        }
+    }//GEN-LAST:event_seedFieldKeyTyped
 
 
 
@@ -277,6 +351,9 @@ public class GenerateSelection extends javax.swing.JPanel {
     private javax.swing.JTextField sampleField;
     private javax.swing.JLabel sampleLabel;
     private javax.swing.JLabel sampleValidLabel;
+    private javax.swing.JTextField seedField;
+    private javax.swing.JLabel seedLabel;
+    private javax.swing.JLabel seedValidLabel;
     private javax.swing.JComboBox typeBox;
     private javax.swing.JLabel typeDetailLabel;
     private javax.swing.JLabel typeLabel;
@@ -291,8 +368,8 @@ public class GenerateSelection extends javax.swing.JPanel {
 //        typeBox.getModel().setSelectedItem("SAMPLE");
         typeBox.addItem(DataGen.RANGE_GEN);
         typeBox.addItem(DataGen.SAMPLE_GEN);
-        typeBox.setSelectedItem(type);
-        setTypeDetailLabel(type);
+        typeBox.setSelectedItem(DataGen.SAMPLE_GEN);
+        setTypeDetailLabel(DataGen.SAMPLE_GEN);
     }
 
     public static void main(String args[]){
