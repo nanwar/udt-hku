@@ -106,7 +106,7 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JLabel" name="WidthLabel">
+    <Component class="javax.swing.JLabel" name="widthLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Interval Width (%):"/>
       </Properties>
@@ -136,7 +136,7 @@
     <Component class="javax.swing.JLabel" name="sampleValidLabel">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="&#x65b0;&#x7d30;&#x660e;&#x9ad4;" size="12" style="1"/>
+          <Font name="Arial" size="12" style="1"/>
         </Property>
       </Properties>
       <Constraints>
@@ -148,7 +148,7 @@
     <Component class="javax.swing.JLabel" name="widthValidLabel">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="&#x65b0;&#x7d30;&#x660e;&#x9ad4;" size="12" style="1"/>
+          <Font name="Arial" size="12" style="1"/>
         </Property>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
