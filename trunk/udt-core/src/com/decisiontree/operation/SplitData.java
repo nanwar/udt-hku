@@ -25,7 +25,7 @@ package com.decisiontree.operation;
  * SplitData - Stores the split information, including attribute, split point and the correpsonding entropy
  *
  * @author Smith Tsang
- * @version 2 Jun 2009
+ * @since 0.8
  *
  */
 public class SplitData{

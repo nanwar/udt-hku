@@ -24,7 +24,7 @@ package com.decisiontree.data;
  * RangeAttrClass - Stores a RangeAttribute with class.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public class RangeAttrClass extends PointAttrClass{
@@ -68,8 +68,8 @@ public class RangeAttrClass extends PointAttrClass{
 	}
 
 	@Override
-	public int compareTo(Object o){
-		double diff = getValue() -((RangeAttrClass)o).getValue();
+	public int compareTo(AttrClass attrClass){
+		double diff = getValue() -((RangeAttrClass)attrClass).getValue();
 		if(diff > 0) return 1;
 		else if( diff ==0) return 0;
 		else return -1;

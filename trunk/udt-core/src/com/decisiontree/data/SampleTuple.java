@@ -27,7 +27,7 @@ import com.decisiontree.param.GlobalParam;
  * SampleTuple - Stores a fully interval-valued tuple with distribution represented by samples.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public class SampleTuple extends RangeTuple {

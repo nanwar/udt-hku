@@ -25,7 +25,7 @@ package com.decisiontree.operation;
  * Split (Interface) - represent a way to split a set of tuple
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public interface Split {

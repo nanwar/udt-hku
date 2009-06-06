@@ -22,13 +22,13 @@ package com.decisiontree.data;
 
 /**
  * 
- * PointAttrClass - Stores an PointAttribute with class.
+ * PointAttrClass - Stores a PointAttribute with class.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
-public class PointAttrClass implements Comparable{
+public class PointAttrClass implements Comparable<AttrClass>{
 
 	private Attribute attribute;
 	private int cls;
@@ -90,8 +90,8 @@ public class PointAttrClass implements Comparable{
 	/**
 	 * 
 	 */
-	public int compareTo(Object o){
-		double diff = getValue() -((PointAttrClass)o).getValue();
+	public int compareTo(AttrClass attrClass){
+		double diff = getValue() -((PointAttrClass)attrClass).getValue();
 		if(diff > 0) return 1;
 		else if( diff ==0) return 0;
 		else return -1;

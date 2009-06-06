@@ -248,7 +248,7 @@ class UDTComApp {
 					}
 					
 					
-					if(mode == BUILD || mode == OVERALL){
+					if(mode.equals(BUILD) || mode == OVERALL){
 						if(param.equals("-type") || param.equals("-y")){
 			
 								if(value.equalsIgnoreCase("xfold"))
@@ -418,7 +418,7 @@ class UDTComApp {
 					if(algorithm == SplitSearch.POINT)
 						log.info("No Uncertain Data Generation Required.");
 					else if(testing == null){
-						if(algorithm == SplitSearch.UDTUD || algorithm == SplitSearch.AVGUD)
+						if(algorithm.equals(SplitSearch.UDTUD) || algorithm.equals(SplitSearch.AVGUD))
 							generateData(training, width, varies);
 						else generateData(training, noSamples, width, seed+i, varies);
 					}
@@ -429,17 +429,17 @@ class UDTComApp {
 					}
 					
 					SplitSearch splitSearch = null;
-					if(algorithm == SplitSearch.UDT)
+					if(algorithm.equals(SplitSearch.UDT))
 						splitSearch = new SplitSearchUnp();
-					else if(algorithm == SplitSearch.UDTBP)
+					else if(algorithm.equals(SplitSearch.UDTBP))
 						splitSearch = new SplitSearchBP();
-					else if(algorithm == SplitSearch.UDTGP)
+					else if(algorithm.equals(SplitSearch.UDTGP))
 						splitSearch = new SplitSearchGP();
-					else if(algorithm == SplitSearch.UDTLP)
+					else if(algorithm.equals(SplitSearch.UDTLP))
 						splitSearch = new SplitSearchLP();
-					else if(algorithm == SplitSearch.UDTES)
+					else if(algorithm.equals(SplitSearch.UDTES))
 						splitSearch = new SplitSearchES();
-					else if(algorithm == SplitSearch.AVG)
+					else if(algorithm.equals(SplitSearch.AVG))
 						splitSearch = new SplitSearchORI();
 					else if(algorithm == SplitSearch.UDTUD)
 						splitSearch = new SplitSearchUD();
@@ -463,7 +463,7 @@ class UDTComApp {
 
 
 					
-					if(type == DecisionTree.BUILD){
+					if(type.equals(DecisionTree.BUILD)){
 						log.info("Timing...");
 						
 						decisionTree.buildTree(training);

@@ -45,7 +45,7 @@ import com.decisiontree.param.GlobalParam;
  * SampleDataGen - Generates interval-valued sampled distributed uncertain data from point-valued data.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class SampleDataGen extends RangeDataGen {

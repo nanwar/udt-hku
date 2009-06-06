@@ -25,7 +25,7 @@ package com.decisiontree.datagen;
  * DataGen (Interface) - Generates uncertain data from point-valued data
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public interface DataGen {

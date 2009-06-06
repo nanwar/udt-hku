@@ -32,7 +32,7 @@ import com.decisiontree.param.GlobalParam;
  * BinarySplitES - Finds the best binary split point of an attribute using the end-pt sampling technique.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class BinarySplitES extends BinarySplitGP {

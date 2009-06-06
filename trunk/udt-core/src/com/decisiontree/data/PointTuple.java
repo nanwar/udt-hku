@@ -27,7 +27,7 @@ import com.decisiontree.param.GlobalParam;
  * PointTuple - Stores a fully point-valued tuple.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public class PointTuple extends Tuple{

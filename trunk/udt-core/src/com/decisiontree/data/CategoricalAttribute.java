@@ -25,7 +25,7 @@ package com.decisiontree.data;
  * CategoricalAttribute - Stores a categorical attribute value. (Current not implemented)
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public class CategoricalAttribute implements Attribute{

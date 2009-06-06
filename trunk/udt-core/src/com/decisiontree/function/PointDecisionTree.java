@@ -35,7 +35,7 @@ import com.decisiontree.operation.SplitSearch;
  * PointDecisionTree -  builds a decision tree for given  point-valued dataset files.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class PointDecisionTree extends DecisionTree {

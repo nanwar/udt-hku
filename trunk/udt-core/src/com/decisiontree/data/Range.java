@@ -25,7 +25,7 @@ package com.decisiontree.data;
  * Range - Stores values of an interval.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public class Range{

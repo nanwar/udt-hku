@@ -34,7 +34,7 @@ import com.decisiontree.param.GlobalParam;
  * SplitSearchUD -finding the best split point for a set of data (interval-valued) using interval-valued pruning technique.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class SplitSearchUD implements SplitSearch{

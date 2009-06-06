@@ -32,7 +32,7 @@ import com.decisiontree.param.GlobalParam;
  * SplitSearchLP -finding the best split point for a set of data using local pruning technique.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class SplitSearchLP implements SplitSearch {

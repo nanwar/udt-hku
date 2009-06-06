@@ -43,7 +43,7 @@ import com.decisiontree.param.GlobalParam;
  * RangeDataGen - Generates interval-valued uncertain data from point-valued data.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class RangeDataGen implements DataGen{

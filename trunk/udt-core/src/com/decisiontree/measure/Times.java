@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
  *
  * @author Dr. Lee Sau-dan
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public class Times {

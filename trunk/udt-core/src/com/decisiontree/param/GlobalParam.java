@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
  * GlobalParam - stores the global parameters for the program
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class GlobalParam{

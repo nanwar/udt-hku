@@ -27,7 +27,7 @@ import java.util.List;
  * DataSet (Interface) - Stores the dataset informations and tuples.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public interface DataSet {

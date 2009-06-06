@@ -29,7 +29,7 @@ import java.util.List;
  * PointDB - Stores the database information for point-value dataset.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public class PointDataSet implements DataSet {

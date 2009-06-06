@@ -25,7 +25,7 @@ package com.decisiontree.data;
  * SampleAttrClass - Stores a SampleAttribute with class.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public class SampleAttrClass extends RangeAttrClass{
@@ -115,8 +115,8 @@ public class SampleAttrClass extends RangeAttrClass{
 	}
 
 	@Override
-	public int compareTo(Object o){
-		double diff = getStart() -((SampleAttrClass)o).getStart();
+	public int compareTo(AttrClass attrClass){
+		double diff = getStart() -((SampleAttrClass)attrClass).getStart();
 		if(diff > 0) return 1;
 		else if( diff ==0) return 0;
 		else return -1;

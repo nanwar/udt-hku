@@ -32,7 +32,7 @@ import com.decisiontree.param.GlobalParam;
  * SampleDataCleaner - Cleans the generated interval-value with sampled distribution data files.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class SampleDataCleaner extends RangeDataCleaner {
