@@ -35,7 +35,7 @@ public class CategoricalAttribute implements Attribute{
 	/**
 	 * Default Constructor
 	 */
-	private CategoricalAttribute(){
+	protected CategoricalAttribute(){
 	}
 	
 	/**
@@ -64,12 +64,12 @@ public class CategoricalAttribute implements Attribute{
 	
 	/**
 	 * Compare with another object
-	 * @param the object to be compare
+	 * @param attr the object to be compare
 	 * @return 0 if the value are equal or -1 if not equal or object is not an categorical attribute.
 	 */
-	public int compareTo(Object object){
-		if(!(object instanceof CategoricalAttribute)) return -1;
-		if( value.equals(((CategoricalAttribute)object).value)) return 0;
+	public int compareTo(Attribute attr){
+		if(!(attr instanceof CategoricalAttribute)) return -1;
+		if( value.equals(((CategoricalAttribute)attr).value)) return 0;
 		return -1;
 	}
 
