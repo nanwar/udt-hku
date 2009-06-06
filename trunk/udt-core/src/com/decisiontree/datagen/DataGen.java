@@ -29,6 +29,10 @@ package com.decisiontree.datagen;
  *
  */
 public interface DataGen {
+
+    public static final String RANGE_GEN = "RANGE";
+    public static final String SAMPLE_GEN = "SAMPLE";
+
 	/**
 	 * Generate the uncertain dataset by a given dataset file name with a given interval width and store the generate data
 	 * @param input the dataset file
