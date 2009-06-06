@@ -36,7 +36,7 @@ import com.decisiontree.param.GlobalParam;
  * Classification (Abstract class) - Classifies a set of testing tuples with a given decision tree.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public abstract class Classification {

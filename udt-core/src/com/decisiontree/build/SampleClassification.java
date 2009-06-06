@@ -35,7 +35,7 @@ import com.decisiontree.operation.SplitSearch;
  * SampleClassification - Classifies for interval-valued sample-distributed testing data with a given decision tree.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class SampleClassification extends Classification {

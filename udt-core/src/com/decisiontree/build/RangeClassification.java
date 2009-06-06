@@ -33,7 +33,7 @@ import com.decisiontree.operation.SplitSearch;
  * RangeClassification - Classifies for interval-valued testing data with a given decision tree.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class RangeClassification extends Classification{
