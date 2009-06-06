@@ -30,7 +30,7 @@ import com.decisiontree.data.Tuple;
  * DreeNode - Represents a decision tree nodes. It could be either internal node or leaf node.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class TreeNode{

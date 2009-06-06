@@ -32,7 +32,7 @@ import com.decisiontree.operation.SplitSearch;
  * PointClassification - Classifies point-valued testing data with a given decision tree.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class PointClassification extends Classification{

@@ -38,7 +38,7 @@ import com.decisiontree.operation.SplitSearch;
  * SampleTree - Builds a decision tree by interval-valued sample-distributed data.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class SampleTree extends Tree{

@@ -35,7 +35,7 @@ import com.decisiontree.param.GlobalParam;
  * Tree (Abstract class) - Builds a decision tree.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public abstract class Tree {
