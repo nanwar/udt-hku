@@ -27,7 +27,7 @@ import com.decisiontree.data.SampleAttrClass;
  * BinarySplitGP - Finds the best binary split point of an attribute using the global pruning technique.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class BinarySplitGP extends BinarySplitLP{

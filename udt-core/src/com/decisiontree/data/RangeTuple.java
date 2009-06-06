@@ -27,7 +27,7 @@ import com.decisiontree.param.GlobalParam;
  * RangeTuple - Stores a fully interval-valued tuple.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public class RangeTuple extends PointTuple{

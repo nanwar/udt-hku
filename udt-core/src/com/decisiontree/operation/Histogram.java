@@ -20,6 +20,12 @@
  */
 package com.decisiontree.operation;
 
+/**
+ * Histogram - Stores the class distribution for an interval
+ * @author Smith Tsang
+ * @version 0.8
+ *
+ */
 public class Histogram{
 
 	public double start;

@@ -30,7 +30,7 @@ import com.decisiontree.operation.SplitSearch;
  * RangeAvgDecisionTree - builds a decision tree for given interval value dataset files with averaging techniques.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class RangeAvgDecisionTree extends PointDecisionTree {

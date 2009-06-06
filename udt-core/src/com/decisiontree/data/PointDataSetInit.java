@@ -35,7 +35,7 @@ import com.decisiontree.param.GlobalParam;
  * PointDataSetInit class - Initializes a PointDB object.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public class PointDataSetInit extends DataSetInit {

@@ -22,31 +22,17 @@ package com.decisiontree.data;
 
 /**
  * 
- * Sample - Represents a sample value of a interval-valued attribute
- *
+ * AttrClass - Stores an Attribute with class.
+ * 
  * @author Smith Tsang
- * @since 0.8
+ * @version 6 June 2009
+ * @since 0.81
  *
  */
+public interface AttrClass {
 
-public class Sample extends PointAttribute{
-	private double cdist;
-
-	public Sample(double value, double cdist){
-		setValue(value);
-		this.cdist =cdist;
-	}
-
-	public double getCDist(){
-		return cdist;
-	}
-	
-	@Override
-	public int compareTo(Attribute attr){
-		double diff = getValue() - ((Sample)attr).getValue();
-		if(diff > 0) return 1;
-		else if( diff ==0) return 0;
-		else return -1;
-	}
-
+	public Attribute getAttribute();
+	public int getCls();
+	public double getWeight();
+	public double getValue();
 }

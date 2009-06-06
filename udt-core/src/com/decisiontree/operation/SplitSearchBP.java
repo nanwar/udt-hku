@@ -30,7 +30,7 @@ import com.decisiontree.data.Tuple;
  * SplitSearchBP - finding the best split point for a set of data using basic pruning technique.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class SplitSearchBP extends SplitSearchUnp{

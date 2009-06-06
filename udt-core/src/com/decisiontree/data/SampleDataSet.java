@@ -34,7 +34,7 @@ import com.decisiontree.param.GlobalParam;
  * SampleDataSet - Stores the database information for interval-valued dataset with distribution represented by samples.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public class SampleDataSet extends RangeDataSet {

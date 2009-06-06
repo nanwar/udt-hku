@@ -32,7 +32,7 @@ import com.decisiontree.param.GlobalParam;
  * 						   files with averaging techniques.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class SampleAvgDecisionTree extends PointDecisionTree {

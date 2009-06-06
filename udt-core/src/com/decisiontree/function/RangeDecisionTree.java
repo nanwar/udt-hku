@@ -35,7 +35,7 @@ import com.decisiontree.operation.SplitSearch;
  * RangeDecisionTree - builds a decision tree for given interval-valued dataset files with distrubtion-based technique.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class RangeDecisionTree extends DecisionTree {

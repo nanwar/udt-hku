@@ -31,7 +31,7 @@ import com.decisiontree.param.GlobalParam;
  * SplitSearchES - finding the best split point for a set of data using end-point sampling technique.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class SplitSearchES extends SplitSearchGP {

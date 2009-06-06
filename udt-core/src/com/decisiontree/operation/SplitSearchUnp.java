@@ -37,7 +37,7 @@ import com.decisiontree.param.GlobalParam;
  * pruning technique.
  * 
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  * 
  */
 public class SplitSearchUnp implements SplitSearch {

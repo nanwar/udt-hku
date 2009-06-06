@@ -31,7 +31,7 @@ import com.decisiontree.data.Tuple;
  * SplitSearchORI - finding the best split point for a set of data (point-valued data) using point-valued pruning technique.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class SplitSearchORI extends SplitSearchBP {

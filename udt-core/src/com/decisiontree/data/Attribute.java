@@ -25,7 +25,7 @@ package com.decisiontree.data;
  * Attribute interface - Stores a single attribute value.
  * 
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public interface Attribute extends Comparable<Attribute>{

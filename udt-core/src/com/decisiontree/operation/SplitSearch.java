@@ -31,7 +31,7 @@ import com.decisiontree.data.Tuple;
  * SplitSearch (Interface) - finding the best split point for a set of data.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public interface SplitSearch {

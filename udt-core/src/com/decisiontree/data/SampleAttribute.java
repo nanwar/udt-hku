@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
  * SampleAttribute -Stores a range data attribute with distribution represented by samples.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public class SampleAttribute extends RangeAttribute {

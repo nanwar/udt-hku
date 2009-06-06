@@ -37,7 +37,7 @@ import com.decisiontree.param.GlobalParam;
  * 						files with distribution-based techniques.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class SampleDecisionTree extends DecisionTree {

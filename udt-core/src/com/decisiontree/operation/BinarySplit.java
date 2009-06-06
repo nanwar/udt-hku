@@ -25,7 +25,7 @@ package com.decisiontree.operation;
  * BinarySplit - Finds the binary split point of an attribute using the basic technique.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class BinarySplit implements Split{

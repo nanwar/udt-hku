@@ -28,7 +28,7 @@ import java.util.List;
  * RangeDataSet - Stores the database information for interval-valued dataset.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public class RangeDataSet extends PointDataSet{

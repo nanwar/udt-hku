@@ -32,7 +32,7 @@ import com.decisiontree.param.GlobalParam;
  * BinarySplitLP - Finds the best binary split point of an attribute using the local pruning technique.
  *
  * @author Smith Tsang
- * @version 28 May 2009
+ * @since 0.8
  *
  */
 public class BinarySplitLP extends BinarySplit{
@@ -149,10 +149,12 @@ public class BinarySplitLP extends BinarySplit{
 		return pruned;
 	}
 
+	@Override
 	public double getEnt(){
 		return threshold;
 	}
 
+	@Override
 	public double getSplit(){
 		return localOptimal;
 	}

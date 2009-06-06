@@ -25,7 +25,7 @@ package com.decisiontree.datagen;
  * DataCleaner (Interface) - Cleans the generated data files.
  *
  * @author Smith Tsang
- * @version 26 May 2009
+ * @since 0.8
  *
  */
 public interface DataCleaner {
