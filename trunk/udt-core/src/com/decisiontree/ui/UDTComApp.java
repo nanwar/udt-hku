@@ -248,7 +248,7 @@ class UDTComApp {
 					}
 					
 					
-					if(mode.equals(BUILD) || mode == OVERALL){
+					if(mode.equals(BUILD) || mode.equals(OVERALL)){
 						if(param.equals("-type") || param.equals("-y")){
 			
 								if(value.equalsIgnoreCase("xfold"))
@@ -270,7 +270,7 @@ class UDTComApp {
 	
 					
 					}
-					if(mode == GEN || mode == OVERALL){
+					if(mode.equals(GEN) || mode.equals(OVERALL)){
 						if (param.equals("-width") || param.equals("-p")) {
 							width = Double.parseDouble(value);
 						}
@@ -279,7 +279,7 @@ class UDTComApp {
 						}
 					}	
 					
-					if(mode == OVERALL){
+					if(mode.equals(OVERALL)){
 						if (param.equals("-trial") || param.equals("-l"))
 							trials = Integer.parseInt(value);
 						if (param.equals("-save") || param.equals("-v")){
@@ -300,13 +300,13 @@ class UDTComApp {
 			}
 				
 	
-			if(mode == GEN ){
+			if(mode.equals(GEN) ){
 				System.out.println("You are running generate mode.");
 				System.out.println("The generate data would be stored in the same folder of the source data file.");
 				log.info("Generating Uncertain Data...");
-				if(algorithm == SplitSearch.POINT)
+				if(algorithm.equals(SplitSearch.POINT))
 					log.info("No Uncertain Data Generation Required.");
-				if(algorithm == SplitSearch.UDTUD || algorithm == SplitSearch.AVGUD){
+				if(algorithm.equals(SplitSearch.UDTUD) || algorithm.equals(SplitSearch.AVGUD)){
 					if(testing == null)
 						generateData(training, width, varies);
 					else generateData(training, testing, width, varies);
@@ -318,43 +318,43 @@ class UDTComApp {
 				}
 			}
 			
-			if(mode  == BUILD ){
+			if(mode.equals(BUILD) ){
 				System.out.println("You are running build mode.");
 				SplitSearch splitSearch = null;
-				if(algorithm == SplitSearch.UDT)
+				if(algorithm.equals(SplitSearch.UDT))
 					splitSearch = new SplitSearchUnp();
-				else if(algorithm == SplitSearch.UDTBP)
+				else if(algorithm.equals(SplitSearch.UDTBP))
 					splitSearch = new SplitSearchBP();
-				else if(algorithm == SplitSearch.UDTGP)
+				else if(algorithm.equals(SplitSearch.UDTGP))
 					splitSearch = new SplitSearchGP();
-				else if(algorithm == SplitSearch.UDTLP)
+				else if(algorithm.equals(SplitSearch.UDTLP))
 					splitSearch = new SplitSearchLP();
-				else if(algorithm == SplitSearch.UDTES)
+				else if(algorithm.equals(SplitSearch.UDTES))
 					splitSearch = new SplitSearchES();
-				else if(algorithm == SplitSearch.AVG)
+				else if(algorithm.equals(SplitSearch.AVG))
 					splitSearch = new SplitSearchORI();
-				else if(algorithm == SplitSearch.UDTUD)
+				else if(algorithm.equals(SplitSearch.UDTUD))
 					splitSearch = new SplitSearchUD();
-				else if(algorithm == SplitSearch.AVGUD)
+				else if(algorithm.equals(SplitSearch.AVGUD))
 					splitSearch = new SplitSearchUD();
-				else if(algorithm == SplitSearch.POINT)
+				else if(algorithm.equals(SplitSearch.POINT))
 					splitSearch = new SplitSearchORI();
 				
 				final Times start = new Times();
 				DecisionTree decisionTree = null;
-				if(algorithm == SplitSearch.AVG) 
+				if(algorithm.equals(SplitSearch.AVG))
 					decisionTree = new SampleAvgDecisionTree(splitSearch, nodeSize, pruningThreshold);
-				else if(algorithm == SplitSearch.UDTUD)
+				else if(algorithm.equals(SplitSearch.UDTUD))
 					decisionTree = new RangeDecisionTree(splitSearch, nodeSize, pruningThreshold);
-				else if (algorithm == SplitSearch.POINT)
+				else if (algorithm.equals(SplitSearch.POINT))
 					decisionTree = new PointDecisionTree(splitSearch, nodeSize, pruningThreshold);
-				else if(algorithm == SplitSearch.AVGUD)
+				else if(algorithm.equals(SplitSearch.AVGUD))
 					decisionTree = new RangeAvgDecisionTree(splitSearch, nodeSize, pruningThreshold);
 				else
 					decisionTree = new SampleDecisionTree(splitSearch, nodeSize, pruningThreshold);
 				
 				
-				if(type == DecisionTree.BUILD){
+				if(type.equals(DecisionTree.BUILD)){
 					log.info("Timing...");
 
 					decisionTree.buildTree(training);
@@ -364,7 +364,7 @@ class UDTComApp {
 					end.difference(start).printTime();
 					System.out.println("No of Entropy Calculation: " + GlobalParam.getNoEntCal());
 					
-				}else if(type == DecisionTree.ACCUR){
+				}else if(type.equals(DecisionTree.ACCUR)){
 					log.info("Finding Accuracy...");
 					double accuracy = 0.0;
 					
@@ -374,7 +374,7 @@ class UDTComApp {
 					
 					accuracy = Math.rint(accuracy *10000)/10000;
 					System.out.println("Testing Accuracy: " + accuracy);
-				}else if(type == DecisionTree.XFOLD){
+				}else if(type.equals(DecisionTree.XFOLD)){
 					log.info("Finding Accuracy by crossfold");
 					double accuracy = decisionTree.crossFold(training);
 					
@@ -383,7 +383,7 @@ class UDTComApp {
 				}
 	
 			}
-			if(mode == CLEAN){
+			if(mode.equals(CLEAN)){
 				System.out.println("You are running clean mode. The operation cannot be rollbacks.");
 				SampleDataCleaner cleaner = new SampleDataCleaner();
 				if(testing == null)
@@ -394,7 +394,7 @@ class UDTComApp {
 				
 			}
 			
-			if( mode == OVERALL){ // OVERALL Allows multiple trials and file save for data.
+			if( mode.equals(OVERALL)){ // OVERALL Allows multiple trials and file save for data.
 				System.out.println("You are running overall mode. Reminded that the generated data would NOT be cleaned.");
 				BufferedWriter writer = null;
 				if(saveToFile){
@@ -415,7 +415,7 @@ class UDTComApp {
 				
 					log.info("Generating Uncertain Data...");
 
-					if(algorithm == SplitSearch.POINT)
+					if(algorithm.equals(SplitSearch.POINT))
 						log.info("No Uncertain Data Generation Required.");
 					else if(testing == null){
 						if(algorithm.equals(SplitSearch.UDTUD) || algorithm.equals(SplitSearch.AVGUD))
@@ -423,7 +423,7 @@ class UDTComApp {
 						else generateData(training, noSamples, width, seed+i, varies);
 					}
 					else{
-						if(algorithm == SplitSearch.UDTUD || algorithm == SplitSearch.AVGUD)
+						if(algorithm.equals(SplitSearch.UDTUD) || algorithm.equals(SplitSearch.AVGUD))
 							generateData(training, testing, width, varies);
 						else generateData(training, testing, noSamples, width, seed+i, varies);
 					}
@@ -441,22 +441,22 @@ class UDTComApp {
 						splitSearch = new SplitSearchES();
 					else if(algorithm.equals(SplitSearch.AVG))
 						splitSearch = new SplitSearchORI();
-					else if(algorithm == SplitSearch.UDTUD)
+					else if(algorithm.equals(SplitSearch.UDTUD))
 						splitSearch = new SplitSearchUD();
-					else if(algorithm == SplitSearch.AVGUD)
+					else if(algorithm.equals(SplitSearch.AVGUD))
 						splitSearch = new SplitSearchORI();
-					else if(algorithm == SplitSearch.POINT)
+					else if(algorithm.equals(SplitSearch.POINT))
 						splitSearch = new SplitSearchORI();
 					
 					final Times start = new Times();
 					DecisionTree decisionTree = null;
-					if(algorithm == SplitSearch.AVG) 
+					if(algorithm.equals(SplitSearch.AVG))
 						decisionTree = new SampleAvgDecisionTree(splitSearch, nodeSize, pruningThreshold);
-					else if(algorithm == SplitSearch.UDTUD)
+					else if(algorithm.equals(SplitSearch.UDTUD))
 						decisionTree = new RangeDecisionTree(splitSearch, nodeSize, pruningThreshold);
-					else if (algorithm == SplitSearch.POINT)
+					else if (algorithm.equals(SplitSearch.POINT))
 						decisionTree = new PointDecisionTree(splitSearch, nodeSize, pruningThreshold);
-					else if(algorithm == SplitSearch.AVGUD)
+					else if(algorithm.equals(SplitSearch.AVGUD))
 						decisionTree = new RangeAvgDecisionTree(splitSearch, nodeSize, pruningThreshold);
 					else
 						decisionTree = new SampleDecisionTree(splitSearch, nodeSize, pruningThreshold);
@@ -481,7 +481,7 @@ class UDTComApp {
 							System.out.println("No of Entropy Calculation: " + GlobalParam.getNoEntCal());
 						}	
 						
-					}else if(type == DecisionTree.ACCUR){
+					}else if(type.equals(DecisionTree.ACCUR)){
 						log.info("Finding Accuracy...");
 						double accuracy = 0.0;
 						
@@ -496,7 +496,7 @@ class UDTComApp {
 									accuracy);
 							writer.newLine();
 						}else System.out.println("Testing Accuracy: " + accuracy);
-					}else if(type == DecisionTree.XFOLD){
+					}else if(type.equals(DecisionTree.XFOLD)){
 						log.info("Finding Accuracy by crossfold");
 						double accuracy = decisionTree.crossFold(training);
 						accuracy = Math.rint(accuracy *10000)/10000;
