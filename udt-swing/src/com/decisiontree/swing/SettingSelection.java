@@ -1,14 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * OptionSelection.java
- *
- * Created on 2009/6/6, 上午 11:34:59
- */
-
 package com.decisiontree.swing;
 
 /**
