@@ -8,7 +8,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
- * @author Smith
+ * @author Smith Tsang
+ * @since 0.85
+ *
  */
 public class FileSettings extends javax.swing.JPanel {
 

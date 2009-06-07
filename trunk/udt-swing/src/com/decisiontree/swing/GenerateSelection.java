@@ -25,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import com.decisiontree.param.GlobalParam;
+import com.decisiontree.param.SwingParam;
 import javax.swing.JOptionPane;
 
 /**
@@ -271,7 +272,7 @@ public class GenerateSelection extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         add(seedField, gridBagConstraints);
 
-        seedValidLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        seedValidLabel.setFont(new java.awt.Font("Arial", 1, 12));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
@@ -283,15 +284,12 @@ public class GenerateSelection extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void setTypeDetailLabel(String type) {
-        if(type.equals(DataGen.SAMPLE_GEN))
-            typeDetailLabel.setText("Generate uncertain data with Gaussian samples.");
-        else if(type.equals(DataGen.RANGE_GEN))
-            typeDetailLabel.setText("Generate uncertian data with Uniform intervals.");
+        typeDetailLabel.setText(SwingParam.getDataGenDescription(type));
     }
 
     private void typeBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeBoxActionPerformed
         type = (String)typeBox.getSelectedItem();
-        setTypeDetailLabel(type);
+        setTypeDetailLabel((String)typeBox.getSelectedItem());
         if(type.equals(DataGen.RANGE_GEN)){
             sampleField.setEnabled(false);
             seedField.setEnabled(false);
@@ -311,7 +309,7 @@ public class GenerateSelection extends javax.swing.JPanel {
             intervalWidth = Double.parseDouble(widthField.getText());
             widthValidLabel.setText("");
         }catch(NumberFormatException e){
-            widthValidLabel.setText(INVALID);
+            widthValidLabel.setText(SwingParam.INVALID);
         }
 
     }//GEN-LAST:event_widthFieldKeyTyped
@@ -321,13 +319,13 @@ public class GenerateSelection extends javax.swing.JPanel {
             noSamples = Integer.parseInt(sampleField.getText());
             sampleValidLabel.setText("");
         }catch(NumberFormatException e){
-            sampleValidLabel.setText(INVALID);
+            sampleValidLabel.setText(SwingParam.INVALID);
         }
     }//GEN-LAST:event_sampleFieldKeyTyped
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        if(widthValidLabel.getText().equals(INVALID) || seedValidLabel.getText().equals(INVALID)
-                || sampleValidLabel.getText().equals(INVALID))
+        if(widthValidLabel.getText().equals(SwingParam.INVALID) || seedValidLabel.getText().equals(SwingParam.INVALID)
+                || sampleValidLabel.getText().equals(SwingParam.INVALID))
             JOptionPane.showMessageDialog(this, "Please Enter valid values", "Warning", JOptionPane.WARNING_MESSAGE);
         
     }//GEN-LAST:event_generateButtonActionPerformed
