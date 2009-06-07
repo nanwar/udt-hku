@@ -34,62 +34,32 @@ public class PointAttrClass implements Comparable<AttrClass>{
 	private int cls;
 	private double weight;
 
-	/**
-	 * 
-	 * @param attribute
-	 * @param cls
-	 * @param weight
-	 */
 	public PointAttrClass(Attribute attribute, int cls, double weight){
 		this.attribute = attribute;
 		this.cls = cls;
 		this.weight = weight;
 	}
 	
-	/**
-	 * 
-	 * @param attribute
-	 * @param cls
-	 */
 	public PointAttrClass(Attribute attribute, int cls){
 		this(attribute,cls,1.0);
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public Attribute getAttribute(){
 		return attribute;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public int getCls(){
 		return cls;
 	}	
 
-	/**
-	 * 
-	 * @return
-	 */
 	public double getWeight(){
 		return weight;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public double getValue(){
 		return ((PointAttribute)attribute).getValue();
 	}
 
-	/**
-	 * 
-	 */
 	public int compareTo(AttrClass attrClass){
 		double diff = getValue() -((PointAttrClass)attrClass).getValue();
 		if(diff > 0) return 1;
