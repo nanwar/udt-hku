@@ -25,7 +25,7 @@ package com.decisiontree.data;
  * AttrClass - Stores an Attribute with class.
  * 
  * @author Smith Tsang
- * @since 0.81
+ * @since 0.85
  *
  */
 public interface AttrClass {

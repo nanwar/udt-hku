@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.decisiontree.ui;
+package com.decisiontree.app;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -49,16 +49,15 @@ import com.decisiontree.param.GlobalParam;
 
 /**
  * 
- * UDTComApp - runs the main function of the UDT - Decision Tree for Uncertain Data.
+ * UDTApp - runs the main function of the UDT - Decision Tree for Uncertain Data.
  *
  * @author Smith Tsang
- * @since 0.8
- * @deprecated
+ * @since 0.85
  *
  */
-class UDTComApp {
+class UDTApp {
 
-	private static Logger log = Logger.getLogger(UDTComApp.class);
+	private static Logger log = Logger.getLogger(UDTApp.class);
 	
 
 	public static final String GEN = "GEN";
