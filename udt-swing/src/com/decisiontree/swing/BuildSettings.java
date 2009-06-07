@@ -1,14 +1,46 @@
 package com.decisiontree.swing;
 
+import com.decisiontree.function.DecisionTree;
+import com.decisiontree.operation.SplitSearch;
+import com.decisiontree.param.GlobalParam;
+import com.decisiontree.param.SwingParam;
+import java.util.Iterator;
+import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 /**
  *
- * @author Smith
+ *
+ * @author Smith Tsang
+ * @since 0.85
+ *
  */
-public class BuildSetting extends javax.swing.JPanel {
+public class BuildSettings extends javax.swing.JPanel {
+
+    private String algorithm = SplitSearch.AVG;
+    private int noSamples = GlobalParam.DEFAULT_NO_SAMPLES;
+
+    public String getAlgorithm() {
+        return algorithm;
+    }
+
+    public void setAlgorithm(String algorithm) {
+        this.algorithm = algorithm;
+    }
+
+    public int getNoSamples() {
+        return noSamples;
+    }
+
+    public void setNoSamples(int noSamples) {
+        this.noSamples = noSamples;
+    }
 
     /** Creates new form BuildSetting */
-    public BuildSetting() {
+    public BuildSettings() {
         initComponents();
+        initAlgorithms();
     }
 
     /** This method is called from within the constructor to
@@ -40,17 +72,22 @@ public class BuildSetting extends javax.swing.JPanel {
         testingFieldLabel = new javax.swing.JTextField();
         buildDescriptionLabel = new javax.swing.JLabel();
         algorithmDescriptionLabel = new javax.swing.JLabel();
-        sampleDescriptionLabel = new javax.swing.JLabel();
+        sampleValidLabel = new javax.swing.JLabel();
         nodeSizeDescriptionLabel = new javax.swing.JLabel();
         purityDescriptionLabel = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("Building Decision Tree"));
         setLayout(new java.awt.GridBagLayout());
 
-        typeBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        typeBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                typeBoxActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(typeBox, gridBagConstraints);
@@ -71,10 +108,15 @@ public class BuildSetting extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(algorithmLabel, gridBagConstraints);
 
-        algorithmBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        algorithmBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                algorithmBoxActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(algorithmBox, gridBagConstraints);
@@ -93,7 +135,7 @@ public class BuildSetting extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(trainingLabel, gridBagConstraints);
 
-        trainingField.setText("jTextField1");
+        trainingField.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -112,11 +154,13 @@ public class BuildSetting extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(testingLabel, gridBagConstraints);
 
-        nodeSizeField.setText("jTextField3");
+        nodeSizeField.setText("1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(nodeSizeField, gridBagConstraints);
 
         nodeSizeLabel.setText("Node Size:");
@@ -124,6 +168,7 @@ public class BuildSetting extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(nodeSizeLabel, gridBagConstraints);
 
         purityField.setText("Node Purity:");
@@ -131,13 +176,16 @@ public class BuildSetting extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(purityField, gridBagConstraints);
 
-        purityLabel.setText("jTextField4");
+        purityLabel.setText("0.99");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(purityLabel, gridBagConstraints);
 
         prePruningLabal.setText("Pre-pruning Parameters (Stop the Decision Tree Building Early) :");
@@ -147,12 +195,19 @@ public class BuildSetting extends javax.swing.JPanel {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 2, 5);
         add(prePruningLabal, gridBagConstraints);
 
-        sampleField.setText("jTextField5");
+        sampleField.setText("100");
+        sampleField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                sampleFieldKeyTyped(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(sampleField, gridBagConstraints);
@@ -174,7 +229,7 @@ public class BuildSetting extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 2, 5);
         add(buildingModeLabel, gridBagConstraints);
 
-        testingFieldLabel.setText("jTextField1");
+        testingFieldLabel.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -188,29 +243,29 @@ public class BuildSetting extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(buildDescriptionLabel, gridBagConstraints);
-
-        algorithmDescriptionLabel.setText("jLabel2");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(algorithmDescriptionLabel, gridBagConstraints);
 
-        sampleDescriptionLabel.setText("jLabel3");
+        sampleValidLabel.setText("jLabel3");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        add(sampleDescriptionLabel, gridBagConstraints);
+        add(sampleValidLabel, gridBagConstraints);
 
         nodeSizeDescriptionLabel.setText("jLabel4");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -218,6 +273,7 @@ public class BuildSetting extends javax.swing.JPanel {
         gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 4, 3, 4);
         add(nodeSizeDescriptionLabel, gridBagConstraints);
 
         purityDescriptionLabel.setText("jLabel5");
@@ -226,8 +282,29 @@ public class BuildSetting extends javax.swing.JPanel {
         gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(purityDescriptionLabel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void algorithmBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_algorithmBoxActionPerformed
+
+        algorithmDescriptionLabel.setText(SwingParam.getAlgorithmDescription((String)algorithmBox.getSelectedItem()));
+        setAlgorithm((String)algorithmBox.getSelectedItem());
+    }//GEN-LAST:event_algorithmBoxActionPerformed
+
+    private void typeBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeBoxActionPerformed
+
+    }//GEN-LAST:event_typeBoxActionPerformed
+
+    private void sampleFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sampleFieldKeyTyped
+        try{
+            noSamples = Integer.parseInt(sampleField.getText());
+            sampleValidLabel.setText("");
+        }catch(NumberFormatException e){
+            e.printStackTrace();
+            sampleValidLabel.setText(SwingParam.INVALID);
+        }
+    }//GEN-LAST:event_sampleFieldKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -244,9 +321,9 @@ public class BuildSetting extends javax.swing.JPanel {
     private javax.swing.JLabel purityDescriptionLabel;
     private javax.swing.JLabel purityField;
     private javax.swing.JTextField purityLabel;
-    private javax.swing.JLabel sampleDescriptionLabel;
     private javax.swing.JTextField sampleField;
     private javax.swing.JLabel sampleLabel;
+    private javax.swing.JLabel sampleValidLabel;
     private javax.swing.JTextField testingFieldLabel;
     private javax.swing.JLabel testingLabel;
     private javax.swing.JTextField trainingField;
@@ -255,4 +332,49 @@ public class BuildSetting extends javax.swing.JPanel {
     private javax.swing.JLabel typeLabel;
     // End of variables declaration//GEN-END:variables
 
+
+    public void initAlgorithms(){
+        Iterator<String> algorithmIter = SwingParam.getAlgorithms().iterator();
+        while(algorithmIter.hasNext())
+            algorithmBox.addItem(algorithmIter.next());
+//        algorithmBox.addItem(SplitSearch.UDT);
+//        algorithmBox.addItem(SplitSearch.UDTBP);
+//        algorithmBox.addItem(SplitSearch.UDTLP);
+//        algorithmBox.addItem(SplitSearch.UDTGP);
+//        algorithmBox.addItem(SplitSearch.UDTES);
+//        algorithmBox.addItem(SplitSearch.AVG);
+//        algorithmBox.addItem(SplitSearch.UDTUD);
+//        algorithmBox.addItem(SplitSearch.AVGUD);
+//        algorithmBox.addItem(SplitSearch.POINT);
+        algorithmBox.setSelectedItem(SplitSearch.AVG);
+    }
+
+    public void initTypes(){
+        typeBox.addItem(DecisionTree.BUILD);
+        typeBox.addItem(DecisionTree.ACCUR);
+        typeBox.addItem(DecisionTree.XFOLD);
+    }
+
+    public static void main(String args[]){
+        JFrame frame = new JFrame("Building Decision Tree");
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (InstantiationException ex) {
+            ex.printStackTrace();
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+        } catch (UnsupportedLookAndFeelException ex) {
+            ex.printStackTrace();
+        }
+
+        frame.add(new BuildSettings());
+        frame.setSize(500,400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setPreferredSize(new Dimension(300,200));
+        frame.setVisible(true);
+
+
+    }
 }
