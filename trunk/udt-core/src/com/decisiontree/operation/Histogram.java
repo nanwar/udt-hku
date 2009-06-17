@@ -28,10 +28,10 @@ package com.decisiontree.operation;
  */
 public class Histogram{
 
-	public double start;
-	public double end;
-	public double classj[];
-	public int noCls;
+	private double start;
+	private double end;
+	private double classj[];
+	private int noCls;
 
 	public Histogram(int noCls){
 		classj = new double[noCls];

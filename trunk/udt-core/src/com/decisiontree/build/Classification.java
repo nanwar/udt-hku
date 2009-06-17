@@ -41,7 +41,7 @@ import com.decisiontree.param.GlobalParam;
  */
 public abstract class Classification {
 	
-	public static Logger log = Logger.getLogger(Classification.class);
+	protected static Logger log = Logger.getLogger(Classification.class);
 	
 	protected DataSet dataSet;
 	
@@ -54,7 +54,7 @@ public abstract class Classification {
 	 * @param dataSet the dataset
 	 * @param splitSearch the SplitSearch
 	 */
-	public Classification(DataSet dataSet, SplitSearch splitSearch){
+	protected Classification(DataSet dataSet, SplitSearch splitSearch){
 		setDataSet(dataSet);
 		setSplitSearch(splitSearch);
 	}
@@ -74,7 +74,7 @@ public abstract class Classification {
 	 * @param tuple the tuple to be classified
 	 * @return the classified class of the tuple
 	 */
-	public int Classify(TreeNode tree, Tuple tuple){
+	private int Classify(TreeNode tree, Tuple tuple){
 		double [] classDist = findClsDistrib(tree, tuple);
 	
 		int max = 0;
@@ -182,7 +182,7 @@ public abstract class Classification {
 	 * Get the training dataset
 	 * @return the training dataset
 	 */
-	public DataSet getDataSet() {
+	protected DataSet getDataSet() {
 		return dataSet;
 	}
 
@@ -190,7 +190,7 @@ public abstract class Classification {
 	 * Set the training dataset
 	 * @param dataSet the training dataset
 	 */
-	public void setDataSet(DataSet dataSet) {
+	protected void setDataSet(DataSet dataSet) {
 		this.dataSet = dataSet;
 	}
 
@@ -198,7 +198,7 @@ public abstract class Classification {
 	 * Get the algorithm (SplitSearch) for best split point search
 	 * @return the SplitSearch object
 	 */
-	public SplitSearch getSplitSearch() {
+	protected SplitSearch getSplitSearch() {
 		return splitSearch;
 	}
 
@@ -206,7 +206,7 @@ public abstract class Classification {
 	 * Set the algorithm (SplitSearch) for best split point search
 	 * @param splitSearch the SplitSearch object
 	 */
-	public void setSplitSearch(SplitSearch splitSearch) {
+	protected void setSplitSearch(SplitSearch splitSearch) {
 		this.splitSearch = splitSearch;
 	}
 }

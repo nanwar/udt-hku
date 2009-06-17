@@ -206,7 +206,7 @@ public abstract class Tree {
 	 * Get the dataset stored
 	 * @return the dataset stored
 	 */
-	public DataSet getDataSet() {
+	protected DataSet getDataSet() {
 		return dataSet;
 	}	
 
@@ -331,7 +331,7 @@ public abstract class Tree {
 	 * Set the dataset 
 	 * @param dataSet the dataset
 	 */
-	public void setDataSet(DataSet dataSet) {
+	protected void setDataSet(DataSet dataSet) {
 		this.dataSet = dataSet;
 	}
 	
@@ -339,7 +339,7 @@ public abstract class Tree {
 	 * Set the algorithm (SplitSearch object) to be use for finding best split point
 	 * @param splitSearch the SplitSearch object
 	 */
-	public void setSplitSearch(SplitSearch splitSearch) {
+	protected void setSplitSearch(SplitSearch splitSearch) {
 		this.splitSearch = splitSearch;
 	}
 

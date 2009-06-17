@@ -36,7 +36,7 @@ import com.decisiontree.data.Tuple;
  */
 public interface SplitSearch {
 
-	public static final Logger log = Logger.getLogger(SplitSearch.class);
+	static final Logger log = Logger.getLogger(SplitSearch.class);
 
 	public static final String UDT  = "UDT";
 	public static final String UDTBP = "UDTBP";

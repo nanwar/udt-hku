@@ -76,7 +76,7 @@ public class SampleDataSetInit extends DataSetInit{
 		
 		int noTuples = dataSet.getNoTuples();
 
-		reader = new BufferedReader(new FileReader(input + GlobalParam.SAMPLE_FILE));
+		reader = new BufferedReader(new FileReader(input + SAMPLE_FILE));
 		
 		String data = "";
 		List <Tuple> t = new ArrayList<Tuple>(noTuples);
@@ -104,12 +104,12 @@ public class SampleDataSetInit extends DataSetInit{
 	
 	@Override
 	public int countNoTuples(String input) {
-		return countNoTuples(input, GlobalParam.SAMPLE_FILE);
+		return countNoTuples(input, SAMPLE_FILE);
 	}
 
 	@Override
 	public void preProcess(String input) {
-		preProcess(input, GlobalParam.SAMPLE_FILE);
+		preProcess(input, SAMPLE_FILE);
 		
 	}
 

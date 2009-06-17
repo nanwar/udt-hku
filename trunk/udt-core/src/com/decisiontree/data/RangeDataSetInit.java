@@ -63,12 +63,12 @@ public class RangeDataSetInit extends DataSetInit{
 
 	@Override
 	public int countNoTuples(String input) {
-		return countNoTuples(input, GlobalParam.RANGE_FILE);
+		return countNoTuples(input, RANGE_FILE);
 	}
 
 	@Override
 	public void preProcess(String input) {
-		preProcess(input, GlobalParam.RANGE_FILE);
+		preProcess(input, RANGE_FILE);
 		
 	}
 
@@ -81,7 +81,7 @@ public class RangeDataSetInit extends DataSetInit{
 		
 			int noTuples = db.getNoTuples();
 			
-			reader = new BufferedReader(new FileReader(input + GlobalParam.RANGE_FILE));
+			reader = new BufferedReader(new FileReader(input + RANGE_FILE));
 			
 			String data = "";
 			List <Tuple> t = new ArrayList<Tuple>(noTuples);
