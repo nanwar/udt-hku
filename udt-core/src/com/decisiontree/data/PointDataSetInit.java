@@ -57,14 +57,14 @@ public class PointDataSetInit extends DataSetInit {
 
 	@Override
 	public int countNoTuples(String input) {
-		return countNoTuples(input, GlobalParam.POINT_FILE);
+		return countNoTuples(input, POINT_FILE);
 	}
 
 
 
 	@Override
 	public void preProcess(String input) {
-		preProcess(input,GlobalParam.POINT_FILE);
+		preProcess(input,POINT_FILE);
 		
 	}
 
@@ -74,7 +74,7 @@ public class PointDataSetInit extends DataSetInit {
 
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new FileReader(input + GlobalParam.POINT_FILE));
+			reader = new BufferedReader(new FileReader(input + POINT_FILE));
 
 			int noTuples = dataSet.getNoTuples();
 

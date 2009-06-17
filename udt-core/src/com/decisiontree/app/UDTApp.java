@@ -71,7 +71,7 @@ class UDTApp {
 	 * @param width the interval width (relative to domain)
 	 * @param varies whether the interval width varies
 	 */
-	public static void generateData(String training,
+	private static void generateData(String training,
 			double width, boolean varies) {
 		generateData(training, null, width, varies);
 	}
@@ -83,7 +83,7 @@ class UDTApp {
 	 * @param width the interval width (relative to domain)
 	 * @param varies whether the interval width varies
 	 */
-	public static void generateData(String training, String testing,
+	private static void generateData(String training, String testing,
 			double width, boolean varies) {
 		
 		log.info("Generating interval uncertain data");
@@ -101,7 +101,6 @@ class UDTApp {
 	}
 
 	/**
-	 * 
 	 * Generate interval-valued sample-distributed data from point data in training dataset
 	 * @param training the training dataset file
 	 * @param noSamples the number of samples
@@ -109,7 +108,7 @@ class UDTApp {
 	 * @param seed the random-generate seed number
 	 * @param varies whether the interval width varies
 	 */
-	public static void generateData(String training, int noSamples,
+	private static void generateData(String training, int noSamples,
 			double width, long seed,  boolean varies) {
 		generateData(training, null, noSamples, width, seed,  varies);
 	}
@@ -122,9 +121,8 @@ class UDTApp {
 	 * @param width the interval width (relative to domain)
 	 * @param seed the random-generate seed number
 	 * @param varies whether the interval width varies
-
 	 */
-	public static void generateData(String training, String testing,
+	private static void generateData(String training, String testing,
 			int noSamples, double width, long seed, boolean varies) {
 		
 		log.info("Generating sampled interval uncertain data");

@@ -72,7 +72,7 @@ class UDTComApp {
 	 * @param width the interval width (relative to domain)
 	 * @param varies whether the interval width varies
 	 */
-	public static void generateData(String training,
+	private static void generateData(String training,
 			double width, boolean varies) {
 		generateData(training, null, width, varies);
 	}
@@ -84,7 +84,7 @@ class UDTComApp {
 	 * @param width the interval width (relative to domain)
 	 * @param varies whether the interval width varies
 	 */
-	public static void generateData(String training, String testing,
+	private static void generateData(String training, String testing,
 			double width, boolean varies) {
 		
 		log.info("Generating interval uncertain data");
@@ -110,7 +110,7 @@ class UDTComApp {
 	 * @param seed the random-generate seed number
 	 * @param varies whether the interval width varies
 	 */
-	public static void generateData(String training, int noSamples,
+	private static void generateData(String training, int noSamples,
 			double width, long seed,  boolean varies) {
 		generateData(training, null, noSamples, width, seed,  varies);
 	}
@@ -125,7 +125,7 @@ class UDTComApp {
 	 * @param varies whether the interval width varies
 
 	 */
-	public static void generateData(String training, String testing,
+	private static void generateData(String training, String testing,
 			int noSamples, double width, long seed, boolean varies) {
 		
 		log.info("Generating sampled interval uncertain data");

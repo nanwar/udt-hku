@@ -85,7 +85,7 @@ public class BinarySplit implements Split{
 	}
 
 
-	public double entropy(double [] dist, double distSize){
+	protected double entropy(double [] dist, double distSize){
 		
 		double ent = 0.0;
 		
@@ -96,7 +96,7 @@ public class BinarySplit implements Split{
 		return -1.0 * ent/distSize;
 	}
 	
-	public double avgEntropy(double [] left, double [] right){
+	protected double avgEntropy(double [] left, double [] right){
 
 		double leftSize = 0.0, rightSize = 0.0;
 		for(int i = 0; i < left.length; i++)
