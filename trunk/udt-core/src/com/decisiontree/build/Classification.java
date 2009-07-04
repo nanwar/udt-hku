@@ -63,7 +63,7 @@ public abstract class Classification {
 	 * Finding the classifying class distribution after classify a tuple 
 	 * with a given decision tree.
 	 * @param tree the root node of the tree
-	 * @param tuple the tuple to be classifoed
+	 * @param tuple the tuple to be classified
 	 * @return the classified class distribution of the tuple
 	 */
 	protected abstract double [] findClsDistrib(TreeNode tree, Tuple tuple);
