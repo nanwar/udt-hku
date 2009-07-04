@@ -162,10 +162,10 @@ public abstract class Classification {
 	protected abstract double crossFold(int fold, double nodeSize, double pruningThreshold);
 	
 	/**
-	 * 
+	 * Doing cross-fold validation for all the folds
 	 * @param nodeSize
 	 * @param pruningThreshold
-	 * @return
+	 * @return the overall classifcation accuracy
 	 */
 	public double crossAllFold(double nodeSize, double pruningThreshold){
 		
