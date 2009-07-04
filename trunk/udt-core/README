@@ -1,13 +1,16 @@
 Decision Tree Classification With Uncertain Data (UDT) Version 0.85
+
 Copyright (C) 2009, The Database Group, 
 Department of Computer Science, The University of Hong Kong
 
-The software is developed by Smith Tsang for the following paper:
+==== Introduction of the software ====
+
+This software is developed by Smith Tsang for the following paper:
 
 Smith Tsang, Ben Kao, Kevin Y. Yip, Wai-Shing Ho, and Sau Dan Lee. 
-Decision trees for uncertain data. In 25th International Conference 
-on Data Engineering (ICDE 2009), pages 441�V444, Shanghai, China, 
-29th March�V2nd April 2009.  
+Decision trees for uncertain data. In Proceedings of the 25th International 
+Conference on Data Engineering (ICDE 2009), pages 441-444, Shanghai, China, 
+29th March-2nd April 2009.  
 
 And in Bibtex.
 
@@ -28,7 +31,7 @@ And in Bibtex.
 
    @proceedings{DBLP:conf/icde/2009,
      title     = {Proceedings of the 25th International Conference on Data
-                  Engineering, ICDE 2009, March 29 2009 - April 2 2009, Shanghai,
+                  Engineering, ICDE 2009, March 29th - April 2nd, Shanghai,
                   China},
      booktitle = {ICDE},
      publisher = {IEEE},
@@ -38,7 +41,7 @@ And in Bibtex.
    }
 
 
-For enquires on the software, you can contant through emails to Smith Tsang by 	
+For enquires on the software, you can contact through email to Smith Tsang by 	
 pktsang@cs.hku.hk or smithtsang@gmail.com.
 
 
@@ -52,26 +55,26 @@ If you are experienced out of memory error during execution for Java VM, you may
 the heap size of the Java VM using -Xms and -Xmx VM arguments. (e.g. java -Xms512m -Xmx1024m <program>)
 For details, please refer to Sun JavaSE documentations.
 
-==== Installing  the Software ====
+==== Installing the Software ====
 To install the software is simple. After you download the software (e.g., UDT_0.9.tar.gz),
 extract it by using a unpacking software or by the following command in a linux terminal
 (make sure in the terminal, you are in the directory of your software, e.g. the home directory ~/)
 
 tar -xzvf UDT_0.9.tar.gz <directory> 
 
-You may unpack the software in any directory you want, e.g. in ~/UDT_0.9. 
-There would be a pre-compiled jar file available for you in the root of the directory. 
-Or you can compile your own by the source code:
+You may unpack the software in any directory you want, e.g. in '~/UDT_0.9'. 
+There would be a pre-compiled jar file available for you in the directory. 
+Or you can compile your own jar file by the source code:
 
 mkdir <directory>
 javac -classpath lib/log4j-1.2.15.jar  src/com/decisiontree/**/*.java  -d <directory>
 jar cvf udt_0.85.jar -C <directory> .
 rm -r <directory>
 
-You can compile your code in any directory, the preferred on would be 
-"class" folder under the directory of your software.
+You can compile your code in any temporary directory, the preferred on would be 
+'class' folder under the directory of your software.
 
-After the compilation, the compiled class would be packed as a jar file udt_0.85.jar under
+After the compilation, the compiled class would be packed as a jar file 'udt_0.85.jar' under
 the directory of your software. You are now ready to execute the software.
 
 ==== Executing the Software ====
@@ -81,7 +84,7 @@ jar file is named as udt_0.85.jar:
 
 java -classpath lib/log4j-1.2.15.jar:udt_0.85.jar com.decisiontree.app.UDTApp
 
-The followings are the commands o the software:
+The followings are the commands of the software:
 
  -mode <value>  	The decision tree building mode. The available mode include:
 					gen		- 	Generate uncertain data.
@@ -143,7 +146,7 @@ The commands for build and overall mode.
  -n <value>			Same as -nodesize.
 
  -purity <value>	The pruning purity of the node of pre-pruning. The decision tree building would stop if
- 					the node purity is higher thanof equal to the given value.
+ 					the node purity is higher than or equal to the given value.
 
  -p <value>			Same as -purity.
 
@@ -176,6 +179,8 @@ for uncertain data classification.
 
 PenDigits and Satellite includes testing test in form of test.data.
 
+Note: 	The sample data transformer is currently unavailable, but will be added for future release.
+
 Acknowledgement:
 Asuncion, A. & Newman, D.J. (2007). UCI Machine Learning Repository 
 [http://www.ics.uci.edu/~mlearn/MLRepository.html]. Irvine, CA: University of California, 
@@ -197,8 +202,25 @@ should be written after the colon. If it is a categorical attribute (NOT IMPLEME
 values are seperated by comma. (e.g. Temperature:continuous or Outlook:Smart,Sporty,Formal)
 The number of classes and attribute are not restricted.
 
-Point dataset file: (.data)
+Dataset file:
+Each line represents a tuple, each attribute is comma seperated, the last value is the class label of the tuple
+(e.g., Smart,0.05,2.4,play represents the tuple having 3 attributes, with the first one is categorical, 
+the second and third one are point-valued.)
 
+Point dataset (.data) -		Each attribute value is a point-valued, representing by a real-valued number, e.g. '2.45'.
+
+Range dataset (.range) - 	Each attribute is an interval, represented by the two
+							real-valued boundaries separated by ->, e.g., '2.34->4.56'.
+
+Sample dataset (.sample) - 	Same as .range, but sample data has the samples for each attribute value stored in the 
+							folder '<dataset>_PDF/'. The sample values are stored in a file for each attribute value 
+							in bytecode format. Each sample is represented by a sample value and a cumulative distribution 
+							(e.g. '2.5,0.9' represent a sample valued at 2.5 having cumulative probability of 0.9). 
+							Here we assume each attribute value have a weighted of 1.0, so the cumulative distribution of 
+							the last sample in each file would be of weight of 1.0. The name of the sample for each attribute 
+							value is 'TiAj' where i is the tuple number and j is the attribute number.
+
+Nore: 	The sample data transformer is currently unavailable, but will be added for future release.
 
 ==== Execution Examples ====
 
