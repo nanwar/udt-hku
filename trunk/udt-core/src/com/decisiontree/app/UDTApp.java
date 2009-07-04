@@ -151,9 +151,9 @@ class UDTApp {
 			PropertyConfigurator.configure(GlobalParam.LOG_FILE);
 			String [] infoMessage = 
 					{
-					"UDT Version 0.9  Copyright (C) 2009 Database Group, ",
+					"UDT Version 0.85  Copyright (C) 2009 Database Group, ",
 					"Department of COmputer Science, The University of Hong Kong ",
-					"Welcome to UDT Version 0.9! Please wait until the program finished."
+					"Welcome to UDT Version 0.85! Please wait until the program finished."
 					};
 			
 			for(int i = 0; i < infoMessage.length; i++){

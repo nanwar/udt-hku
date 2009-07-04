@@ -154,14 +154,16 @@ class UDTComApp {
 			PropertyConfigurator.configure(GlobalParam.LOG_FILE);
 			String [] infoMessage = 
 					{
-					"UDT Version 0.9  Copyright (C) 2009 Database Group, ",
+					"UDT Version 0.85  Copyright (C) 2009 Database Group, ",
 					"Department of COmputer Science, The University of Hong Kong ",
-					"Welcome to UDT Version 0.9! Please wait until the program finished."
+					"Please use class com.decisiontree.app.UDTApp instead!",
+					"For more details, Please refer to UPDATE."
 					};
 			
 			for(int i = 0; i < infoMessage.length; i++){
 				log.info(infoMessage[i]);
 				System.out.println(infoMessage[i]);
+				System.exit(0);
 			}
 				
 			log.info("Starting...");		
