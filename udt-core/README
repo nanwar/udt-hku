@@ -1,8 +1,15 @@
-Decision Tree Classification With Uncertain Data (UDT) Version 0.9
+Decision Tree Classification With Uncertain Data (UDT) Version 0.85
 Copyright (C) 2009, The Database Group, 
 Department of Computer Science, The University of Hong Kong
 
-The software is developed by Smith Tsang for the following paper (in Bibtex).
+The software is developed by Smith Tsang for the following paper:
+
+Smith Tsang, Ben Kao, Kevin Y. Yip, Wai-Shing Ho, and Sau Dan Lee. 
+Decision trees for uncertain data. In 25th International Conference 
+on Data Engineering (ICDE 2009), pages 441¡V444, Shanghai, China, 
+29th March¡V2nd April 2009.  
+
+And in Bibtex.
 
    @inproceedings{DBLP:conf/icde/TsangKYHL09,
      author    = {Smith Tsang and
@@ -31,24 +38,40 @@ The software is developed by Smith Tsang for the following paper (in Bibtex).
    }
 
 
-For enquires on the software, you can contant Smith Tsang by 	
-pktsang@cs.hku.hk or smithtsang@gmail.com
+For enquires on the software, you can contant through emails to Smith Tsang by 	
+pktsang@cs.hku.hk or smithtsang@gmail.com.
 
 
-====System Requirements====
+==== System Requirements ====
 The software is recommended to run on a system of the following requirements
 - Intel Pentinum 4 PC or above
 - 2GB or above of main memory
 - Linux System, e.g. Ubuntu Linux 8.04.
-- Sun JavaSE 6.0
-If you experience out of memory error during execution for Java VM, you may increse 
-the heap size of the Java VM using -Xms and -Xmx VM arguments.
+- Sun JavaSE JDK 6.0
+If you are experienced out of memory error during execution for Java VM, you may increase 
+the heap size of the Java VM using -Xms and -Xmx VM arguments. (e.g. java -Xms512m -Xmx1024m <program>)
 For details, please refer to Sun JavaSE documentations.
 
-====Running the Software====
+==== Installing  the Software ====
+To install the software is simple. After you download the software (e.g., UDT_0.9.tar.gz),
+extract it by using a unpacking software or by the following command in a linux terminal
+(make sure in the terminal, you are in the directory of your software, e.g. the home directory ~/)
+
+tar -xzvf UDT_0.9.tar.gz <directory> 
+
+You may unpack the software in any directory you want, e.g. in ~/UDT_0.9. 
+There would be a pre-compiled jar file available for you in the root of the directory. 
+Or you can compile your own by the source code:
+
+javac 
+
+After the compilation, you are ready to execute the software.
+
+==== Executing the Software ====
 The software currently consists of a command-line version.
-The program can be execute in a terminal by the following commands:
-java -classpath lib/log4j-1.2.15.jar:udt_0.9.jar com.decisiontree.ui.UDTComApp
+The program can be executed in a terminal by the following commands:
+
+java -classpath lib/log4j-1.2.15.jar:udt_0.9.jar com.decisiontree.app.UDTApp
 
 
 The followings are the commands o the software:
@@ -57,7 +80,7 @@ The followings are the commands o the software:
 					gen		- 	Generate uncertain data.
 					build   - 	Build decision tree.
 					clean   - 	Clean generated uncertain data 
-								(The operation cannot be rollbacked!)
+								(The operation cannot be roll-backed!)
 					overall - 	Generate uncertain data and build the decision tree. 
                            	  	This mode allow result to be save in files.
                            	  
@@ -136,21 +159,41 @@ The commands for overall mode ONLY.
  
  -save <value>		Saving the result in a file given.
 
-====Datasets====
-There 10 pre-structured datasets.
-JapaneseVowel is a "uncertain data" which includes pre-structured sampled data. 
-Each interval contains 30 samples.
-All others are point datasets.
-PenDigit and Satellite includes testing test in form of test.data.
+==== Pre-structured Datasets ====
+There 10 pre-structured datasets: (Please refer to the ICDE paper for more details).
 
+JapaneseVowel is an "uncertain data" which includes pre-structured sampled data. 
+Each attribute value is an interval, which contains 30 samples.
+All other dataset are point datasets and will need use our uncertain data generator
+for uncertain data classification.
 
-====File Extension for dataset====
+PenDigits and Satellite includes testing test in form of test.data.
+
+Acknowledgement:
+Asuncion, A. & Newman, D.J. (2007). UCI Machine Learning Repository 
+[http://www.ics.uci.edu/~mlearn/MLRepository.html]. Irvine, CA: University of California, 
+School of Information and Computer Science. 
+
+==== File Extension for dataset ====
 .name = the dataset property file
 .data = the dataset file (POINT data)
 .range = the dataset file (RANGE data)
 .error = the dataset file (SAMPLE data). The samples are stored under <filename>_PDF/ directory.
 
-====Examples of running====
+
+==== File Format for dataset ====
+Propery file: (.name)
+The first line would be the class sepeated by comma (e.g., play, not play).
+The each line from the second line would represent an attribute. The attribute name would come first 
+while the attribute values would come after the colon. If the attribute is continuous, a keyword continuous
+should be written after the colon. If it is a categorical attribute (NOT IMPLEMETED), the attribute
+values are seperated by comma. (e.g. Temperature:continuous or Outlook:Smart,Sporty,Formal)
+The number of classes and attribute are not restricted.
+
+Point dataset file: (.data)
+
+
+==== Execution Examples ====
 
 Generating interval-valued sample-distributed data for iris dataset of relative width of 0.1 and of 100 samples: 
 	-dataset datasets/iris/iris -mode gen -width 0.1 -algorithmn UDT -sample 100 -seed 20
