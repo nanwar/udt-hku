@@ -6,8 +6,8 @@ The software is developed by Smith Tsang for the following paper:
 
 Smith Tsang, Ben Kao, Kevin Y. Yip, Wai-Shing Ho, and Sau Dan Lee. 
 Decision trees for uncertain data. In 25th International Conference 
-on Data Engineering (ICDE 2009), pages 441¡V444, Shanghai, China, 
-29th March¡V2nd April 2009.  
+on Data Engineering (ICDE 2009), pages 441ï¿½V444, Shanghai, China, 
+29th Marchï¿½V2nd April 2009.  
 
 And in Bibtex.
 
@@ -63,16 +63,23 @@ You may unpack the software in any directory you want, e.g. in ~/UDT_0.9.
 There would be a pre-compiled jar file available for you in the root of the directory. 
 Or you can compile your own by the source code:
 
-javac 
+mkdir <directory>
+javac -classpath lib/log4j-1.2.15.jar  src/com/decisiontree/**/*.java  -d <directory>
+jar cvf udt_0.85.jar -C <directory> .
+rm -r <directory>
 
-After the compilation, you are ready to execute the software.
+You can compile your code in any directory, the preferred on would be 
+"class" folder under the directory of your software.
+
+After the compilation, the compiled class would be packed as a jar file udt_0.85.jar under
+the directory of your software. You are now ready to execute the software.
 
 ==== Executing the Software ====
 The software currently consists of a command-line version.
-The program can be executed in a terminal by the following commands:
+The program can be executed in a terminal by the following commands if your program 
+jar file is named as udt_0.85.jar:
 
-java -classpath lib/log4j-1.2.15.jar:udt_0.9.jar com.decisiontree.app.UDTApp
-
+java -classpath lib/log4j-1.2.15.jar:udt_0.85.jar com.decisiontree.app.UDTApp
 
 The followings are the commands o the software:
 
