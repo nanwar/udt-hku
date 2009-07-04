@@ -1,5 +1,5 @@
 ==== Update in release 0.85 ====
-- Bug Fixing on string comparisions.
+- Bug Fixings on string comparisons.
 - Renamed the main class UDTComApp.java as UDTApp.java and 
   moved it to package com.decisiontree.app (the old one is deprecated)
 - Better compiling instructions
