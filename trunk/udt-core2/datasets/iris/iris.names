@@ -1,0 +1,5 @@
+1, 2, 3.
+sepal-length: continuous.  
+sepal-width: continuous.
+petal-length: continuous.
+petal-width: continuous.
