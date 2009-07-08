@@ -23,6 +23,7 @@ package com.decisiontree.app;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -46,6 +47,7 @@ import com.decisiontree.operation.SplitSearchORI;
 import com.decisiontree.operation.SplitSearchUD;
 import com.decisiontree.operation.SplitSearchUnp;
 import com.decisiontree.param.GlobalParam;
+import com.decisiontree.ui.UDTFunctions;
 
 /**
  * 
@@ -70,6 +72,7 @@ class UDTApp {
 	 * @param training the training dataset file
 	 * @param width the interval width (relative to domain)
 	 * @param varies whether the interval width varies
+	 * @deprecated
 	 */
 	private static void generateData(String training,
 			double width, boolean varies) {
@@ -82,6 +85,7 @@ class UDTApp {
 	 * @param testing the testing dataset file
 	 * @param width the interval width (relative to domain)
 	 * @param varies whether the interval width varies
+	 * @deprecated
 	 */
 	private static void generateData(String training, String testing,
 			double width, boolean varies) {
@@ -107,6 +111,7 @@ class UDTApp {
 	 * @param width the interval width (relative to domain)
 	 * @param seed the random-generate seed number
 	 * @param varies whether the interval width varies
+	 * @deprecated
 	 */
 	private static void generateData(String training, int noSamples,
 			double width, long seed,  boolean varies) {
@@ -121,6 +126,7 @@ class UDTApp {
 	 * @param width the interval width (relative to domain)
 	 * @param seed the random-generate seed number
 	 * @param varies whether the interval width varies
+	 * @deprecated
 	 */
 	private static void generateData(String training, String testing,
 			int noSamples, double width, long seed, boolean varies) {
@@ -151,9 +157,9 @@ class UDTApp {
 			PropertyConfigurator.configure(GlobalParam.LOG_FILE);
 			String [] infoMessage = 
 					{
-					"UDT Version 0.85  Copyright (C) 2009 Database Group, ",
+					"UDT Version 0.9  Copyright (C) 2009 Database Group, ",
 					"Department of COmputer Science, The University of Hong Kong ",
-					"Welcome to UDT Version 0.85! Please wait until the program finished."
+					"Welcome to UDT Version 0.9! Please wait until the program finished."
 					};
 			
 			for(int i = 0; i < infoMessage.length; i++){
@@ -192,7 +198,7 @@ class UDTApp {
 			
 			boolean varies = false; //NOT SUPPORT IN THIS VERSION
 			
-			int trials = 1;
+			int noTrials = 1;
 			boolean saveToFile = false;
 			String resultFileName = GlobalParam.RESULT_FILE;
 		
@@ -279,7 +285,7 @@ class UDTApp {
 					
 					if(mode.equals(OVERALL)){
 						if (param.equals("-trial") || param.equals("-l"))
-							trials = Integer.parseInt(value);
+							noTrials = Integer.parseInt(value);
 						if (param.equals("-save") || param.equals("-v")){
 							saveToFile = true;
 							resultFileName = value;
@@ -297,96 +303,43 @@ class UDTApp {
 				System.exit(1);
 			}
 				
+			
+			UDTFunctions functions = new UDTFunctions();
 	
 			if(mode.equals(GEN) ){
 				System.out.println("You are running generate mode.");
 				System.out.println("The generate data would be stored in the same folder of the source data file.");
-				log.info("Generating Uncertain Data...");
-				if(algorithm.equals(SplitSearch.POINT))
-					log.info("No Uncertain Data Generation Required.");
-				if(algorithm.equals(SplitSearch.UDTUD) || algorithm.equals(SplitSearch.AVGUD)){
-					if(testing == null)
-						generateData(training, width, varies);
-					else generateData(training, testing, width, varies);
-				}
-				else{
-					if(testing == null)
-						generateData(training, noSamples, width, seed, varies);
-					else generateData(training, testing, noSamples, width, seed, varies);
-				}
+				functions.generateMode(training, testing, algorithm, noSamples, width, seed, varies);
 			}
 			
 			if(mode.equals(BUILD) ){
 				System.out.println("You are running build mode.");
-				SplitSearch splitSearch = null;
-				if(algorithm.equals(SplitSearch.UDT))
-					splitSearch = new SplitSearchUnp();
-				else if(algorithm.equals(SplitSearch.UDTBP))
-					splitSearch = new SplitSearchBP();
-				else if(algorithm.equals(SplitSearch.UDTGP))
-					splitSearch = new SplitSearchGP();
-				else if(algorithm.equals(SplitSearch.UDTLP))
-					splitSearch = new SplitSearchLP();
-				else if(algorithm.equals(SplitSearch.UDTES))
-					splitSearch = new SplitSearchES();
-				else if(algorithm.equals(SplitSearch.AVG))
-					splitSearch = new SplitSearchORI();
-				else if(algorithm.equals(SplitSearch.UDTUD))
-					splitSearch = new SplitSearchUD();
-				else if(algorithm.equals(SplitSearch.AVGUD))
-					splitSearch = new SplitSearchUD();
-				else if(algorithm.equals(SplitSearch.POINT))
-					splitSearch = new SplitSearchORI();
 				
-				final Times start = new Times();
-				DecisionTree decisionTree = null;
-				if(algorithm.equals(SplitSearch.AVG))
-					decisionTree = new SampleAvgDecisionTree(splitSearch, nodeSize, pruningThreshold);
-				else if(algorithm.equals(SplitSearch.UDTUD))
-					decisionTree = new RangeDecisionTree(splitSearch, nodeSize, pruningThreshold);
-				else if (algorithm.equals(SplitSearch.POINT))
-					decisionTree = new PointDecisionTree(splitSearch, nodeSize, pruningThreshold);
-				else if(algorithm.equals(SplitSearch.AVGUD))
-					decisionTree = new RangeAvgDecisionTree(splitSearch, nodeSize, pruningThreshold);
-				else
-					decisionTree = new SampleDecisionTree(splitSearch, nodeSize, pruningThreshold);
-				
-				
+				String result = functions.buildMode(training, testing, algorithm, type, nodeSize, pruningThreshold);
+				String [] splitResult = result.split(",");				
 				if(type.equals(DecisionTree.BUILD)){
 					log.info("Timing...");
 
-					decisionTree.buildTree(training);
-					final Times end = new Times();
-
 					System.out.println("Building Time: " );
-					end.difference(start).printTime();
-					System.out.println("No of Entropy Calculation: " + GlobalParam.getNoEntCal());
+					System.out.println( "\tUserTime: " + splitResult[3]);
+					System.out.println( "\tSystemTime: " + splitResult[4]);
+//					end.difference(start).printTime();
+					System.out.println("No of Entropy Calculation: " + splitResult[2]);
 					
 				}else if(type.equals(DecisionTree.ACCUR)){
 					log.info("Finding Accuracy...");
-					double accuracy = 0.0;
-					
-					if(training == null)
-						accuracy = decisionTree.findAccuracy(training);
-					else accuracy = decisionTree.findAccuracy(training, testing);
-					
-					accuracy = Math.rint(accuracy *10000)/10000;
-					System.out.println("Testing Accuracy: " + accuracy);
+
+					System.out.println("Testing Accuracy: " + splitResult[1]);
 				}else if(type.equals(DecisionTree.XFOLD)){
 					log.info("Finding Accuracy by crossfold");
-					double accuracy = decisionTree.crossFold(training);
-					
-					accuracy = Math.rint(accuracy *10000)/10000;
-					System.out.println("Cross-Fold Accuracy: " + accuracy);
+					System.out.println("Cross-Fold Accuracy: " + splitResult[1]);
 				}
 	
 			}
 			if(mode.equals(CLEAN)){
 				System.out.println("You are running clean mode. The operation cannot be rollbacks.");
-				SampleDataCleaner cleaner = new SampleDataCleaner();
-				if(testing == null)
-					cleaner.cleanGeneratedData(training);
-				else cleaner.cleanGeneratedDataWithTest(training, testing);
+
+				functions.cleanMode(training, testing);
 				
 				System.out.println("Data is cleaned successfully.");
 				
@@ -394,124 +347,17 @@ class UDTApp {
 			
 			if( mode.equals(OVERALL)){ // OVERALL Allows multiple trials and file save for data.
 				System.out.println("You are running overall mode. Reminded that the generated data would NOT be cleaned.");
-				BufferedWriter writer = null;
 				if(saveToFile){
-					File resultFile = new File(resultFileName);
-					if(!resultFile.exists()){
-						if(resultFile.getParent() != null){
-							resultFile.getParentFile().mkdirs();
-						}
-						resultFile.createNewFile();
-					}
-					writer = new BufferedWriter(new FileWriter(resultFileName));
-					writer.write("Decision Tree Build Type = " + type );
-					writer.newLine();
-					writer.write("Algorithm,Trail,NoEntropyCal,UserTime,SystemTime");
-					writer.newLine();
-				}
-				for(int i = 0 ; i < trials ; i++){
-				
-					log.info("Generating Uncertain Data...");
-
-					if(algorithm.equals(SplitSearch.POINT))
-						log.info("No Uncertain Data Generation Required.");
-					else if(testing == null){
-						if(algorithm.equals(SplitSearch.UDTUD) || algorithm.equals(SplitSearch.AVGUD))
-							generateData(training, width, varies);
-						else generateData(training, noSamples, width, seed+i, varies);
-					}
-					else{
-						if(algorithm.equals(SplitSearch.UDTUD) || algorithm.equals(SplitSearch.AVGUD))
-							generateData(training, testing, width, varies);
-						else generateData(training, testing, noSamples, width, seed+i, varies);
-					}
-					
-					SplitSearch splitSearch = null;
-					if(algorithm.equals(SplitSearch.UDT))
-						splitSearch = new SplitSearchUnp();
-					else if(algorithm.equals(SplitSearch.UDTBP))
-						splitSearch = new SplitSearchBP();
-					else if(algorithm.equals(SplitSearch.UDTGP))
-						splitSearch = new SplitSearchGP();
-					else if(algorithm.equals(SplitSearch.UDTLP))
-						splitSearch = new SplitSearchLP();
-					else if(algorithm.equals(SplitSearch.UDTES))
-						splitSearch = new SplitSearchES();
-					else if(algorithm.equals(SplitSearch.AVG))
-						splitSearch = new SplitSearchORI();
-					else if(algorithm.equals(SplitSearch.UDTUD))
-						splitSearch = new SplitSearchUD();
-					else if(algorithm.equals(SplitSearch.AVGUD))
-						splitSearch = new SplitSearchORI();
-					else if(algorithm.equals(SplitSearch.POINT))
-						splitSearch = new SplitSearchORI();
-					
-					final Times start = new Times();
-					DecisionTree decisionTree = null;
-					if(algorithm.equals(SplitSearch.AVG))
-						decisionTree = new SampleAvgDecisionTree(splitSearch, nodeSize, pruningThreshold);
-					else if(algorithm.equals(SplitSearch.UDTUD))
-						decisionTree = new RangeDecisionTree(splitSearch, nodeSize, pruningThreshold);
-					else if (algorithm.equals(SplitSearch.POINT))
-						decisionTree = new PointDecisionTree(splitSearch, nodeSize, pruningThreshold);
-					else if(algorithm.equals(SplitSearch.AVGUD))
-						decisionTree = new RangeAvgDecisionTree(splitSearch, nodeSize, pruningThreshold);
-					else
-						decisionTree = new SampleDecisionTree(splitSearch, nodeSize, pruningThreshold);
-
-
-					
-					if(type.equals(DecisionTree.BUILD)){
-						log.info("Timing...");
-						
-						decisionTree.buildTree(training);
-						final Times end = new Times();
-						
-						if(saveToFile){ // Save to File
-							writer.write(algorithm + "," + i + "," + GlobalParam.getNoEntCal() +"," +
-									end.getUserTime() + "," + end.getSystemTime());
-							writer.newLine();
-							
-						}else{
-							// Printing result to console
-							System.out.println("Building Time: " );
-							end.difference(start).printTime();
-							System.out.println("No of Entropy Calculation: " + GlobalParam.getNoEntCal());
-						}	
-						
-					}else if(type.equals(DecisionTree.ACCUR)){
-						log.info("Finding Accuracy...");
-						double accuracy = 0.0;
-						
-						if(training == null)
-							accuracy = decisionTree.findAccuracy(training);
-						else accuracy = decisionTree.findAccuracy(training, testing);
-
-						accuracy = Math.rint(accuracy *10000)/10000;
-						
-						if(saveToFile){ // Save to File
-							writer.write(algorithm + "," + i + "," + GlobalParam.getNoEntCal() + "," +
-									accuracy);
-							writer.newLine();
-						}else System.out.println("Testing Accuracy: " + accuracy);
-					}else if(type.equals(DecisionTree.XFOLD)){
-						log.info("Finding Accuracy by crossfold");
-						double accuracy = decisionTree.crossFold(training);
-						accuracy = Math.rint(accuracy *10000)/10000;
-						if(saveToFile){ // Save to File
-							writer.write(algorithm + "," + i + "," + GlobalParam.getNoEntCal() + "," +
-									accuracy);
-							writer.newLine();
-						}else{
-							System.out.println("Cross-Fold Accuracy: " + accuracy);
-						}
-
-					}
-					GlobalParam.clearStoredValues();
-				}
-				if(saveToFile){
+					functions.overallMode(training, testing, algorithm, type, noSamples, width, seed, varies, 
+							nodeSize, pruningThreshold,noTrials,resultFileName);
 					System.out.println("The result data is saved in " + resultFileName +".");
-					writer.close();
+
+				}else{
+					System.out.println("The results are as follows:");
+					List<String> resultList = functions.overallMode(training, testing, algorithm, type, noSamples, width, seed, varies, nodeSize, pruningThreshold, noTrials);
+					for(int i = 0; i < resultList.size(); i++){
+						System.out.println(resultList.get(i));
+					}
 				}
 			}
 
