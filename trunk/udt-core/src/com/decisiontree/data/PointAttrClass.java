@@ -28,7 +28,7 @@ package com.decisiontree.data;
  * @since 0.8
  *
  */
-public class PointAttrClass implements Comparable<AttrClass>{
+public class PointAttrClass implements AttrClass, Comparable<AttrClass>{
 
 	private Attribute attribute;
 	private int cls;
