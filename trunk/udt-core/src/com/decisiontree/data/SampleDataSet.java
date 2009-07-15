@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -27,10 +27,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.decisiontree.datagen.SampleByteArrayConvertor;
 import com.decisiontree.param.GlobalParam;
 
 /**
- * 
+ *
  * SampleDataSet - Stores the database information for interval-valued dataset with distribution represented by samples.
  *
  * @author Smith Tsang
@@ -38,36 +39,36 @@ import com.decisiontree.param.GlobalParam;
  *
  */
 public class SampleDataSet extends RangeDataSet {
-	
+
 	public static Logger log = Logger.getLogger(SampleDataSet.class);
-	
+
 	private int noSamples;
-	
+
 	public SampleDataSet(int noCls, int noAttr, int noSamples){
 		super(noCls, noAttr);
 		setNoSamples(noSamples);
 	}
-	
+
 	public SampleDataSet(List<Tuple> data, int noCls, int noAttr, int noSamples){
 		super(data, noCls, noAttr);
 		setNoSamples(noSamples);
 	}
-	
+
 	public SampleDataSet(String input, int noCls, int noAttr, int noSamples) {
 		super(input, noCls, noAttr);
 		setNoSamples(noSamples);
 	}
-	
-	
+
+
 	public int getNoSamples() {
 		return noSamples;
 	}
-	
+
 	public void setNoSamples(int noSamples){
 		this.noSamples = noSamples;
 	}
-	
 
+	@Deprecated
 	private double byteToDouble(byte[] b) {
 
 		long accum = 0;
@@ -78,7 +79,7 @@ public class SampleDataSet extends RangeDataSet {
 		}
 		return Double.longBitsToDouble(accum);
 	}
-	
+
 	private String getFileName(String name, int tupleNum, int attrNum) {
 		StringBuffer sb = new StringBuffer(name);
 		sb.append(GlobalParam.SAMPLE_PATH);
@@ -88,7 +89,7 @@ public class SampleDataSet extends RangeDataSet {
 		sb.append(attrNum);
 		return sb.toString();
 	}
-	
+
 	public Sample[] getSamples(int tupleNum, int attrNum) {
 
 		Sample [] samples = new Sample[getNoSamples()];
@@ -101,9 +102,9 @@ public class SampleDataSet extends RangeDataSet {
 			byte[] b = new byte[8];
 			for (int i = 0; i < noSamples; i++) {
 				reader.read(b, 0, 8);
-				a1 = byteToDouble(b);
+				a1 = SampleByteArrayConvertor.byteArrayToDouble(b);
 				reader.read(b, 0, 8);
-				a2 = byteToDouble(b);
+				a2 = SampleByteArrayConvertor.byteArrayToDouble(b);
 				samples[i] = new Sample(a1, a2);
 			}
 		} catch (Exception e) {
@@ -120,5 +121,5 @@ public class SampleDataSet extends RangeDataSet {
 		return samples;
 //
     }
-	
+
 }
