@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -20,37 +20,20 @@
  */
 package com.decisiontree.app;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.decisiontree.datagen.RangeDataGen;
-import com.decisiontree.datagen.SampleDataCleaner;
 import com.decisiontree.datagen.SampleDataGen;
 import com.decisiontree.function.DecisionTree;
-import com.decisiontree.function.PointDecisionTree;
-import com.decisiontree.function.RangeAvgDecisionTree;
-import com.decisiontree.function.RangeDecisionTree;
-import com.decisiontree.function.SampleAvgDecisionTree;
-import com.decisiontree.function.SampleDecisionTree;
-import com.decisiontree.measure.Times;
 import com.decisiontree.operation.SplitSearch;
-import com.decisiontree.operation.SplitSearchBP;
-import com.decisiontree.operation.SplitSearchES;
-import com.decisiontree.operation.SplitSearchGP;
-import com.decisiontree.operation.SplitSearchLP;
-import com.decisiontree.operation.SplitSearchORI;
-import com.decisiontree.operation.SplitSearchUD;
-import com.decisiontree.operation.SplitSearchUnp;
 import com.decisiontree.param.GlobalParam;
 import com.decisiontree.ui.UDTFunctions;
 
 /**
- * 
+ *
  * UDTApp - runs the main function of the UDT - Decision Tree for Uncertain Data.
  *
  * @author Smith Tsang
@@ -60,13 +43,13 @@ import com.decisiontree.ui.UDTFunctions;
 class UDTApp {
 
 	private static Logger log = Logger.getLogger(UDTApp.class);
-	
+
 
 	public static final String GEN = "GEN";
 	public static final String BUILD = "BUILD";
 	public static final String OVERALL = "OVERALL";
 	public static final String CLEAN = "CLEAN";
-	
+
 	/**
 	 * Generate interval-valued data from point data in training dataset
 	 * @param training the training dataset file
@@ -80,7 +63,7 @@ class UDTApp {
 	}
 
 	/**
-	 * Generate interval-valued data from point data in training and testing dataset 
+	 * Generate interval-valued data from point data in training and testing dataset
 	 * @param training the training dataset file
 	 * @param testing the testing dataset file
 	 * @param width the interval width (relative to domain)
@@ -89,7 +72,7 @@ class UDTApp {
 	 */
 	private static void generateData(String training, String testing,
 			double width, boolean varies) {
-		
+
 		log.info("Generating interval uncertain data");
 
 		RangeDataGen gen = new RangeDataGen(training, varies);
@@ -130,7 +113,7 @@ class UDTApp {
 	 */
 	private static void generateData(String training, String testing,
 			int noSamples, double width, long seed, boolean varies) {
-		
+
 		log.info("Generating sampled interval uncertain data");
 
 		SampleDataGen gen = new SampleDataGen(training, noSamples, seed, varies);
@@ -141,7 +124,7 @@ class UDTApp {
 
 		if(testing == null)
 			gen.storeGeneratedData(training, widths);
-		else 
+		else
 			gen.storeGeneratedDataWithTest(training, testing, widths);
 	}
 
@@ -153,55 +136,55 @@ class UDTApp {
 	public static void main(String args []){
 
 		try{
-			
+
 			PropertyConfigurator.configure(GlobalParam.LOG_FILE);
-			String [] infoMessage = 
+			String [] infoMessage =
 					{
 					"UDT Version 0.9  Copyright (C) 2009 Database Group, ",
 					"Department of COmputer Science, The University of Hong Kong ",
 					"Welcome to UDT Version 0.9! Please wait until the program finished."
 					};
-			
+
 			for(int i = 0; i < infoMessage.length; i++){
 				log.info(infoMessage[i]);
 				System.out.println(infoMessage[i]);
 			}
-				
-			log.info("Starting...");		
-	
+
+			log.info("Starting...");
+
 			boolean help = false;
-	
+
 			for(int i = 0; i < args.length;i++)
 				if(args[i].equals("-h") || args[i].equals("-help"))
 					help = true;
-	
+
 			if(help || args.length < 1){
 				System.out.println("Usage: Please refer to the README for instructions.");
 				System.exit(1);
 			}
 			log.info("Configure...");
-			
+
 			// default values
 			String training = null;
 			String testing = null;
 			int noSamples = GlobalParam.DEFAULT_NO_SAMPLES;
 			double nodeSize = GlobalParam.DEFAULT_NODESIZE;
 			double pruningThreshold = GlobalParam.DEFAULT_THRESHOLD;
-			
+
 			String mode = BUILD;
 			String type = DecisionTree.BUILD;
 			String algorithm = SplitSearch.AVG;
-			
+
 			double width = GlobalParam.DEFAULT_WIDTH;
-			
+
 			long seed = GlobalParam.DEFAULT_SEED;
-			
+
 			boolean varies = false; //NOT SUPPORT IN THIS VERSION
-			
+
 			int noTrials = 1;
 			boolean saveToFile = false;
 			String resultFileName = GlobalParam.RESULT_FILE;
-		
+
 			for(int i = 0; i < args.length; i++){
 				String param = args[i];
 				if( i+1 < args.length ){
@@ -220,18 +203,18 @@ class UDTApp {
 						training = value;
 						continue;
 					}
-	
+
 					else if(param.equals("-test") || param.equals("-t")){
 						testing = value;
 						continue;
 					}
-					
+
 					else if(param.equals("-sample") || args[i].equals("-s")){
 						noSamples = Integer.parseInt(value);
 					}
-					
+
 					else if(param.equals("-algorithm") || param.equals("-a")){
-						if(value.equalsIgnoreCase("udt")) 
+						if(value.equalsIgnoreCase("udt"))
 							algorithm = SplitSearch.UDT;
 						else if(value.equalsIgnoreCase("udtbp"))
 							algorithm = SplitSearch.UDTBP;
@@ -241,7 +224,7 @@ class UDTApp {
 							algorithm = SplitSearch.UDTGP;
 						else if(value.equalsIgnoreCase("udtes"))
 							algorithm = SplitSearch.UDTES;
-						else if(value.equalsIgnoreCase("avg")) 
+						else if(value.equalsIgnoreCase("avg"))
 							algorithm = SplitSearch.AVG;
 						else if(value.equalsIgnoreCase("udtud"))
 							algorithm = SplitSearch.UDTUD;
@@ -250,19 +233,19 @@ class UDTApp {
 						else if(value.equalsIgnoreCase("point"))
 							algorithm = SplitSearch.POINT;
 					}
-					
-					
+
+
 					if(mode.equals(BUILD) || mode.equals(OVERALL)){
 						if(param.equals("-type") || param.equals("-y")){
-			
+
 								if(value.equalsIgnoreCase("xfold"))
 									type = DecisionTree.XFOLD;
 								else if (value.equalsIgnoreCase("accuracy"))
 									type = DecisionTree.ACCUR;
 								else type = DecisionTree.BUILD;
-							
+
 						}
-						
+
 						else if(param.equals("-nodesize") || param.equals("-n")){
 							nodeSize = Double.parseDouble(value);
 							if(nodeSize < GlobalParam.DEFAULT_NODESIZE) nodeSize = GlobalParam.DEFAULT_NODESIZE;
@@ -271,8 +254,8 @@ class UDTApp {
 							pruningThreshold = Double.parseDouble(value);
 							if(pruningThreshold > GlobalParam.DEFAULT_THRESHOLD) pruningThreshold = GlobalParam.DEFAULT_THRESHOLD;
 						}
-	
-					
+
+
 					}
 					if(mode.equals(GEN) || mode.equals(OVERALL)){
 						if (param.equals("-width") || param.equals("-p")) {
@@ -281,8 +264,8 @@ class UDTApp {
 						else if(param.equals("-seed") || param.equals("-e")){
 							seed = Integer.parseInt(value);
 						}
-					}	
-					
+					}
+
 					if(mode.equals(OVERALL)){
 						if (param.equals("-trial") || param.equals("-l"))
 							noTrials = Integer.parseInt(value);
@@ -291,32 +274,32 @@ class UDTApp {
 							resultFileName = value;
 						}
 					}
-					
+
 				}
-	
+
 			}
-			
+
 			// if training data file is not specified
 			if(training == null){
-				log.error("No training set is specified."); 
-				System.out.println("Please input training set using -d or -dataset option."); 
+				log.error("No training set is specified.");
+				System.out.println("Please input training set using -d or -dataset option.");
 				System.exit(1);
 			}
-				
-			
+
+
 			UDTFunctions functions = new UDTFunctions();
-	
+
 			if(mode.equals(GEN) ){
 				System.out.println("You are running generate mode.");
 				System.out.println("The generate data would be stored in the same folder of the source data file.");
 				functions.generateMode(training, testing, algorithm, noSamples, width, seed, varies);
 			}
-			
+
 			if(mode.equals(BUILD) ){
 				System.out.println("You are running build mode.");
-				
+
 				String result = functions.buildMode(training, testing, algorithm, type, nodeSize, pruningThreshold);
-				String [] splitResult = result.split(",");				
+				String [] splitResult = result.split(",");
 				if(type.equals(DecisionTree.BUILD)){
 					log.info("Timing...");
 
@@ -325,7 +308,7 @@ class UDTApp {
 					System.out.println( "\tSystemTime: " + splitResult[4]);
 //					end.difference(start).printTime();
 					System.out.println("No of Entropy Calculation: " + splitResult[2]);
-					
+
 				}else if(type.equals(DecisionTree.ACCUR)){
 					log.info("Finding Accuracy...");
 
@@ -334,21 +317,21 @@ class UDTApp {
 					log.info("Finding Accuracy by crossfold");
 					System.out.println("Cross-Fold Accuracy: " + splitResult[1]);
 				}
-	
+
 			}
 			if(mode.equals(CLEAN)){
 				System.out.println("You are running clean mode. The operation cannot be rollbacks.");
 
 				functions.cleanMode(training, testing);
-				
+
 				System.out.println("Data is cleaned successfully.");
-				
+
 			}
-			
+
 			if( mode.equals(OVERALL)){ // OVERALL Allows multiple trials and file save for data.
 				System.out.println("You are running overall mode. Reminded that the generated data would NOT be cleaned.");
 				if(saveToFile){
-					functions.overallMode(training, testing, algorithm, type, noSamples, width, seed, varies, 
+					functions.overallMode(training, testing, algorithm, type, noSamples, width, seed, varies,
 							nodeSize, pruningThreshold,noTrials,resultFileName);
 					System.out.println("The result data is saved in " + resultFileName +".");
 
