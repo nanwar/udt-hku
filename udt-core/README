@@ -1,4 +1,4 @@
-Decision Tree Classification With Uncertain Data (UDT) Version 0.85
+Decision Tree Classification With Uncertain Data (UDT) Version 0.9
 
 Copyright (C) 2009, The Database Group, 
 Department of Computer Science, The University of Hong Kong
@@ -68,21 +68,21 @@ Or you can compile your own jar file by the source code:
 
 mkdir <directory>
 javac -classpath lib/log4j-1.2.15.jar  src/com/decisiontree/**/*.java  -d <directory>
-jar cvf udt_0.85.jar -C <directory> .
+jar cvf udt_0.9.jar -C <directory> .
 rm -r <directory>
 
 You can compile your code in any temporary directory, the preferred on would be 
 'class' folder under the directory of your software.
 
-After the compilation, the compiled class would be packed as a jar file 'udt_0.85.jar' under
-the directory of your software. You are now ready to execute the software.
+After the compilation, the compiled class would be packed as a jar file 'udt_0.9.jar'
+under the directory of your software. You are now ready to execute the software.
 
 ==== Executing the Software ====
 The software currently consists of a command-line version.
 The program can be executed in a terminal by the following commands if your program 
-jar file is named as udt_0.85.jar:
+jar file is named as udt_0.9.jar:
 
-java -classpath lib/log4j-1.2.15.jar:udt_0.85.jar com.decisiontree.app.UDTApp
+java -classpath lib/log4j-1.2.15.jar:udt_0.9.jar com.decisiontree.app.UDTApp
 
 The followings are the commands of the software:
 
