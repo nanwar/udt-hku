@@ -41,13 +41,13 @@ public class BinarySplitLP extends BinarySplit{
 	protected double tempOptimal;
 	protected boolean pruned;
 
-	public BinarySplitLP(Dispersion dispersion){
-		super(dispersion);
-	}
-
-	public BinarySplitLP(double noTuples, int noCls){
-		super(noTuples, noCls);
-	}
+//	public BinarySplitLP(Dispersion dispersion){
+//		super(dispersion);
+//	}
+//
+//	public BinarySplitLP(double noTuples, int noCls){
+//		super(noTuples, noCls);
+//	}
 
 	public BinarySplitLP(Dispersion dispersion, double noTuples, int noCls) {
 		super(dispersion, noTuples, noCls);
@@ -75,7 +75,7 @@ public class BinarySplitLP extends BinarySplit{
 				GlobalParam.incrNoHeterIntervals();
 				double [] region = segments[i].getAllCls();
 
-				lowerBoundSet[i] = dispersion.findLowerBound(left, right, region, noTuples, noCls);
+				lowerBoundSet[i] = dispersion.findLowerBound(left, right, region);
 			}
 
 			if(i == noSegments -1) break;
@@ -85,7 +85,7 @@ public class BinarySplitLP extends BinarySplit{
 				right[j] -= segments[i].getCls(j);
 			}
 
-			double avgEnt = dispersion.averageDispersion(left, right, noTuples);
+			double avgEnt = dispersion.averageDispersion(left, right);
 			if(minEnt - avgEnt >= GlobalParam.DOUBLE_PRECISION){
 				min = i;
 				minEnt = avgEnt;
@@ -257,7 +257,7 @@ public class BinarySplitLP extends BinarySplit{
 				tempLeft[j] += miniSegmentSet[i].getCls(j);
 				tempRight[j] -= miniSegmentSet[i].getCls(j);
 			}
-			double regionEnt = dispersion.averageDispersion(tempLeft, tempRight, noTuples);
+			double regionEnt = dispersion.averageDispersion(tempLeft, tempRight);
 			if(regionEnt < minEnt){
 				minEnt = regionEnt;
 				tempOptimal = split;

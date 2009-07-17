@@ -39,17 +39,30 @@ public class BinarySplit implements Split{
 	protected double threshold;
 	protected Dispersion dispersion;
 
-	public BinarySplit(Dispersion dispersion){
-		this.dispersion = dispersion;
-	}
+//	public BinarySplit(Dispersion dispersion){
+//		this.dispersion = dispersion;
+//	}
 
-	public BinarySplit(double noTuples, int noCls){
-		this(new Entropy(), noTuples, noCls);
-	}
+//	public BinarySplit(double noTuples, int noCls){
+//		this(new Entropy(), noTuples, noCls);
+//	}
 
 	public BinarySplit(Dispersion dispersion, double noTuples, int noCls){
 		init(noTuples, noCls);
 		this.dispersion = dispersion;
+	}
+
+	public void reset(){
+
+	}
+
+
+	public void init(double noTuples, int noCls) {
+		this.noTuples = noTuples;
+		this.noCls = noCls;
+		this.threshold = Double.POSITIVE_INFINITY;
+		this.localOptimal = Double.POSITIVE_INFINITY;
+
 	}
 
 	public void run(Histogram [] segments){
@@ -72,7 +85,7 @@ public class BinarySplit implements Split{
 				right[i] -= segments[j].getCls(i);
 			}
 
-			double avgEnt = dispersion.averageDispersion(left,right, noTuples);
+			double avgEnt = dispersion.averageDispersion(left,right);
 			if(minEnt - avgEnt > 1E-12){
 				min = j;
 				minEnt = avgEnt;
@@ -94,14 +107,7 @@ public class BinarySplit implements Split{
 		return localOptimal;
 	}
 
-	@Override
-	public void init(double noTuples, int noCls) {
-		this.noTuples = noTuples;
-		this.noCls = noCls;
-		this.threshold = Double.POSITIVE_INFINITY;
-		this.localOptimal = Double.POSITIVE_INFINITY;
 
-	}
 
 
 }

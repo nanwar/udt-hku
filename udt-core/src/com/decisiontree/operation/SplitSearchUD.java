@@ -155,7 +155,7 @@ public class SplitSearchUD extends AbstractSplitSearch{
 
 		double totalTuples = Tuple.countWeightedTuples(data);
 
-		BinarySplit binarySplit = new BinarySplit(totalTuples, noCls);
+		BinarySplit binarySplit = new BinarySplit(dispersion,totalTuples, noCls);
 
 		for(int i = 0 ; i < noAttr; i++){
 			Histogram segmentSet []  = SegGen(data, noCls, i);

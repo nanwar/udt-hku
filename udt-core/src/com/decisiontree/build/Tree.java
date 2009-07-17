@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -31,7 +31,7 @@ import com.decisiontree.operation.SplitSearch;
 import com.decisiontree.param.GlobalParam;
 
 /**
- * 
+ *
  * Tree (Abstract class) - Builds a decision tree.
  *
  * @author Smith Tsang
@@ -39,18 +39,18 @@ import com.decisiontree.param.GlobalParam;
  *
  */
 public abstract class Tree {
-	
+
 	private static final Logger log = Logger.getLogger(Tree.class);
-	
+
 	protected static final int NO_PARTITION = GlobalParam.DEFAULT_PARTITION;
 	private TreeNode tree;
 	protected DataSet dataSet;
 
 	public double nodeSize = GlobalParam.DEFAULT_NODESIZE;
 	public double pruningThreshold = GlobalParam.DEFAULT_THRESHOLD;
-	
+
 	public SplitSearch splitSearch = null;
-	
+
 	/**
 	 * Constructor with dataset
 	 * @param dataSet the dataset
@@ -71,7 +71,7 @@ public abstract class Tree {
 		this.nodeSize = nodeSize;
 		this.pruningThreshold = purity;
 	}
-	
+
 	/**
 	 * Constructor with dataset and the algorithm (SplitSearch) to find the best split.
 	 * @param dataSet the dataset
@@ -81,7 +81,7 @@ public abstract class Tree {
 		this(dataSet);
 		setSplitSearch(splitSearch);
 	}
-	
+
 	/**
 	 * Constructor with dataset, pre-pruning parameters and the algorithm (SplitSearch) to find the best split.
 	 * @param dataSet the dataset
@@ -93,7 +93,7 @@ public abstract class Tree {
 		this(dataSet, nodeSize, purity);
 		setSplitSearch(splitSearch);
 	}
-	
+
 
 	/**
 	 * Constructing the decision with postpruning on the dataSet stored
@@ -113,19 +113,19 @@ public abstract class Tree {
 
 	}
 
-	
+
 	/**
 	 * Finding the best attribute, split point pairs for a list of data tuples.
 	 * @param data the list of data tuples
 	 * @return the SplitData object storing the best split information
 	 */
 	public SplitData findBestAttr(List<Tuple> data){
-		
+
 		if(splitSearch == null){
 			log.error("No SplitSearch initialized");
 			return null;
 		}
-			
+
 		return splitSearch.findBestAttr(data, dataSet.getNoCls(), dataSet.getNoAttr());
 
 	}
@@ -150,16 +150,16 @@ public abstract class Tree {
 	 * @return the built decision tree at the given height
 	 */
 	public TreeNode buildDTree(List<Tuple> data, int height){
-		
+
 		TreeNode treeNode = new TreeNode(data, null, dataSet.getNoCls());
-//		Param.noNode++;
+
 		GlobalParam.incrNoNode();
 		treeNode.setHeight(height);
 		log.debug("Total Tuple at level " + height + ": " + treeNode.getWeightedNoTuples());
 
 		if(treeNode.isSingleCls()){
 			log.debug("Level " + height + ":  Same Class - "+ treeNode.getCls());
-			treeNode.setType(TreeNode.LEAF);       
+			treeNode.setType(TreeNode.LEAF);
 			return treeNode;
 		}
 		if( treeNode.getWeightedNoTuples() <= nodeSize  || treeNode.getPurity() - pruningThreshold > 1E-12){
@@ -167,7 +167,7 @@ public abstract class Tree {
 			treeNode.setType(TreeNode.LEAF);
 			return treeNode;
 		}
-		
+
 		SplitData splitData = findBestAttr(data);
 
 		if(!splitData.isValidSplit() || treeNode.getEnt() < splitData.getEnt() || Math.abs(treeNode.getEnt() - splitData.getEnt()) < 1E-12){
@@ -178,7 +178,7 @@ public abstract class Tree {
 
 		int attrNum = splitData.getAttrNum();
 		List<List<Tuple>> partitions = genPartitions(data, attrNum, splitData.getSplit());
-		
+
 		treeNode.setType(TreeNode.INTERAL);
 		treeNode.setAttrNum(attrNum);
 		treeNode.setNoChild(NO_PARTITION);
@@ -187,11 +187,11 @@ public abstract class Tree {
 		for(int i = 0 ; i < NO_PARTITION; i++){
 			treeNode.addChild(buildDTree(partitions.get(i), height+1),i);
 			treeNode.getChild(i).setParent(treeNode);
-		}	
+		}
 
 		return treeNode;
 	}
-	
+
 	/**
 	 * Generate Partitions for a particular split points. It should be placed in SplitSearch once it is stable.
 	 * @param data the data tuples
@@ -208,7 +208,7 @@ public abstract class Tree {
 	 */
 	protected DataSet getDataSet() {
 		return dataSet;
-	}	
+	}
 
 	/**
 	 * Get the root of the built decisiion tree
@@ -219,7 +219,7 @@ public abstract class Tree {
 	}
 
 	/**
-	 * Get the SplitSearch object 
+	 * Get the SplitSearch object
 	 * @return the SplitSearch object
 	 */
 	protected SplitSearch getSplitSearch() {
@@ -241,7 +241,7 @@ public abstract class Tree {
 
 //		int i =0;
 		Coeff = Coeff * Coeff;
-	
+
 		if(e < 1E-6)
 			return N* (1-Math.exp(Math.log(CF)/N));
 		else if(e < 0.9999){
@@ -257,14 +257,14 @@ public abstract class Tree {
 
 
 	}
-	
+
 	/**
 	 * Post-pruning for the decision tree using pessimatic errors as in C4.5
 	 * @param tree the root node of the decision tree
 	 * @return the lowest of chi-square error and pessimistic error of the root node of the tree
 	 */
 	protected double postPruning(TreeNode tree){
-		
+
 		if(tree.getType() == TreeNode.LEAF){
 			double k = findPError(tree);
 			return k;
@@ -273,8 +273,8 @@ public abstract class Tree {
 		for(int i =0; i < tree.getNoChildren(); i++)
 			chiE += postPruning(tree.getChild(i)) * tree.getChild(i).getWeightedNoTuples();
 		chiE = chiE/tree.getWeightedNoTuples();
-			
-		double parE = findPError(tree);	
+
+		double parE = findPError(tree);
 
 		if(chiE > parE){
 			//pruning by subtree replacement
@@ -283,7 +283,7 @@ public abstract class Tree {
 			return parE;
 		}
 		return chiE;
-		
+
 
 	}
 	/**
@@ -291,15 +291,15 @@ public abstract class Tree {
 	 * @param tree the root node of the decision tree
 	 * @param level the level of the tree
 	 */
-	public void printTree(TreeNode tree, int level){	
+	public void printTree(TreeNode tree, int level){
 		if(tree.getType() == TreeNode.LEAF){
 			for(int i = 0; i < level; i++)
 				System.out.print("\t");
 			System.out.println(" " + dataSet.getClsName(tree.getCls()) + " ( " + tree.getWeightedNoTuples() + ", " + tree.getError() + " )");
 			return;
 		}
-		
-		
+
+
 		for(int  i=0 ;i < NO_PARTITION; i++){
 			for(int j = 0; j < level; j++)
 				System.out.print("\t");
@@ -312,29 +312,29 @@ public abstract class Tree {
 		}
 
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * Read decision tree from file - NOT IMPLEMENTED
 	 * @param path the read path
 	 */
 	abstract public void readTree(String path);
 
 	/**
-	 * 
+	 *
 	 * Save decision tree to file - NOT IMPLEMENTED
 	 * @param path the save path
 	 */
 	abstract public void saveTree(String path);
-	
+
 	/**
-	 * Set the dataset 
+	 * Set the dataset
 	 * @param dataSet the dataset
 	 */
 	protected void setDataSet(DataSet dataSet) {
 		this.dataSet = dataSet;
 	}
-	
+
 	/**
 	 * Set the algorithm (SplitSearch object) to be use for finding best split point
 	 * @param splitSearch the SplitSearch object

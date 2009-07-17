@@ -33,13 +33,13 @@ import com.decisiontree.eval.Dispersion;
  */
 public class BinarySplitGP extends BinarySplitLP{
 
-	public BinarySplitGP(Dispersion dispersion){
-		super(dispersion);
-	}
-
-	public BinarySplitGP(double noTuples, int noCls){
-		super(noTuples, noCls);
-	}
+//	public BinarySplitGP(Dispersion dispersion){
+//		super(dispersion);
+//	}
+//
+//	public BinarySplitGP(double noTuples, int noCls){
+//		super(noTuples, noCls);
+//	}
 
 	public BinarySplitGP(Dispersion dispersion, double noTuples, int noCls) {
 		super(dispersion, noTuples, noCls);

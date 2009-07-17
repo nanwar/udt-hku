@@ -1,9 +1,44 @@
+/**
+ * Decision Tree Classification With Uncertain Data (UDT)
+ * Copyright (C) 2009, The Database Group,
+ * Department of Computer Science, The University of Hong Kong
+ *
+ * This file is part of UDT.
+ *
+ * UDT is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * UDT is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.decisiontree.eval;
 
 import com.decisiontree.param.GlobalParam;
 
+/**
+ *
+ * Entropy
+ *
+ * @author Smith Tsang
+ * @since 0.9
+ *
+ */
 public class Entropy implements Dispersion{
 
+	private int noCls;
+	private int noTuples;
+
+	public Entropy(int noTuples, int noCls){
+		this.noTuples = noTuples;
+		this.noCls = noCls;
+	}
 
 	public double getDispersion(double [] dist, double distSize){
 
@@ -16,7 +51,7 @@ public class Entropy implements Dispersion{
 		return -1.0 * entropy/distSize;
 	}
 
-	public double averageDispersion(double [] left, double [] right, double noTuples){
+	public double averageDispersion(double [] left, double [] right){
 
 		double leftSize = getDistSum(left);
 		double rightSize = getDistSum(right);
@@ -35,7 +70,7 @@ public class Entropy implements Dispersion{
 	}
 
 
-	public double findLowerBound(double [] left, double [] right, double [] region, double noTuples, double noCls){
+	public double findLowerBound(double [] left, double [] right, double [] region){
 
 		double leftSize = 0.0, rightSize = 0.0;
 		for(int i = 0 ; i < noCls; i++){

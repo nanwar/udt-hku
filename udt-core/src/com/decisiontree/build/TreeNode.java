@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ import java.util.List;
 import com.decisiontree.data.Tuple;
 
 /**
- * 
+ *
  * DreeNode - Represents a decision tree nodes. It could be either internal node or leaf node.
  *
  * @author Smith Tsang
@@ -46,12 +46,12 @@ public class TreeNode{
 	private TreeNode parent;
 	private TreeNode [] children;
 	private int noChildren;
-	
+
 	/**
 	 * Node Type - internal node or leaf node
 	 */
-	private int type; 
-	private int attrNum; 
+	private int type;
+	private int attrNum;
 	private double split;
 
 	private double entropy;
@@ -118,7 +118,7 @@ public class TreeNode{
 		this.noChildren = noChild;
 		children = new TreeNode[noChild];
 	}
-	
+
 	public void addChild(TreeNode child, int pos){
 		if(pos < 0 && pos >= noChildren) return;
 		children[pos] = child;
@@ -144,18 +144,18 @@ public class TreeNode{
 		if(pos < 0 && pos >= noChildren) return null;
 		return children[pos];
 	}
-	
+
 	public TreeNode getParent(){
 		return parent;
 	}
-	
+
 	public double getSplit(){
 		return split;
 	}
         public void setSplit(double split){
 		this.split = split;
 	}
-	
+
 	public void setCls(int cls){
 		this.cls = cls;
 	}
@@ -182,17 +182,17 @@ public class TreeNode{
 
 
 	public int majorityCls(){
-		
+
 		return cls;
 	}
-	
+
 	public void setClsDist(){
 
 		clsDist = new double[noCls];
 		for(int i =0; i< noCls; i++){
 			clsDist[i] = 0;
 		}
-		
+
 		Tuple tuple = null;
 		Iterator<Tuple> iter = data.iterator();
 		while(iter.hasNext()){
@@ -207,20 +207,20 @@ public class TreeNode{
 			if(clsDist[i] > 0)
 				count++;
 		}
-		
+
 		this.cls = max;
 
 		sameCls = (count <= 1);
 	}
 
 	public void setEntropy(){
-		
+
 		double ent = 0;
 
 		for(int i =0; i< noCls; i++)
 			ent += clsDist[i]
 					* Math.log(clsDist[i]/weightedNoTuples);
-		
+
 		entropy = -1.0 * ent / Math.log(2.0)/ weightedNoTuples;
 	}
 
@@ -233,14 +233,14 @@ public class TreeNode{
 	}
 
 	public double getError(){
-		
+
 		double count =0.0;
 		for(int i = 0 ; i < clsDist.length ; i++)
 			if(i != cls)
 				count += clsDist[i];
 
 		return count;
-		
+
 	}
 
 	public void setHeight(int height){
@@ -251,7 +251,7 @@ public class TreeNode{
 		return height;
 	}
 	public double [] getClsDist(){
-		return clsDist;	
+		return clsDist;
 	}
 
 	public void clearChildren(){

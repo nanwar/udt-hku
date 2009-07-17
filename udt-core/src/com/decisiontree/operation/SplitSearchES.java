@@ -59,7 +59,7 @@ public class SplitSearchES extends SplitSearchGP {
 
 		final int noTuples = attrClassSet.length;
 		final int noEndPts = endPtSet.length;
-		
+
 		int maxNoSegments = noEndPts -1;
 		Histogram tempSegmentList [] = new Histogram[maxNoSegments];
 		int noSampledSegements = 0;
@@ -87,7 +87,7 @@ public class SplitSearchES extends SplitSearchGP {
 			endPos = attrClassSet[i].getEndPos();
 
 			currPos = startPos;
-			prevPos = startPos; 
+			prevPos = startPos;
 
 			//Assume pos1 < pos2
 
@@ -150,7 +150,7 @@ public class SplitSearchES extends SplitSearchGP {
 		double totalTuples = Tuple.countWeightedTuples(data);
 		log.debug("Total Tuples: " + totalTuples);
 
-		BinarySplitES binarySplit = new BinarySplitES(totalTuples, noCls);
+		BinarySplitES binarySplit = new BinarySplitES(dispersion,totalTuples, noCls);
 
 		Histogram allSegmentSet [][] = new Histogram[noAttr][];
 		SampleAttrClass allAttrClassSet[][] = new SampleAttrClass[noAttr][];
