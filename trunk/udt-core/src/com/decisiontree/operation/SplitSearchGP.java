@@ -141,7 +141,7 @@ public class SplitSearchGP extends AbstractSplitSearch {
 		splitData.setEnt(Double.POSITIVE_INFINITY);
 		double totalTuples = Tuple.countWeightedTuples(data);
 
-		BinarySplitGP binarySplit = new BinarySplitGP(totalTuples, noCls);
+		BinarySplitGP binarySplit = new BinarySplitGP(dispersion,totalTuples, noCls);
 
 		Histogram allSegmentSet [][] = new Histogram[noAttr][];
 		SampleAttrClass allAttrClassSet[][] = new SampleAttrClass[noAttr][];

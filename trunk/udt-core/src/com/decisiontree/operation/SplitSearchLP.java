@@ -141,7 +141,7 @@ public class SplitSearchLP extends AbstractSplitSearch {
 		splitData.setEnt(Double.POSITIVE_INFINITY);
 		double totalTuples = Tuple.countWeightedTuples(data);
 
-		BinarySplitLP binarySplit = new BinarySplitLP(totalTuples, noCls);
+		BinarySplitLP binarySplit = new BinarySplitLP(dispersion,totalTuples, noCls);
 
 		SampleAttrClass [] attrClassSet;
 		Histogram [] segmentSet;

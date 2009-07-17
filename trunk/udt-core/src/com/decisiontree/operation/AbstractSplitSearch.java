@@ -4,7 +4,7 @@ import com.decisiontree.eval.Dispersion;
 
 public abstract class AbstractSplitSearch implements SplitSearch {
 
-	private Dispersion dispersion;
+	protected Dispersion dispersion;
 	private Split split;
 
 	public Dispersion getDispersion() {

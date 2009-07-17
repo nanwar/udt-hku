@@ -30,5 +30,9 @@ package com.decisiontree.operation;
  */
 public interface Split {
 	// TODO: better organization of methods
-	public void init(double noTuples, int noCls);
+//	public void init();
+//
+//	public void run();
+//
+//	public void reset();
 }
