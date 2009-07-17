@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -28,14 +28,14 @@ import com.decisiontree.data.Tuple;
 import com.decisiontree.param.GlobalParam;
 
 /**
- * 
+ *
  * SplitSearchLP -finding the best split point for a set of data using local pruning technique.
  *
  * @author Smith Tsang
  * @since 0.8
  *
  */
-public class SplitSearchLP implements SplitSearch {
+public class SplitSearchLP extends AbstractSplitSearch {
 
 	protected SampleAttrClass []  getSampleAttrClass(List<Tuple> data,  int attr){
 
@@ -56,7 +56,7 @@ public class SplitSearchLP implements SplitSearch {
 		int noEndPts = noTuples *2;
 		double [] endPtSet = new double[noEndPts];
 		for(int  i =0 ; i < noTuples; i++){
-			endPtSet[2*i] = attrClassList[i].getStart(); 
+			endPtSet[2*i] = attrClassList[i].getStart();
 			endPtSet[2*i +1] = attrClassList[i].getEnd();
 		}
 
@@ -73,13 +73,13 @@ public class SplitSearchLP implements SplitSearch {
 		int prevPos = -1,currPos = -1, startPos = -1, endPos = -1;
 
 		for(int i = 0; i < noTuples; i++){
-	
+
 			for(;temp < maxNoSegments && attrClassList[i].getStart() > tempSegmentSet[temp].getEnd();temp++);
 			if(temp >= maxNoSegments) break;
 
 			startPos = attrClassList[i].getStartPos();
 			endPos = attrClassList[i].getEndPos();
-			
+
 			currPos = startPos;
 			prevPos = startPos; // prevPos;
 
@@ -90,14 +90,14 @@ public class SplitSearchLP implements SplitSearch {
 			double totalFrac = 0;
 			for(int rtemp = temp; rtemp < maxNoSegments && attrClassList[i].getEnd() > tempSegmentSet[rtemp].getStart(); rtemp++){
 				if(tempSegmentSet[rtemp].getEnd() < nextSampleValue) continue;
-				
+
 				currPos = attrClassList[i].getNearSample(currPos+1, tempSegmentSet[rtemp].getEnd());
 
 			 	double frac = 0.0;
 				if(currPos <= startPos) frac = 0.0;
-				else if(currPos >= endPos) frac = attrClassList[i].getFrac(prevPos, endPos); // need to add 
-				else frac = attrClassList[i].getFrac(prevPos, currPos);	
-				
+				else if(currPos >= endPos) frac = attrClassList[i].getFrac(prevPos, endPos); // need to add
+				else frac = attrClassList[i].getFrac(prevPos, currPos);
+
 				tempSegmentSet[rtemp].addCls(attrClassList[i].getCls(), frac * attrClassList[i].getWeight());
 
 				totalFrac += frac;
@@ -105,15 +105,15 @@ public class SplitSearchLP implements SplitSearch {
 				nextSampleValue = attrClassList[i].getSampleValue(currPos+1);
 				prevPos = currPos;
 			}
-			
+
 		}
-		
-		int noPrunedSegments = 0;		
+
+		int noPrunedSegments = 0;
 		if(tempSegmentSet[0].empty()) {tempSegmentSet[0] = null; noPrunedSegments++;}
 		for(int i = 1; i < maxNoSegments; i++){
 			if(tempSegmentSet[i].empty()) {
 				tempSegmentSet[i] = tempSegmentSet[i-1];
-				tempSegmentSet[i-1] = null; 
+				tempSegmentSet[i-1] = null;
 				noPrunedSegments++;
 				continue;
 			}
@@ -131,30 +131,30 @@ public class SplitSearchLP implements SplitSearch {
 			if(tempSegmentSet[i] != null){
 				segmentSet[count++] = tempSegmentSet[i];
 		 	}
-		return segmentSet;	
+		return segmentSet;
 
 	}
-	
+
 	public SplitData findBestAttr(List<Tuple> data, int noCls, int noAttr) {
-		
+
 		SplitData splitData = new SplitData();
 		splitData.setEnt(Double.POSITIVE_INFINITY);
-		double totalTuples = Tuple.countWeightedTuples(data);			
+		double totalTuples = Tuple.countWeightedTuples(data);
 
 		BinarySplitLP binarySplit = new BinarySplitLP(totalTuples, noCls);
 
 		SampleAttrClass [] attrClassSet;
 		Histogram [] segmentSet;
 		for(int i = 0 ; i < noAttr; i++){
-			
+
 			attrClassSet = getSampleAttrClass(data, i);
 			segmentSet  = SegGen(attrClassSet, noCls);
-	
+
 //			Param.noEndPtIntervals +=segmentSet.length;
 			GlobalParam.addNoEndPtIntervals(segmentSet.length);
 			binarySplit.run(segmentSet, attrClassSet);
 			double localEnt = binarySplit.getEnt();
-			
+
 			if(splitData.getEnt() - localEnt > 1E-12){
 				splitData.setEnt(localEnt);
 				splitData.setSplit(binarySplit.getSplit());
@@ -162,13 +162,16 @@ public class SplitSearchLP implements SplitSearch {
 			}
 		}
 
-		
+
 		log.debug("Best Split: " + splitData.getAttrNum() + ", " + splitData.getSplit() + ", " + splitData.getEnt());
 
 		return splitData;
-		
+
 	}
 
-	
+	protected BinarySplitLP getSplit(){
+		return (BinarySplitLP) super.getSplit();
+	}
+
 }
 

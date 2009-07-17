@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -32,15 +32,15 @@ import com.decisiontree.data.Tuple;
 import com.decisiontree.param.GlobalParam;
 
 /**
- * 
+ *
  * SplitSearchUnp - finding the best split point for a set of data without any
  * pruning technique.
- * 
+ *
  * @author Smith Tsang
  * @since 0.8
- * 
+ *
  */
-public class SplitSearchUnp implements SplitSearch {
+public class SplitSearchUnp extends AbstractSplitSearch {
 
 	protected PointAttrClass[] generatePointAttrClass(List<Tuple> data, int attr) {
 
@@ -148,6 +148,10 @@ public class SplitSearchUnp implements SplitSearch {
 				+ splitData.getSplit() + ", " + splitData.getEnt());
 
 		return splitData;
+	}
+
+	protected BinarySplit getSplit(){
+		return (BinarySplit) super.getSplit();
 	}
 
 }

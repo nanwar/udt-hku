@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -25,10 +25,11 @@ import java.util.Arrays;
 
 import com.decisiontree.data.PointAttrClass;
 import com.decisiontree.data.SampleAttrClass;
+import com.decisiontree.eval.Dispersion;
 import com.decisiontree.param.GlobalParam;
 
 /**
- * 
+ *
  * BinarySplitLP - Finds the best binary split point of an attribute using the local pruning technique.
  *
  * @author Smith Tsang
@@ -38,12 +39,20 @@ import com.decisiontree.param.GlobalParam;
 public class BinarySplitLP extends BinarySplit{
 
 	protected double tempOptimal;
-	protected boolean pruned = true;
+	protected boolean pruned;
+
+	public BinarySplitLP(Dispersion dispersion){
+		super(dispersion);
+	}
 
 	public BinarySplitLP(double noTuples, int noCls){
 		super(noTuples, noCls);
 	}
-	
+
+	public BinarySplitLP(Dispersion dispersion, double noTuples, int noCls) {
+		super(dispersion, noTuples, noCls);
+	}
+
 	public double [] preProcess(Histogram [] segments){
 		int noSegments = segments.length;
 
@@ -63,58 +72,56 @@ public class BinarySplitLP extends BinarySplit{
 		for(int i = 0 ; i < noSegments; i++){
 
 			if(segments[i].mulCls()){
-//				Param.noHeterIntervals++; Param.addNoEntCal(1);
 				GlobalParam.incrNoHeterIntervals();
 				double [] region = segments[i].getAllCls();
-			
-				lowerBoundSet[i] = findLowerBound(left, right, region);
+
+				lowerBoundSet[i] = dispersion.findLowerBound(left, right, region, noTuples, noCls);
 			}
 
 			if(i == noSegments -1) break;
 
 			for(int j = 0; j  < noCls; j++){
-				left[j] += segments[i].getCls(j);			
+				left[j] += segments[i].getCls(j);
 				right[j] -= segments[i].getCls(j);
 			}
 
-			double avgEnt = avgEntropy(left,right);
-			if(minEnt - avgEnt >= 1E-12){
+			double avgEnt = dispersion.averageDispersion(left, right, noTuples);
+			if(minEnt - avgEnt >= GlobalParam.DOUBLE_PRECISION){
 				min = i;
 				minEnt = avgEnt;
 			}
 		}
 
-		if(min != -1)	
+		if(min != -1)
 			localOptimal = segments[min].getEnd();
 		threshold = minEnt;
 		return lowerBoundSet;
-		
+
 	}
 
 	protected boolean [] findUnprunedRegion(Histogram [] segments, double [] lowerBounds){
-		
+
 		boolean [] unpruned = new boolean[segments.length];
 		for(int i = 0; i < segments.length;i++){
-			if(segments[i].mulCls() && threshold - lowerBounds[i] >= 1E-12){ 
-//				Param.noUnpIntervals++;
+			if(segments[i].mulCls() && threshold - lowerBounds[i] >= GlobalParam.DOUBLE_PRECISION){
 				GlobalParam.incrNoUnpIntervals();
 				unpruned[i] = true;
-				pruned = false;
+				setPruned(false);
 			}
-			else unpruned[i] = false; 
+			else unpruned[i] = false;
 		}
-		
-		return unpruned; 	
+
+		return unpruned;
 	}
 
 	public void run(Histogram [] segmentSet, SampleAttrClass [] attrClassSet){
 
-		pruned = true;
+
 		double lowerBounds[] = preProcess(segmentSet);
 		boolean unpruned[] = findUnprunedRegion(segmentSet, lowerBounds);
 
-		if(pruned) return;
-		
+		if(isPruned()) return;
+
 		double left[] = new double[noCls];
 		double right[] = new double[noCls];
 
@@ -122,21 +129,19 @@ public class BinarySplitLP extends BinarySplit{
 			for(int j = 0 ; j < noCls; j++){
 				right[j] += segmentSet[i].getCls(j);
 			}
-			
+
 		}
 
 		for(int i = 0; i < segmentSet.length; i++){
-			
+
 			if(unpruned[i]){
-			//	if(lower[i] - threshold > 1E-12) {  
 				double bestEnt = findEntInRegion(segmentSet[i],attrClassSet,left,right);
-				if(threshold - bestEnt > 1E-12){
+				if(threshold - bestEnt > GlobalParam.DOUBLE_PRECISION){
 					threshold = bestEnt;
 					localOptimal = tempOptimal;
 				}
-			//	}
 			}
-			for(int j = 0 ; j < noCls; j++){		
+			for(int j = 0 ; j < noCls; j++){
 				left[j] += segmentSet[i].getCls(j);
 				right[j] -= segmentSet[i].getCls(j);
 			}
@@ -145,9 +150,7 @@ public class BinarySplitLP extends BinarySplit{
 		}
 	}
 
-	public boolean isAttrPruned(){
-		return pruned;
-	}
+
 
 	@Override
 	public double getEnt(){
@@ -159,16 +162,16 @@ public class BinarySplitLP extends BinarySplit{
 		return localOptimal;
 	}
 
-	
+
 	protected Histogram [] miniSegGen(PointAttrClass [] pointAttrClassSet){
-		
+
 		int noTuples = pointAttrClassSet.length;
 
 		int count =0;
 		Histogram tempSegments[] = new Histogram[noTuples];
-		tempSegments[0] = new Histogram(noCls);	
+		tempSegments[0] = new Histogram(noCls);
 		tempSegments[0].setHist(pointAttrClassSet[0].getValue(), pointAttrClassSet[0].getCls(), pointAttrClassSet[0].getWeight());
-		
+
 		for( int i =1; i < noTuples; i++){
 			if(pointAttrClassSet[i].getValue() == tempSegments[count].getValue() || (!tempSegments[count].mulCls() && pointAttrClassSet[i].getCls() == tempSegments[count].singleCls()))
 				tempSegments[count].setHist(pointAttrClassSet[i].getValue(), pointAttrClassSet[i].getCls(), pointAttrClassSet[i].getWeight());
@@ -187,10 +190,10 @@ public class BinarySplitLP extends BinarySplit{
 
 
 	protected int binarySearch(SampleAttrClass [] attrClassSet, double key){
-		
+
 		int low = 0;
 		int high = attrClassSet.length-1;
-	
+
 		int mid = 0;
 		while(high >= low){
 			mid = (low+high)/2;
@@ -201,47 +204,42 @@ public class BinarySplitLP extends BinarySplit{
 		}
 
 		return low;
-					
+
 	}
-	
-	//modified
+
 	protected double findEntInRegion(Histogram hist, SampleAttrClass [] attrClassSet,  double [] left, double [] right){
-		
+
 		double start = hist.getStart();
 		double end = hist.getEnd();
-		
+
 		double frac = 0;
-		
-		ArrayList<PointAttrClass> nList = new ArrayList<PointAttrClass>((int)(hist.size()));	
+
+		ArrayList<PointAttrClass> nList = new ArrayList<PointAttrClass>((int)(hist.size()));
 		int pos = binarySearch(attrClassSet, end);
 		int pos2, pos3;
 
-		//double segSize = 0;
-		//double curFrac = 0;
 		for(int i = 0; i < pos; i++){
-			if(attrClassSet[i].getEnd() <= start) continue; 
-			pos2 = attrClassSet[i].getEqualOrLarger(start); 
+			if(attrClassSet[i].getEnd() <= start) continue;
+			pos2 = attrClassSet[i].getEqualOrLarger(start);
 			pos3 = attrClassSet[i].getNearSample(end);
 
 			if(pos2 < attrClassSet[i].getStartPos()) pos2 = attrClassSet[i].getStartPos();
 			if(pos3 > attrClassSet[i].getEndPos()) pos3 = attrClassSet[i].getEndPos();
 			// assume startPos < endPos;
-					
+
 			for(int j =pos2 ; j <= pos3; j++){
 				frac = attrClassSet[i].getFrac(j-1,j);
-		//		segSize += frac * t[i].getWeight();	
 				nList.add( new PointAttrClass(attrClassSet[i].getSample(j),attrClassSet[i].getCls(), frac * attrClassSet[i].getWeight()));
 			}
 		}
 
-		//System.out.println("Segsize: " + segSize + " "  + seg.size());
 		PointAttrClass nArray[] = new PointAttrClass[nList.size()];
 		nList.toArray(nArray);
-		
-		Arrays.sort(nArray);		
-		
+
+		Arrays.sort(nArray);
+
 		Histogram miniSegmentSet[] = miniSegGen(nArray);
-				
+
 		double [] tempLeft = new double[noCls];
 	       	double [] tempRight = new double[noCls];
 
@@ -250,30 +248,29 @@ public class BinarySplitLP extends BinarySplit{
 			tempRight[i] = right[i];
 		}
 		double split = start;
-		
+
 		double minEnt = Double.POSITIVE_INFINITY;
-		
+
 		for(int i = 0 ; i <miniSegmentSet.length; i++){
 			split = miniSegmentSet[i].getValue();
 			for(int j = 0; j< noCls; j++){
 				tempLeft[j] += miniSegmentSet[i].getCls(j);
 				tempRight[j] -= miniSegmentSet[i].getCls(j);
-			} 
-			double regionEnt = avgEntropy(tempLeft,tempRight);
+			}
+			double regionEnt = dispersion.averageDispersion(tempLeft, tempRight, noTuples);
 			if(regionEnt < minEnt){
 				minEnt = regionEnt;
-				tempOptimal = split;	
+				tempOptimal = split;
 			}
 		}
 
-//		Param.noEntOnSamples += miniSegmentSet.length;	
-//		Param.addNoEntCal(miniSegmentSet.length);
 		GlobalParam.addNoEntOnSamples(miniSegmentSet.length);
 		return minEnt;
 
 
 	}
 
+	@Deprecated
 	public double findLowerBound(double [] left, double [] right, double [] region){
 
 		double leftSize = 0.0, rightSIze = 0.0;
@@ -284,10 +281,10 @@ public class BinarySplitLP extends BinarySplit{
 
 		double ent = 0.0;
 		for(int i = 0 ; i < noCls; i++){
-			
+
 			double leftT = left[i] + region[i];
-			double logValueL = 0; 
-			if( leftT > 1E-12){  
+			double logValueL = 0;
+			if( leftT > 1E-12){
 				logValueL = Math.log(leftT/(leftSize + region[i]))/Math.log(2.0);
 			}
 			double sumLeft = left[i] * logValueL;
@@ -297,7 +294,7 @@ public class BinarySplitLP extends BinarySplit{
 				logValueR = Math.log(right[i]/(rightSIze + region[i]))/Math.log(2.0);
 			double sumRight = (right[i] - region[i]) * logValueR;
 
-			
+
 			double remain = 0.0;
 			if(region[i] > 1E-12){
 				if(logValueL > logValueR)
@@ -309,5 +306,19 @@ public class BinarySplitLP extends BinarySplit{
 		}
 
 		return -1.0 * ent/noTuples;
+	}
+
+	public void init(double noTuples, int noCls){
+		super.init(noTuples, noCls);
+		tempOptimal = Double.POSITIVE_INFINITY;
+		this.pruned = true;
+	}
+
+	public boolean isPruned(){
+		return pruned;
+	}
+
+	private void setPruned(boolean pruned) {
+		this.pruned = pruned;
 	}
 }
