@@ -1,6 +1,32 @@
+==== Update in version 0.90 ====
+11/09/09	Added com.decisiontree.gen.SampleDataTransform to
+			transform human readable sample data to bytecode data
+			for the program ???
+16/07/09	Added interface com.decisiontree.eval.Dispersion
+			for all dispersion measure. Added
+			com.decisiontree.eval.Entropy for Entropy
+16/07/09	Added com.decisiontree.operation.AbstractSplitSearch
+			and extended by all SplitSearch classes.
+15/07/09	Move the method byteToDouble in
+			com.decisiontree.data.SampleDataSet and
+			doubleToByte in com.decisiontree.datagen.SampleDataGen to
+			com.decisiontree.datagen.SampleDataTransformer
+11/07/09	Code cleaning for com.decisiontree.gen.RangeDataGen
+			and com.decisiontree.gen.SampleDataGen
+07/07/09	Modified com.decisiontree.app.UDTApp to use
+			com.decisiontree.ui.UDTFunction instead of messing
+			in main class
+07/07/09	Added class com.decisiontree,UDTFunction to control the
+			program running for extensibility.
+07/07/09	Bug Fixing: com.decisiontree.data.PointAttrClass should
+			implement AttrClass
+
+
 ==== Update in version 0.85 ====
-- Bug fixings on string comparisons.
-- Renamed the main class UDTComApp.java as UDTApp.java and 
-  moved it to package com.decisiontree.app (the old one is deprecated)
-- Better compiling instructions
-- Added comments on source codes
+04/07/09	Better compiling instructions
+28/06/09 	Renamed the main class UDTComApp.java as UDTApp.java and
+     		moved it to package com.decisiontree.app (the old one is
+     		deprecated)
+22/06/09 	Bug fixings on string comparisons on
+			com.decisiontree.ui.UDTComApp
+22/06/09 	Added comments on source codes
