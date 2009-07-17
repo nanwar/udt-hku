@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -21,9 +21,10 @@
 package com.decisiontree.operation;
 
 import com.decisiontree.data.SampleAttrClass;
+import com.decisiontree.eval.Dispersion;
 
 /**
- * 
+ *
  * BinarySplitGP - Finds the best binary split point of an attribute using the global pruning technique.
  *
  * @author Smith Tsang
@@ -32,11 +33,18 @@ import com.decisiontree.data.SampleAttrClass;
  */
 public class BinarySplitGP extends BinarySplitLP{
 
-	
+	public BinarySplitGP(Dispersion dispersion){
+		super(dispersion);
+	}
+
 	public BinarySplitGP(double noTuples, int noCls){
 		super(noTuples, noCls);
 	}
-	
+
+	public BinarySplitGP(Dispersion dispersion, double noTuples, int noCls) {
+		super(dispersion, noTuples, noCls);
+	}
+
 	public void run(Histogram [] segments, double [] lowerBounds, SampleAttrClass [] attrClassSet, double threshold){
 
 		pruned = true;
@@ -44,7 +52,7 @@ public class BinarySplitGP extends BinarySplitLP{
 		boolean unpruned[] = findUnprunedRegion(segments, lowerBounds);
 
 		if(pruned) return;
-		
+
 		double left[] = new double[noCls];
 		double right[] = new double[noCls];
 
@@ -52,18 +60,18 @@ public class BinarySplitGP extends BinarySplitLP{
 			for(int j = 0 ; j < noCls; j++){
 				right[j] += segments[i].getCls(j);
 			}
-			
+
 		}
 
 		for(int i = 0; i < segments.length; i++){
-			if(unpruned[i]){ 
+			if(unpruned[i]){
 				double bestEnt = findEntInRegion(segments[i],attrClassSet,left,right);
 				if(this.threshold - bestEnt > 1E-12){
 					this.threshold = bestEnt;
 					localOptimal = tempOptimal;
 				}
 			}
-			for(int j = 0 ; j < noCls; j++){		
+			for(int j = 0 ; j < noCls; j++){
 				left[j] += segments[i].getCls(j);
 				right[j] -= segments[i].getCls(j);
 			}

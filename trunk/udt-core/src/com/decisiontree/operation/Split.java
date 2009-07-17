@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 package com.decisiontree.operation;
 
 /**
- * 
+ *
  * Split (Interface) - represent a way to split a set of tuple
  *
  * @author Smith Tsang
@@ -29,5 +29,6 @@ package com.decisiontree.operation;
  *
  */
 public interface Split {
-	// TODO: better organization of methods 
+	// TODO: better organization of methods
+	public void init(double noTuples, int noCls);
 }

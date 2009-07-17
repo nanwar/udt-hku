@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -30,16 +30,16 @@ import com.decisiontree.data.Tuple;
 import com.decisiontree.param.GlobalParam;
 
 /**
- * 
+ *
  * SplitSearchUD -finding the best split point for a set of data (interval-valued) using interval-valued pruning technique.
  *
  * @author Smith Tsang
  * @since 0.8
  *
  */
-public class SplitSearchUD implements SplitSearch{
-	
-	
+public class SplitSearchUD extends AbstractSplitSearch{
+
+
 	public RangeAttrClass [] generateRangeAttrClass(List<Tuple>data, int attr){
 
 		int noTuples = data.size();
@@ -59,7 +59,7 @@ public class SplitSearchUD implements SplitSearch{
 
 		double [] endPtSet = new double[noTuples*2];
 		for(int  i =0 ; i < noTuples; i++){
-			endPtSet[2*i] = attrClassSet[i].getStart(); 
+			endPtSet[2*i] = attrClassSet[i].getStart();
 			endPtSet[2*i +1] = attrClassSet[i].getEnd();
 		}
 
@@ -69,10 +69,6 @@ public class SplitSearchUD implements SplitSearch{
 		int attrClassPos = 0;
 		int maxNoSegments =0;
 
-//		int emptyInt = 0;
-//		int homoInt = 0;
-//		int heterInt = 0;
-
 		double totalFrac = 0;
 		double start, end;
 		for( int i =1; i < noTuples*2; i++){
@@ -80,7 +76,7 @@ public class SplitSearchUD implements SplitSearch{
 			end = endPtSet[i];
 
 			if(end - start < 1E-10) continue;
-			for( ; attrClassPos < noTuples && 
+			for( ; attrClassPos < noTuples &&
 					attrClassSet[attrClassPos].getEnd() < start; attrClassPos++){};
 			if( attrClassPos >= noTuples) break;
 			int temp = attrClassPos;
@@ -105,34 +101,23 @@ public class SplitSearchUD implements SplitSearch{
 				tempSegmentSet[maxNoSegments].addCls(attrClassSet[temp].getCls(),frac * attrClassSet[temp].getWeight());
 			}
 			tempSegmentSet[maxNoSegments].setValue(end);
-			maxNoSegments++;			
+			maxNoSegments++;
 
 		}
-	
-//		Histogram segments[] = new Histogram[maxNoSegments];
+
 		ArrayList<Histogram> segmentList = new ArrayList<Histogram>(maxNoSegments);
-
-//		int singClsMerge = 0;
-//		int mulClsMerge = 0;
-
-//		int noSegments = countSegments;
-//		int countSegments =0;
-//		segments[0] = new Histogram(noCls);
-//		segmentList.add(segments[0]);
-//		segments[0].mergeHist(tempSegmentSet[0]);
 
 		Histogram currSegment = new Histogram(noCls);
 		currSegment.mergeHist(tempSegmentSet[0]);
-		segmentList.add(/*segments[0]*/currSegment);
-//		if(tempSegmentSet[0].mulCls()) heterInt++;
-//		else homoInt++;
+		segmentList.add(currSegment);
+
 		for( int i =1; i < maxNoSegments ; i++){
 			if(tempSegmentSet[i].empty())
 				continue;
 			else if(tempSegmentSet[i].mulCls()){
 				if(currSegment.mulCls() && currSegment.checkDist(tempSegmentSet[i])){
 					currSegment.mergeHist(tempSegmentSet[i]);
-//					
+//
 				}
 				else{
 					currSegment = new Histogram(noCls);
@@ -151,43 +136,14 @@ public class SplitSearchUD implements SplitSearch{
 				}
 			}
 		}
-		
-//		for( int i =1; i < maxNoSegments ; i++){
-//			if(tempSegmentSet[i].empty()){ /*emptyInt++; */continue;}
-//			else if(tempSegmentSet[i].mulCls()){
-////				heterInt++;
-//				if(/*segments[countSegments]*/currSegment.mulCls() && /*segments[countSegments]*/currSegment.checkDist(tempSegmentSet[i])){
-//					/*segments[countSegments]*/currSegment.mergeHist(tempSegmentSet[i]);
-////					mulClsMerge++;
-//				}
-//				else{
-//					/*segments[++countSegments] */currSegment = new Histogram(noCls);
-//					segmentList.add(/*segments[countSegments]*/currSegment);
-//					/*segments[countSegments]*/currSegment.mergeHist(tempSegmentSet[i]);
-//				}
-//			}
-//			else{
-////				homoInt++;
-//				if(!segments[countSegments].mulCls() && segments[countSegments].singleCls() == tempSegmentSet[i].singleCls()){
-//					segments[countSegments].mergeHist(tempSegmentSet[i]);
-////					singClsMerge++;
-//				}
-//				else{
-//					segments[++countSegments] = new Histogram(noCls);
-//					segmentList.add(segments[countSegments]);
-//					segments[countSegments].mergeHist(tempSegmentSet[i]);
-//				}
-//			}
-//		}
+
 
 		Histogram [] segments = new Histogram[segmentList.size()];
-//		Histogram tempSegment = null;
 		Iterator<Histogram> iter = segmentList.iterator();
 		for(int i = 0; iter.hasNext(); i++)
 			segments[i] = iter.next();
-		
-//		segmentList.toArray(segments);
-		return segments;	
+
+		return segments;
 
 	}
 
@@ -196,11 +152,11 @@ public class SplitSearchUD implements SplitSearch{
 
 		SplitData splitData = new SplitData();
 		splitData.setEnt(Double.POSITIVE_INFINITY);
-	
+
 		double totalTuples = Tuple.countWeightedTuples(data);
 
-		BinarySplit binarySplit = new BinarySplit(totalTuples, noCls);	
-	
+		BinarySplit binarySplit = new BinarySplit(totalTuples, noCls);
+
 		for(int i = 0 ; i < noAttr; i++){
 			Histogram segmentSet []  = SegGen(data, noCls, i);
 			int noSegments = segmentSet.length;
@@ -210,7 +166,7 @@ public class SplitSearchUD implements SplitSearch{
 			GlobalParam.addNoEntOnSamples(segmentSet.length);
 			binarySplit.run(segmentSet);
 			double localEnt = binarySplit.getEnt();
-			
+
 			if(splitData.getEnt() - localEnt > 1E-12){
 				splitData.setEnt(localEnt);
 				splitData.setSplit(binarySplit.getSplit());
@@ -218,8 +174,12 @@ public class SplitSearchUD implements SplitSearch{
 			}
 		}
 		log.debug("Best Split: " + splitData.getAttrNum() + ", " + splitData.getSplit() + ", " + splitData.getEnt());
-		
+
 		return splitData;
+	}
+
+	protected BinarySplit getSplit(){
+		return (BinarySplit) super.getSplit();
 	}
 
 }

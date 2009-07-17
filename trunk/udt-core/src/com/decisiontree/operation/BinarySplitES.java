@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -25,10 +25,11 @@ import java.util.Arrays;
 
 import com.decisiontree.data.PointAttrClass;
 import com.decisiontree.data.SampleAttrClass;
+import com.decisiontree.eval.Dispersion;
 import com.decisiontree.param.GlobalParam;
 
 /**
- * 
+ *
  * BinarySplitES - Finds the best binary split point of an attribute using the end-pt sampling technique.
  *
  * @author Smith Tsang
@@ -37,8 +38,16 @@ import com.decisiontree.param.GlobalParam;
  */
 public class BinarySplitES extends BinarySplitGP {
 
+	public BinarySplitES(Dispersion dispersion){
+		super(dispersion);
+	}
+
 	public BinarySplitES(double noTuples, int noCls) {
 		super(noTuples, noCls);
+	}
+
+	public BinarySplitES(Dispersion dispersion, double noTuples, int noCls) {
+		super(dispersion, noTuples, noCls);
 	}
 
 	@Override
@@ -62,9 +71,8 @@ public class BinarySplitES extends BinarySplitGP {
 
 			if (segmentSet[i].mulCls()) {
 				double[] region = segmentSet[i].getAllCls();
-//				Param.noHeterIntervals++;
 				GlobalParam.incrNoHeterIntervals();
-				lower[i] = findLowerBound(left, right, region);
+				lower[i] = dispersion.findLowerBound(left, right, region, noTuples, noCls);
 			}
 
 			if (i == noSegments - 1)
@@ -75,7 +83,7 @@ public class BinarySplitES extends BinarySplitGP {
 				right[j] -= segmentSet[i].getCls(j);
 			}
 
-			double avgEnt = avgEntropy(left, right);
+			double avgEnt = dispersion.averageDispersion(left, right, noTuples);
 			if (minEnt - avgEnt >= 1E-12) {
 				min = i;
 				minEnt = avgEnt;
@@ -246,11 +254,9 @@ public class BinarySplitES extends BinarySplitGP {
 
 				mulCls = false;
 				if (segmentSet[i].mulCls()) {
-					tempLowerBound = findLowerBound(tempLeft, tempRight, segmentSet[i].getAllCls());
-//					Param.noEndPtSampLBs++; Param.addNoEntCal(1);
+					tempLowerBound = dispersion.findLowerBound(tempLeft, tempRight, segmentSet[i].getAllCls(), noTuples, noCls);
 					GlobalParam.incrNoEndPtSampLBs();
 					if (threshold - tempLowerBound > 1E-14 && tempThres - tempLowerBound > 1E-14) {
-//						Param.noUnpEndPtSampLBs++;
 						GlobalParam.incrNoUnpEndPtSampLBs();
 						tempEnt = findEntInRegion(segmentSet[i], attrClassSet, tempLeft,
 								tempRight);
@@ -264,7 +270,6 @@ public class BinarySplitES extends BinarySplitGP {
 				} else {
 					presentSegNum = segmentSet[i].singleCls();
 					if (presentSegNum != prevHomoSegNum)
-//						 Param.noHomo++;
 						prevHomoSegNum = presentSegNum;
 				}
 
@@ -276,8 +281,8 @@ public class BinarySplitES extends BinarySplitGP {
 				}
 
 				if (presentSegNum == prevHomoSegNum && !mulCls) {
-					double avgEnt = avgEntropy(tempLeft, tempRight);
-//					Param.noEndPtSampIntervals++; Param.addNoEntCal(1);
+					double avgEnt = dispersion.averageDispersion(tempLeft, tempRight, noTuples);
+
 					GlobalParam.incrNoEndPtSampIntervals();
 					if (tempThres - avgEnt > 1E-14
 							&& threshold - avgEnt > 1E-14) {
@@ -354,7 +359,7 @@ public class BinarySplitES extends BinarySplitGP {
 				tempLeft[j] += miniSegmentSet[i].getCls(j);
 				tempRight[j] -= miniSegmentSet[i].getCls(j);
 			}
-			double regionEnt = avgEntropy(tempLeft, tempRight);
+			double regionEnt = dispersion.averageDispersion(tempLeft, tempRight, noTuples);
 
 			if (minEnt - regionEnt > 1E-14) {
 				minEnt = regionEnt;
@@ -363,11 +368,11 @@ public class BinarySplitES extends BinarySplitGP {
 		}
 
 		GlobalParam.addNoEntOnSamples(miniSegmentSet.length);
-//		Param.noEntOnSamples += miniSegmentSet.length;
-//		Param.addNoEntCal(miniSegmentSet.length);
-//		Param.noEnt += mini.length;
+
 		return minEnt;
 
 	}
+
+
 
 }

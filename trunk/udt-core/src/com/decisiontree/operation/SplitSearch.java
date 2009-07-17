@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -25,9 +25,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.decisiontree.data.Tuple;
+import com.decisiontree.eval.Dispersion;
 
 /**
- * 
+ *
  * SplitSearch (Interface) - finding the best split point for a set of data.
  *
  * @author Smith Tsang
@@ -45,21 +46,28 @@ public interface SplitSearch {
 	public static final String UDTES = "UDTES";
 
 	public static final String AVG = "AVG";
-	
+
 	public static final String UDTUD = "UDTUD";
 	public static final String AVGUD = "AVGUD";
-	
+
 	public static final String POINT = "POINT";
 
-
 	/**
-	 * Finding best attribute,split point pair with the given data tuples 
+	 * Finding best attribute,split point pair with the given data tuples
 	 * @param data the given data tuples
 	 * @param noCls the number of classes
 	 * @param noAttr the number of attribute
 	 * @return the SplitData object storing the best attribute,split point pair
 	 */
 	public SplitData findBestAttr(List<Tuple> data, int noCls, int noAttr);
-	
-	
+
+	public Dispersion getDispersion();
+
+	public void setDispersion(Dispersion dispersion);
+
+//	Split getSplit();
+//	void setBinarySplit(BinarySplit binarySplit);
+
+
+
 }

@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -20,8 +20,11 @@
  */
 package com.decisiontree.operation;
 
+import com.decisiontree.eval.Dispersion;
+import com.decisiontree.eval.Entropy;
+
 /**
- * 
+ *
  * BinarySplit - Finds the binary split point of an attribute using the basic technique.
  *
  * @author Smith Tsang
@@ -30,20 +33,27 @@ package com.decisiontree.operation;
  */
 public class BinarySplit implements Split{
 
-	protected double noTuples;	
+	protected double noTuples;
 	protected int noCls;
 	protected double localOptimal;
 	protected double threshold;
+	protected Dispersion dispersion;
+
+	public BinarySplit(Dispersion dispersion){
+		this.dispersion = dispersion;
+	}
 
 	public BinarySplit(double noTuples, int noCls){
-		this.noTuples =noTuples;
-		this.noCls = noCls;
-		this.threshold = Double.POSITIVE_INFINITY;
-		this.localOptimal = Double.POSITIVE_INFINITY;
+		this(new Entropy(), noTuples, noCls);
+	}
+
+	public BinarySplit(Dispersion dispersion, double noTuples, int noCls){
+		init(noTuples, noCls);
+		this.dispersion = dispersion;
 	}
 
 	public void run(Histogram [] segments){
-	
+
 		int noSegments = segments.length;
 		double left[] = new double[noCls];
 		double right[] = new double[noCls];
@@ -58,11 +68,11 @@ public class BinarySplit implements Split{
 
 		for(int j = 0 ; j < noSegments-1; j++){
 			for(int i = 0; i  <noCls; i++){
-				left[i] += segments[j].getCls(i);			
+				left[i] += segments[j].getCls(i);
 				right[i] -= segments[j].getCls(i);
 			}
 
-			double avgEnt = avgEntropy(left,right);
+			double avgEnt = dispersion.averageDispersion(left,right, noTuples);
 			if(minEnt - avgEnt > 1E-12){
 				min = j;
 				minEnt = avgEnt;
@@ -72,7 +82,7 @@ public class BinarySplit implements Split{
 		threshold = minEnt;
 		if(min != -1)
 			localOptimal = segments[min].getValue();
-			
+
 
 	}
 
@@ -84,28 +94,14 @@ public class BinarySplit implements Split{
 		return localOptimal;
 	}
 
+	@Override
+	public void init(double noTuples, int noCls) {
+		this.noTuples = noTuples;
+		this.noCls = noCls;
+		this.threshold = Double.POSITIVE_INFINITY;
+		this.localOptimal = Double.POSITIVE_INFINITY;
 
-	protected double entropy(double [] dist, double distSize){
-		
-		double ent = 0.0;
-		
-		for(int i = 0; i < dist.length ; i++)
-			if(dist[i] > 1E-12)
-				ent += dist[i] * Math.log(dist[i]/distSize)/Math.log(2.0);
-
-		return -1.0 * ent/distSize;
 	}
-	
-	protected double avgEntropy(double [] left, double [] right){
 
-		double leftSize = 0.0, rightSize = 0.0;
-		for(int i = 0; i < left.length; i++)
-			leftSize += left[i];
-		for(int i = 0; i < right.length; i++)
-			rightSize += right[i];
-		
-		return (entropy(left, leftSize) * leftSize + entropy(right, rightSize) * rightSize) / noTuples;
-		
-	}
 
 }
