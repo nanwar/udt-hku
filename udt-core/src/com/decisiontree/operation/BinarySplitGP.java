@@ -21,7 +21,7 @@
 package com.decisiontree.operation;
 
 import com.decisiontree.data.SampleAttrClass;
-import com.decisiontree.eval.Dispersion;
+import com.decisiontree.eval.DispersionMeasure;
 
 /**
  *
@@ -33,16 +33,13 @@ import com.decisiontree.eval.Dispersion;
  */
 public class BinarySplitGP extends BinarySplitLP{
 
-//	public BinarySplitGP(Dispersion dispersion){
-//		super(dispersion);
-//	}
-//
-//	public BinarySplitGP(double noTuples, int noCls){
-//		super(noTuples, noCls);
-//	}
 
-	public BinarySplitGP(Dispersion dispersion, double noTuples, int noCls) {
-		super(dispersion, noTuples, noCls);
+	public BinarySplitGP(String dispersionStr) {
+		super(dispersionStr);
+	}
+
+	public BinarySplitGP(DispersionMeasure dispersion) {
+		super(dispersion);
 	}
 
 	public void run(Histogram [] segments, double [] lowerBounds, SampleAttrClass [] attrClassSet, double threshold){

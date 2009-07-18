@@ -25,6 +25,7 @@ import java.util.List;
 import com.decisiontree.data.PointAttrClass;
 import com.decisiontree.data.PointAttribute;
 import com.decisiontree.data.Tuple;
+import com.decisiontree.eval.DispersionMeasure;
 
 /**
  * 
@@ -35,6 +36,15 @@ import com.decisiontree.data.Tuple;
  *
  */
 public class SplitSearchORI extends SplitSearchBP {
+	
+	public SplitSearchORI(String dispersionStr){
+		super(dispersionStr);
+	}
+
+	
+	protected SplitSearchORI(Split split){
+		super(split);
+	}
 
 	@Override
 	protected PointAttrClass [] generatePointAttrClass(List<Tuple> data, int attr){

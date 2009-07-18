@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.decisiontree.data.PointAttrClass;
 import com.decisiontree.data.Tuple;
+import com.decisiontree.eval.DispersionMeasure;
 
 /**
  * 
@@ -34,13 +35,23 @@ import com.decisiontree.data.Tuple;
  *
  */
 public class SplitSearchBP extends SplitSearchUnp{
+	
+	
+	public SplitSearchBP(String dispersionStr){
+		super(dispersionStr);
+	}
+
+	
+	protected SplitSearchBP(Split split){
+		super(split);
+	}
 
 	@Override
 	protected Histogram [] SegGen(List<Tuple> data, int noCls, int attr){
 
 		PointAttrClass [] attrClassSet =  generatePointAttrClass(data,attr);
 		if(attrClassSet.length == 0){ 
-			log.warn("Bug: the attrClassSet size should not be 0."); 
+			log.error("The attrClassSet size should not be 0."); 
 			return null;
 		}
 		Arrays.sort(attrClassSet);

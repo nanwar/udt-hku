@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.decisiontree.data.SampleAttrClass;
 import com.decisiontree.data.Tuple;
+import com.decisiontree.eval.DispersionMeasure;
 import com.decisiontree.param.GlobalParam;
 
 /**
@@ -36,6 +37,16 @@ import com.decisiontree.param.GlobalParam;
  *
  */
 public class SplitSearchLP extends AbstractSplitSearch {
+
+	public SplitSearchLP(String dispersionStr){
+		this(new BinarySplitLP(dispersionStr));
+	}
+
+	
+	protected SplitSearchLP(Split split){
+		super(split);
+//		setSplit(split);
+	}
 
 	protected SampleAttrClass []  getSampleAttrClass(List<Tuple> data,  int attr){
 
@@ -138,11 +149,12 @@ public class SplitSearchLP extends AbstractSplitSearch {
 	public SplitData findBestAttr(List<Tuple> data, int noCls, int noAttr) {
 
 		SplitData splitData = new SplitData();
-		splitData.setEnt(Double.POSITIVE_INFINITY);
+		splitData.setDispersion(Double.POSITIVE_INFINITY);
 		double totalTuples = Tuple.countWeightedTuples(data);
 
-		BinarySplitLP binarySplit = new BinarySplitLP(dispersion,totalTuples, noCls);
-
+//		BinarySplitLP binarySplit = new BinarySplitLP(dispersion,totalTuples, noCls);
+		getSplit().init(totalTuples, noCls);
+		
 		SampleAttrClass [] attrClassSet;
 		Histogram [] segmentSet;
 		for(int i = 0 ; i < noAttr; i++){
@@ -150,20 +162,19 @@ public class SplitSearchLP extends AbstractSplitSearch {
 			attrClassSet = getSampleAttrClass(data, i);
 			segmentSet  = SegGen(attrClassSet, noCls);
 
-//			Param.noEndPtIntervals +=segmentSet.length;
 			GlobalParam.addNoEndPtIntervals(segmentSet.length);
-			binarySplit.run(segmentSet, attrClassSet);
-			double localEnt = binarySplit.getEnt();
+			getSplit().run(segmentSet, attrClassSet);
+			double localEnt = getSplit().getEnt();
 
-			if(splitData.getEnt() - localEnt > 1E-12){
-				splitData.setEnt(localEnt);
-				splitData.setSplit(binarySplit.getSplit());
+			if(splitData.getDispersion() - localEnt > 1E-12){
+				splitData.setDispersion(localEnt);
+				splitData.setSplitPt(getSplit().getSplit());
 				splitData.setAttrNum(i);
 			}
 		}
 
 
-		log.debug("Best Split: " + splitData.getAttrNum() + ", " + splitData.getSplit() + ", " + splitData.getEnt());
+		log.debug("Best Split: " + splitData.getAttrNum() + ", " + splitData.getSplitPt() + ", " + splitData.getDispersion());
 
 		return splitData;
 

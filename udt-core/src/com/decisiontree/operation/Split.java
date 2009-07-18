@@ -20,6 +20,8 @@
  */
 package com.decisiontree.operation;
 
+import com.decisiontree.eval.DispersionMeasure;
+
 /**
  *
  * Split (Interface) - represent a way to split a set of tuple
@@ -30,9 +32,5 @@ package com.decisiontree.operation;
  */
 public interface Split {
 	// TODO: better organization of methods
-//	public void init();
-//
-//	public void run();
-//
-//	public void reset();
+	public DispersionMeasure getDispersionMeasure();
 }

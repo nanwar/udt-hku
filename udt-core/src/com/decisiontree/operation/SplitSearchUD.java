@@ -27,6 +27,7 @@ import java.util.List;
 
 import com.decisiontree.data.RangeAttrClass;
 import com.decisiontree.data.Tuple;
+import com.decisiontree.eval.DispersionMeasure;
 import com.decisiontree.param.GlobalParam;
 
 /**
@@ -38,6 +39,15 @@ import com.decisiontree.param.GlobalParam;
  *
  */
 public class SplitSearchUD extends AbstractSplitSearch{
+	
+	public SplitSearchUD(String dispersionStr){
+		this(new BinarySplit(dispersionStr));
+	}
+
+	
+	protected SplitSearchUD(Split split){
+		super(split);
+	}
 
 
 	public RangeAttrClass [] generateRangeAttrClass(List<Tuple>data, int attr){
@@ -151,12 +161,13 @@ public class SplitSearchUD extends AbstractSplitSearch{
 	public SplitData findBestAttr(List<Tuple> data, int noCls, int noAttr) {
 
 		SplitData splitData = new SplitData();
-		splitData.setEnt(Double.POSITIVE_INFINITY);
+		splitData.setDispersion(Double.POSITIVE_INFINITY);
 
 		double totalTuples = Tuple.countWeightedTuples(data);
 
-		BinarySplit binarySplit = new BinarySplit(dispersion,totalTuples, noCls);
-
+//		BinarySplit binarySplit = new BinarySplit(dispersion,totalTuples, noCls);
+		getSplit().init(totalTuples, noCls);
+		
 		for(int i = 0 ; i < noAttr; i++){
 			Histogram segmentSet []  = SegGen(data, noCls, i);
 			int noSegments = segmentSet.length;
@@ -164,16 +175,16 @@ public class SplitSearchUD extends AbstractSplitSearch{
 				continue;
 			}
 			GlobalParam.addNoEntOnSamples(segmentSet.length);
-			binarySplit.run(segmentSet);
-			double localEnt = binarySplit.getEnt();
+			getSplit().run(segmentSet);
+			double localEnt = getSplit().getEnt();
 
-			if(splitData.getEnt() - localEnt > 1E-12){
-				splitData.setEnt(localEnt);
-				splitData.setSplit(binarySplit.getSplit());
+			if(splitData.getDispersion() - localEnt > 1E-12){
+				splitData.setDispersion(localEnt);
+				splitData.setSplitPt(getSplit().getSplit());
 				splitData.setAttrNum(i);
 			}
 		}
-		log.debug("Best Split: " + splitData.getAttrNum() + ", " + splitData.getSplit() + ", " + splitData.getEnt());
+		log.debug("Best Split: " + splitData.getAttrNum() + ", " + splitData.getSplitPt() + ", " + splitData.getDispersion());
 
 		return splitData;
 	}

@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 import com.decisiontree.data.PointAttrClass;
 import com.decisiontree.data.SampleAttrClass;
-import com.decisiontree.eval.Dispersion;
+import com.decisiontree.eval.DispersionMeasure;
 import com.decisiontree.param.GlobalParam;
 
 /**
@@ -41,16 +41,12 @@ public class BinarySplitLP extends BinarySplit{
 	protected double tempOptimal;
 	protected boolean pruned;
 
-//	public BinarySplitLP(Dispersion dispersion){
-//		super(dispersion);
-//	}
-//
-//	public BinarySplitLP(double noTuples, int noCls){
-//		super(noTuples, noCls);
-//	}
+	public BinarySplitLP(String dispersionStr) {
+		super(dispersionStr);
+	}
 
-	public BinarySplitLP(Dispersion dispersion, double noTuples, int noCls) {
-		super(dispersion, noTuples, noCls);
+	public BinarySplitLP(DispersionMeasure dispersion) {
+		super(dispersion);
 	}
 
 	public double [] preProcess(Histogram [] segments){
@@ -75,7 +71,7 @@ public class BinarySplitLP extends BinarySplit{
 				GlobalParam.incrNoHeterIntervals();
 				double [] region = segments[i].getAllCls();
 
-				lowerBoundSet[i] = dispersion.findLowerBound(left, right, region);
+				lowerBoundSet[i] = dispersionMeasure.findLowerBound(left, right, region);
 			}
 
 			if(i == noSegments -1) break;
@@ -85,7 +81,7 @@ public class BinarySplitLP extends BinarySplit{
 				right[j] -= segments[i].getCls(j);
 			}
 
-			double avgEnt = dispersion.averageDispersion(left, right);
+			double avgEnt = dispersionMeasure.averageDispersion(left, right);
 			if(minEnt - avgEnt >= GlobalParam.DOUBLE_PRECISION){
 				min = i;
 				minEnt = avgEnt;
@@ -257,7 +253,7 @@ public class BinarySplitLP extends BinarySplit{
 				tempLeft[j] += miniSegmentSet[i].getCls(j);
 				tempRight[j] -= miniSegmentSet[i].getCls(j);
 			}
-			double regionEnt = dispersion.averageDispersion(tempLeft, tempRight);
+			double regionEnt = dispersionMeasure.averageDispersion(tempLeft, tempRight);
 			if(regionEnt < minEnt){
 				minEnt = regionEnt;
 				tempOptimal = split;
@@ -308,6 +304,7 @@ public class BinarySplitLP extends BinarySplit{
 		return -1.0 * ent/noTuples;
 	}
 
+	@Override
 	public void init(double noTuples, int noCls){
 		super.init(noTuples, noCls);
 		tempOptimal = Double.POSITIVE_INFINITY;

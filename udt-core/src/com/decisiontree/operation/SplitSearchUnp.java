@@ -29,6 +29,7 @@ import com.decisiontree.data.PointAttrClass;
 import com.decisiontree.data.Sample;
 import com.decisiontree.data.SampleAttribute;
 import com.decisiontree.data.Tuple;
+import com.decisiontree.eval.DispersionMeasure;
 import com.decisiontree.param.GlobalParam;
 
 /**
@@ -41,7 +42,24 @@ import com.decisiontree.param.GlobalParam;
  *
  */
 public class SplitSearchUnp extends AbstractSplitSearch {
+	
+	
+	public SplitSearchUnp(String dispersionStr){
+		this(new BinarySplit(dispersionStr));
+	}
 
+	protected SplitSearchUnp(Split split){
+		super(split);
+	}
+//	public SplitSearchUnp(Dispersion dispersion){
+//		this(new BinarySplit(dispersion));
+//	}
+//	
+//	protected SplitSearchUnp(Dispersion dispersion, Split split){
+//		super(dispersion);
+//		setSplit(split);
+//	}
+	
 	protected PointAttrClass[] generatePointAttrClass(List<Tuple> data, int attr) {
 
 		int noTuples = data.size();
@@ -117,11 +135,12 @@ public class SplitSearchUnp extends AbstractSplitSearch {
 	public SplitData findBestAttr(List<Tuple> data, int noCls, int noAttr) {
 
 		SplitData splitData = new SplitData();
-		splitData.setEnt(Double.POSITIVE_INFINITY);
+		splitData.setDispersion(Double.POSITIVE_INFINITY);
 
 		double totalTuples = Tuple.countWeightedTuples(data);
 
-		BinarySplit binarySplit = new BinarySplit(dispersion,totalTuples, noCls);
+		getSplit().init(totalTuples, noCls);
+//		BinarySplit binarySplit = new BinarySplit(dispersion, noCls);
 		for (int i = 0; i < noAttr; i++) {
 			Histogram segmentSet[] = SegGen(data, noCls, i);
 			if (segmentSet == null)
@@ -134,18 +153,18 @@ public class SplitSearchUnp extends AbstractSplitSearch {
 			if (noSegments <= 1)
 				continue;
 
-			binarySplit.run(segmentSet);
-			double localEnt = binarySplit.getEnt();
+			getSplit().run(segmentSet);
+			double localEnt = getSplit().getEnt();
 
-			if (splitData.getEnt() - localEnt > 1E-12) {
-				splitData.setEnt(localEnt);
-				splitData.setSplit(binarySplit.getSplit());
+			if (splitData.getDispersion() - localEnt > 1E-12) {
+				splitData.setDispersion(localEnt);
+				splitData.setSplitPt(getSplit().getSplit());
 				splitData.setAttrNum(i);
 			}
 		}
 
 		log.debug("Best Split: " + splitData.getAttrNum() + ", "
-				+ splitData.getSplit() + ", " + splitData.getEnt());
+				+ splitData.getSplitPt() + ", " + splitData.getDispersion());
 
 		return splitData;
 	}
@@ -153,5 +172,8 @@ public class SplitSearchUnp extends AbstractSplitSearch {
 	protected BinarySplit getSplit(){
 		return (BinarySplit) super.getSplit();
 	}
+
+
+
 
 }

@@ -25,7 +25,8 @@ import java.util.Arrays;
 
 import com.decisiontree.data.PointAttrClass;
 import com.decisiontree.data.SampleAttrClass;
-import com.decisiontree.eval.Dispersion;
+import com.decisiontree.eval.DispersionMeasure;
+import com.decisiontree.eval.DispersionMeasureFactory;
 import com.decisiontree.param.GlobalParam;
 
 /**
@@ -38,16 +39,12 @@ import com.decisiontree.param.GlobalParam;
  */
 public class BinarySplitES extends BinarySplitGP {
 
-//	public BinarySplitES(Dispersion dispersion){
-//		super(dispersion);
-//	}
-//
-//	public BinarySplitES(double noTuples, int noCls) {
-//		super(noTuples, noCls);
-//	}
-
-	public BinarySplitES(Dispersion dispersion, double noTuples, int noCls) {
-		super(dispersion, noTuples, noCls);
+	public BinarySplitES(String dispersionStr){
+		super(dispersionStr);
+	}
+	
+	public BinarySplitES(DispersionMeasure dispersion) {
+		super(dispersion);
 	}
 
 	@Override
@@ -72,7 +69,7 @@ public class BinarySplitES extends BinarySplitGP {
 			if (segmentSet[i].mulCls()) {
 				double[] region = segmentSet[i].getAllCls();
 				GlobalParam.incrNoHeterIntervals();
-				lower[i] = dispersion.findLowerBound(left, right, region);
+				lower[i] = dispersionMeasure.findLowerBound(left, right, region);
 			}
 
 			if (i == noSegments - 1)
@@ -83,7 +80,7 @@ public class BinarySplitES extends BinarySplitGP {
 				right[j] -= segmentSet[i].getCls(j);
 			}
 
-			double avgEnt = dispersion.averageDispersion(left, right);
+			double avgEnt = dispersionMeasure.averageDispersion(left, right);
 			if (minEnt - avgEnt >= 1E-12) {
 				min = i;
 				minEnt = avgEnt;
@@ -254,7 +251,7 @@ public class BinarySplitES extends BinarySplitGP {
 
 				mulCls = false;
 				if (segmentSet[i].mulCls()) {
-					tempLowerBound = dispersion.findLowerBound(tempLeft, tempRight, segmentSet[i].getAllCls());
+					tempLowerBound = dispersionMeasure.findLowerBound(tempLeft, tempRight, segmentSet[i].getAllCls());
 					GlobalParam.incrNoEndPtSampLBs();
 					if (threshold - tempLowerBound > 1E-14 && tempThres - tempLowerBound > 1E-14) {
 						GlobalParam.incrNoUnpEndPtSampLBs();
@@ -281,7 +278,7 @@ public class BinarySplitES extends BinarySplitGP {
 				}
 
 				if (presentSegNum == prevHomoSegNum && !mulCls) {
-					double avgEnt = dispersion.averageDispersion(tempLeft, tempRight);
+					double avgEnt = dispersionMeasure.averageDispersion(tempLeft, tempRight);
 
 					GlobalParam.incrNoEndPtSampIntervals();
 					if (tempThres - avgEnt > 1E-14
@@ -359,7 +356,7 @@ public class BinarySplitES extends BinarySplitGP {
 				tempLeft[j] += miniSegmentSet[i].getCls(j);
 				tempRight[j] -= miniSegmentSet[i].getCls(j);
 			}
-			double regionEnt = dispersion.averageDispersion(tempLeft, tempRight);
+			double regionEnt = dispersionMeasure.averageDispersion(tempLeft, tempRight);
 
 			if (minEnt - regionEnt > 1E-14) {
 				minEnt = regionEnt;

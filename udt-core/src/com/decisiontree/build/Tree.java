@@ -151,17 +151,24 @@ public abstract class Tree {
 	 */
 	public TreeNode buildDTree(List<Tuple> data, int height){
 
-		TreeNode treeNode = new TreeNode(data, null, dataSet.getNoCls());
-
+		double [] clsDist = Tuple.computeClsDist(data, dataSet.getNoCls());
+		double weightedNoTuples = Tuple.countWeightedTuples(data);
+		double dispersion = splitSearch.findDispersion(clsDist,weightedNoTuples);
+		
+		TreeNode treeNode = new TreeNode(clsDist, weightedNoTuples, dispersion);
+//		TreeNode treeNode = new TreeNode(data, null, dataSet.getNoCls());
 		GlobalParam.incrNoNode();
-		treeNode.setHeight(height);
-		log.debug("Total Tuple at level " + height + ": " + treeNode.getWeightedNoTuples());
 
-		if(treeNode.isSingleCls()){
+//		treeNode.setHeight(height);
+//		log.debug("Total Tuple at level " + height + ": " + treeNode.getWeightedNoTuples());
+		 
+		boolean singleCls =	TreeUtil.isSingleCls(clsDist);
+		if(singleCls){
 			log.debug("Level " + height + ":  Same Class - "+ treeNode.getCls());
 			treeNode.setType(TreeNode.LEAF);
 			return treeNode;
 		}
+
 		if( treeNode.getWeightedNoTuples() <= nodeSize  || treeNode.getPurity() - pruningThreshold > 1E-12){
 			log.debug("Level " + height + ":  Pruned - "+ treeNode.getCls());
 			treeNode.setType(TreeNode.LEAF);
@@ -170,19 +177,19 @@ public abstract class Tree {
 
 		SplitData splitData = findBestAttr(data);
 
-		if(!splitData.isValidSplit() || treeNode.getEnt() < splitData.getEnt() || Math.abs(treeNode.getEnt() - splitData.getEnt()) < 1E-12){
-			log.debug("Level " + height + ":  No Best Attribute - "+ treeNode.getEnt() + " " + splitData.getEnt());
+		if(!splitData.isValidSplit() || treeNode.getDispersion() < splitData.getDispersion() || Math.abs(treeNode.getDispersion() - splitData.getDispersion()) < 1E-12){
+			log.debug("Level " + height + ":  No Best Attribute - "+ treeNode.getDispersion() + " " + splitData.getDispersion());
 			treeNode.setType(TreeNode.LEAF);
 			return treeNode;
 		}
 
 		int attrNum = splitData.getAttrNum();
-		List<List<Tuple>> partitions = genPartitions(data, attrNum, splitData.getSplit());
+		List<List<Tuple>> partitions = genPartitions(data, attrNum, splitData.getSplitPt());
 
 		treeNode.setType(TreeNode.INTERAL);
 		treeNode.setAttrNum(attrNum);
 		treeNode.setNoChild(NO_PARTITION);
-		treeNode.setSplit(splitData.getSplit());
+		treeNode.setSplit(splitData.getSplitPt());
 
 		for(int i = 0 ; i < NO_PARTITION; i++){
 			treeNode.addChild(buildDTree(partitions.get(i), height+1),i);

@@ -20,8 +20,8 @@
  */
 package com.decisiontree.operation;
 
-import com.decisiontree.eval.Dispersion;
-import com.decisiontree.eval.Entropy;
+import com.decisiontree.eval.DispersionMeasure;
+import com.decisiontree.eval.DispersionMeasureFactory;
 
 /**
  *
@@ -37,31 +37,24 @@ public class BinarySplit implements Split{
 	protected int noCls;
 	protected double localOptimal;
 	protected double threshold;
-	protected Dispersion dispersion;
+	protected DispersionMeasure dispersionMeasure;
 
-//	public BinarySplit(Dispersion dispersion){
-//		this.dispersion = dispersion;
-//	}
-
-//	public BinarySplit(double noTuples, int noCls){
-//		this(new Entropy(), noTuples, noCls);
-//	}
-
-	public BinarySplit(Dispersion dispersion, double noTuples, int noCls){
-		init(noTuples, noCls);
-		this.dispersion = dispersion;
+	
+	public BinarySplit(String dispersionStr){
+		this.dispersionMeasure = DispersionMeasureFactory.createDispersionMeasure(dispersionStr);
 	}
-
-	public void reset(){
-
+	
+	public BinarySplit(DispersionMeasure dispersionMeasure){
+		this.dispersionMeasure = dispersionMeasure;
 	}
-
-
+	
 	public void init(double noTuples, int noCls) {
 		this.noTuples = noTuples;
 		this.noCls = noCls;
+		this.dispersionMeasure.init(noTuples, noCls);
 		this.threshold = Double.POSITIVE_INFINITY;
 		this.localOptimal = Double.POSITIVE_INFINITY;
+
 
 	}
 
@@ -85,7 +78,7 @@ public class BinarySplit implements Split{
 				right[i] -= segments[j].getCls(i);
 			}
 
-			double avgEnt = dispersion.averageDispersion(left,right);
+			double avgEnt = dispersionMeasure.averageDispersion(left,right);
 			if(minEnt - avgEnt > 1E-12){
 				min = j;
 				minEnt = avgEnt;
@@ -96,15 +89,20 @@ public class BinarySplit implements Split{
 		if(min != -1)
 			localOptimal = segments[min].getValue();
 
-
 	}
-
+	
 	public double getEnt(){
 		return threshold;
 	}
 
 	public double getSplit(){
 		return localOptimal;
+	}
+
+	@Override
+	public DispersionMeasure getDispersionMeasure() {
+		// TODO Auto-generated method stub
+		return dispersionMeasure;
 	}
 
 
