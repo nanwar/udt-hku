@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import com.decisiontree.datagen.RangeDataGen;
 import com.decisiontree.datagen.SampleDataCleaner;
 import com.decisiontree.datagen.SampleDataGen;
+import com.decisiontree.eval.DispersionMeasure;
 import com.decisiontree.function.DecisionTree;
 import com.decisiontree.function.PointDecisionTree;
 import com.decisiontree.function.RangeAvgDecisionTree;
@@ -42,6 +43,7 @@ import com.decisiontree.measure.Times;
 import com.decisiontree.operation.SplitSearch;
 import com.decisiontree.operation.SplitSearchBP;
 import com.decisiontree.operation.SplitSearchES;
+import com.decisiontree.operation.SplitSearchFactory;
 import com.decisiontree.operation.SplitSearchGP;
 import com.decisiontree.operation.SplitSearchLP;
 import com.decisiontree.operation.SplitSearchORI;
@@ -165,27 +167,9 @@ public class UDTFunctions {
 		}
     }
     
+    @Deprecated
     private SplitSearch createSplitSearch(String algorithm){
-		SplitSearch splitSearch = null;
-		if(algorithm.equals(SplitSearch.UDT))
-			splitSearch = new SplitSearchUnp();
-		else if(algorithm.equals(SplitSearch.UDTBP))
-			splitSearch = new SplitSearchBP();
-		else if(algorithm.equals(SplitSearch.UDTGP))
-			splitSearch = new SplitSearchGP();
-		else if(algorithm.equals(SplitSearch.UDTLP))
-			splitSearch = new SplitSearchLP();
-		else if(algorithm.equals(SplitSearch.UDTES))
-			splitSearch = new SplitSearchES();
-		else if(algorithm.equals(SplitSearch.AVG))
-			splitSearch = new SplitSearchORI();
-		else if(algorithm.equals(SplitSearch.UDTUD))
-			splitSearch = new SplitSearchUD();
-		else if(algorithm.equals(SplitSearch.AVGUD))
-			splitSearch = new SplitSearchUD();
-		else if(algorithm.equals(SplitSearch.POINT))
-			splitSearch = new SplitSearchORI();
-		return splitSearch;
+    	return null;
     }
 
     
@@ -205,9 +189,9 @@ public class UDTFunctions {
     	
     }
     public String buildMode(String training, String testing, String algorithm, String type,  double nodeSize, double pruningThreshold){
-//		System.out.println("You are running build mode.");
 
-    	SplitSearch splitSearch = createSplitSearch(algorithm);
+    	// Currently using entropy
+    	SplitSearch splitSearch = SplitSearchFactory.createSplitSearch(algorithm, DispersionMeasure.ENTROPY); 
     	if(splitSearch == null){
     		log.error("Incorrect algorithm specified.");
     		return null;
