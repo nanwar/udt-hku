@@ -20,6 +20,7 @@
  */
 package com.decisiontree.data;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -184,4 +185,31 @@ public abstract class Tuple {
 		return count;
 	}
 
+	public static double[] computeClsDist(List<Tuple> data, int noCls){
+
+		double [] clsDist = new double[noCls];
+		Arrays.fill(clsDist,0);
+
+		Tuple tuple = null;
+		Iterator<Tuple> iter = data.iterator();
+		while(iter.hasNext()){
+			tuple = iter.next();
+			clsDist[tuple.getCls()] += tuple.getWeight();
+		}
+
+		return clsDist;
+//		int max = 0,count =0;
+//		for(int i = 0 ; i < noCls ; i++){
+//			if(clsDist[max] < clsDist[i])
+//				max = i;
+//			if(clsDist[i] > 0)
+//				count++;
+//		}
+//
+//		this.cls = max;
+
+//		sameCls = (count <= 1);
+	}
+	
+	
 }
