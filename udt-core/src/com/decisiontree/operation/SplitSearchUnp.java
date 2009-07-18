@@ -29,7 +29,6 @@ import com.decisiontree.data.PointAttrClass;
 import com.decisiontree.data.Sample;
 import com.decisiontree.data.SampleAttribute;
 import com.decisiontree.data.Tuple;
-import com.decisiontree.eval.DispersionMeasure;
 import com.decisiontree.param.GlobalParam;
 
 /**

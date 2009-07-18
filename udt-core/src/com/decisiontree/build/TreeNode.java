@@ -20,12 +20,8 @@
  */
 package com.decisiontree.build;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
-import com.decisiontree.data.Tuple;
 import com.decisiontree.param.GlobalParam;
 
 /**
@@ -194,8 +190,6 @@ public class TreeNode{
 
 	public boolean isEmptyNode(){
 		return weightedNoTuples < GlobalParam.DOUBLE_PRECISION;
-		
-//		return (data == null);
 	}
 
 	public double getPurity(){

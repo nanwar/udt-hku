@@ -20,8 +20,6 @@
  */
 package com.decisiontree.datagen;
 
-import java.util.List;
-
 import com.decisiontree.data.Sample;
 
 /**
