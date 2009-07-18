@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.decisiontree.data.Tuple;
-import com.decisiontree.eval.Dispersion;
+import com.decisiontree.eval.DispersionMeasure;
 
 /**
  *
@@ -40,7 +40,7 @@ public interface SplitSearch {
 	static final Logger log = Logger.getLogger(SplitSearch.class);
 
 	public static final String UDT  = "UDT";
-	public static final String UDTBP = "UDTBP";
+	public static final String UDTBP = "UDTBP";	
 	public static final String UDTGP = "UDTGP";
 	public static final String UDTLP = "UDTLP";
 	public static final String UDTES = "UDTES";
@@ -49,7 +49,7 @@ public interface SplitSearch {
 
 	public static final String UDTUD = "UDTUD";
 	public static final String AVGUD = "AVGUD";
-
+	
 	public static final String POINT = "POINT";
 
 	/**
@@ -60,10 +60,12 @@ public interface SplitSearch {
 	 * @return the SplitData object storing the best attribute,split point pair
 	 */
 	public SplitData findBestAttr(List<Tuple> data, int noCls, int noAttr);
+	
+	public double findDispersion(double [] dist, double distSize);
 
-	public Dispersion getDispersion();
-
-	public void setDispersion(Dispersion dispersion);
+//	public Dispersion getDispersion();
+//
+//	public void setDispersion(Dispersion dispersion);
 
 //	Split getSplit();
 //	void setBinarySplit(BinarySplit binarySplit);

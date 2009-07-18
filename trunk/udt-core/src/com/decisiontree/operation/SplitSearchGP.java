@@ -25,17 +25,28 @@ import java.util.List;
 
 import com.decisiontree.data.SampleAttrClass;
 import com.decisiontree.data.Tuple;
+import com.decisiontree.eval.DispersionMeasure;
 import com.decisiontree.param.GlobalParam;
 
 /**
  *
- * SplitSearchGP -finding the best split point for a set of data using global pruning technique.
+ * SplitSearchGP - Finds the best split point for a set of data using global pruning technique.
  *
  * @author Smith Tsang
  * @since 0.8
  *
  */
 public class SplitSearchGP extends AbstractSplitSearch {
+	
+	public SplitSearchGP(String dispersionStr){
+		this(new BinarySplitGP(dispersionStr));
+	}
+
+	
+	protected SplitSearchGP(Split split){
+		super(split);
+	}
+
 
 	protected SampleAttrClass []  getSampleAttrClass(List<Tuple> data,  int attr){
 
@@ -138,11 +149,12 @@ public class SplitSearchGP extends AbstractSplitSearch {
 	public SplitData findBestAttr(List<Tuple> data, int noCls, int noAttr) {
 
 		SplitData splitData = new SplitData();
-		splitData.setEnt(Double.POSITIVE_INFINITY);
+		splitData.setDispersion(Double.POSITIVE_INFINITY);
 		double totalTuples = Tuple.countWeightedTuples(data);
 
-		BinarySplitGP binarySplit = new BinarySplitGP(dispersion,totalTuples, noCls);
-
+//		BinarySplitGP binarySplit = new BinarySplitGP(dispersion,totalTuples, noCls);
+		getSplit().init(totalTuples, noCls);
+		
 		Histogram allSegmentSet [][] = new Histogram[noAttr][];
 		SampleAttrClass allAttrClassSet[][] = new SampleAttrClass[noAttr][];
 		double allLowerBounds[][] = new double[noAttr][];
@@ -151,36 +163,34 @@ public class SplitSearchGP extends AbstractSplitSearch {
 			allAttrClassSet[i] = getSampleAttrClass(data, i);
 			allSegmentSet[i]  = SegGen(allAttrClassSet[i], noCls);
 
-//			Param.noEndPtIntervals += allSegmentSet[i].length;
 			GlobalParam.addNoEndPtIntervals(allSegmentSet[i].length);
 
-			allLowerBounds[i] = binarySplit.preProcess(allSegmentSet[i]);
+			allLowerBounds[i] = getSplit().preProcess(allSegmentSet[i]);
 			if(allSegmentSet[i].length == 1) continue;
 
-			double localEnt = binarySplit.getEnt();
-//			log.info("localEnt: " + binarySplit.getEnt());
+			double localEnt = getSplit().getEnt();
 
-			if(splitData.getEnt() - localEnt > 1E-12){
-				splitData.setEnt(localEnt);
-				splitData.setSplit(binarySplit.getSplit());
+			if(splitData.getDispersion() - localEnt > GlobalParam.DOUBLE_PRECISION){
+				splitData.setDispersion(localEnt);
+				splitData.setSplitPt(getSplit().getSplit());
 				splitData.setAttrNum(i);
 			}
 		}
 
 		for(int i = 0 ; i < noAttr; i++){
 
-			binarySplit.run(allSegmentSet[i], allLowerBounds[i], allAttrClassSet[i], splitData.getEnt());
-			if(!binarySplit.isPruned()){
-				double localEnt = binarySplit.getEnt();
-				if(splitData.getEnt() - localEnt > 1E-12){
-					splitData.setEnt(localEnt);
-					splitData.setSplit(binarySplit.getSplit());
+			getSplit().run(allSegmentSet[i], allLowerBounds[i], allAttrClassSet[i], splitData.getDispersion());
+			if(!getSplit().isPruned()){
+				double localEnt = getSplit().getEnt();
+				if(splitData.getDispersion() - localEnt > GlobalParam.DOUBLE_PRECISION){
+					splitData.setDispersion(localEnt);
+					splitData.setSplitPt(getSplit().getSplit());
 					splitData.setAttrNum(i);
 				}
 			}
 		}
 
-		log.debug("Best Split: " + splitData.getAttrNum() + ", " + splitData.getSplit() + ", " + splitData.getEnt());
+		log.debug("Best Split: " + splitData.getAttrNum() + ", " + splitData.getSplitPt() + ", " + splitData.getDispersion());
 
 		return splitData;
 

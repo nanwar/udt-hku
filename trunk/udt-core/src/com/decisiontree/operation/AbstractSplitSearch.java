@@ -1,23 +1,41 @@
 package com.decisiontree.operation;
 
-import com.decisiontree.eval.Dispersion;
+import com.decisiontree.eval.DispersionMeasure;
 
 public abstract class AbstractSplitSearch implements SplitSearch {
 
-	protected Dispersion dispersion;
+//	private Dispersion dispersion;
 	private Split split;
-
-	public Dispersion getDispersion() {
-		return dispersion;
+	protected int noCls;
+	
+	
+	public AbstractSplitSearch(Split split) {
+//		this.dispersion = dispersion;
+		this.split = split;
 	}
 
-	public void setDispersion(Dispersion dispersion) {
-		this.dispersion = dispersion;
+	public void setSplit(Split split) {
+		this.split = split;
 	}
 
 	protected Split getSplit(){
 		return split;
 	}
+	
+//	public Dispersion getDispersion() {
+//		return dispersion;
+//	}
+//
+//	public void setDispersion(Dispersion dispersion) {
+//		this.dispersion = dispersion;
+//	}
+
+	@Override
+	public double findDispersion(double [] dist, double distSize) {
+		return getSplit().getDispersionMeasure().getDispersion(dist, distSize);
+	}
+
+
 
 
 }

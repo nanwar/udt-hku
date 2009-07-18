@@ -23,7 +23,10 @@ package com.decisiontree.build;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.decisiontree.data.Tuple;
+import com.decisiontree.param.GlobalParam;
 
 /**
  *
@@ -34,12 +37,14 @@ import com.decisiontree.data.Tuple;
  *
  */
 public class TreeNode{
+	
+	public static Logger log = Logger.getLogger(TreeNode.class);
 
 	public static final int INTERAL = 0;
 	public static final int LEAF = 1;
 
-	private List<Tuple> data;
-	private int noTuples;
+//	private List<Tuple> data;
+//	private int noTuples;
 	private double weightedNoTuples;
 
 
@@ -54,35 +59,46 @@ public class TreeNode{
 	private int attrNum;
 	private double split;
 
-	private double entropy;
+	private double dispersion;
 	private double [] clsDist;
 	private int height;
-	private int noCls;
+//	private int noCls;
 
-	private boolean sameCls;
+//	private boolean sameCls;
 
-	private int cls; //only for leaf node
+	private int majorityCls; //only for leaf node
 
-	public TreeNode(){
-		noChildren = -1;
-		parent = null;
-		data = null;
+	public TreeNode(double [] clsDist, double weightedNoTuples, double dispersion){
+		this(null,clsDist,weightedNoTuples, dispersion, 0);
+//		data = null;
 	}
 
-	public TreeNode(List<Tuple> data, TreeNode parent, int noCls){
-		setNoCls(noCls);
-		setTuple(data);
-		setClsDist();
-		countTuples();
-		setEntropy();
+	public TreeNode(TreeNode parent,double[] clsDist, double weightedNoTuples, double dispersion, int height){
 		setParent(parent);
 		noChildren = -1;
-		if(parent == null) height = 0;
+		setHeight(height);
+		setClsDist(clsDist);
+		setWeightedNoTuples(weightedNoTuples);
+		setEntropy(dispersion);
+//		if(parent == null) this.height = 0;
 	}
+	
 
-	public void setNoCls(int noCls){
-		this.noCls = noCls;
-	}
+
+//	public TreeNode(List<Tuple> data, TreeNode parent, int noCls){
+//		setNoCls(noCls);
+//		setTuple(data);
+//		setClsDist();
+//		countTuples();
+//		setEntropy();
+//		setParent(parent);
+//		noChildren = -1;
+//		if(parent == null) height = 0;
+//	}
+
+//	public void setNoCls(int noCls){
+//		this.noCls = noCls;
+//	}
 
 	public void setType(int type){
 		this.type = type;
@@ -92,18 +108,18 @@ public class TreeNode{
 		return type;
 	}
 
-	public void setTuple(List<Tuple> data){
-		this.data = data;
-		noTuples = data.size();
-	}
+//	public void setTuple(List<Tuple> data){
+//		this.data = data;
+//		noTuples = data.size();
+//	}
 
-	public void countTuples(){
-		weightedNoTuples = 0;
-		Iterator<Tuple> iter = data.iterator();
-		while(iter.hasNext()){
-			weightedNoTuples += iter.next().getWeight();
-		}
-	}
+//	public void countTuples(){
+//		weightedNoTuples = 0;
+//		Iterator<Tuple> iter = data.iterator();
+//		while(iter.hasNext()){
+//			weightedNoTuples += iter.next().getWeight();
+//		}
+//	}
 
 	public void setAttrNum(int i){
 		this.attrNum = i;
@@ -114,7 +130,10 @@ public class TreeNode{
 	}
 
 	public void setNoChild(int noChild){
-		if(noChild < 0) return;
+		if(noChild < 0){
+			log.error("Invalid number of children,");
+			return;
+		}
 		this.noChildren = noChild;
 		children = new TreeNode[noChild];
 	}
@@ -123,10 +142,13 @@ public class TreeNode{
 		if(pos < 0 && pos >= noChildren) return;
 		children[pos] = child;
 	}
-
-	public List<Tuple> getData(){
-		return data;
+	public void setMajorityCls(int majorityCls){
+		this.majorityCls = majorityCls;
 	}
+	
+//	public List<Tuple> getData(){
+//		return data;
+//	}
 
 	public int getAttrNum(){
 		return attrNum;
@@ -137,7 +159,7 @@ public class TreeNode{
 	}
 
 	public int getCls(){
-		return cls;
+		return majorityCls;
 	}
 
 	public TreeNode getChild(int pos){
@@ -155,94 +177,108 @@ public class TreeNode{
         public void setSplit(double split){
 		this.split = split;
 	}
-
-	public void setCls(int cls){
-		this.cls = cls;
-	}
-
+        
+    private void setWeightedNoTuples(double weightedNoTuples) {
+    	this.weightedNoTuples = weightedNoTuples;
+    		
+    }
 
 	public double getWeightedNoTuples(){
 		return weightedNoTuples;
 	}
 
-	public int getNoTuples(){
-		return noTuples;
-	}
+//	public int getNoTuples(){
+//		return noTuples;
+//	}
 
 
 	public boolean isEmptyNode(){
-		return (data == null);
+		return weightedNoTuples < GlobalParam.DOUBLE_PRECISION;
+		
+//		return (data == null);
 	}
 
 	public double getPurity(){
 
-		return clsDist[cls]/weightedNoTuples;
+		return clsDist[majorityCls]/weightedNoTuples;
 
 	}
 
 
 	public int majorityCls(){
 
-		return cls;
+		return majorityCls;
 	}
 
-	public void setClsDist(){
+	public void setClsDist(double [] clsDist){
+		this.clsDist = clsDist;
+	}
+	
+//	public void setClsDist(){
+//
+//		clsDist = new double[noCls];
+//		for(int i =0; i< noCls; i++){
+//			clsDist[i] = 0;
+//		}
+//
+//		Tuple tuple = null;
+//		Iterator<Tuple> iter = data.iterator();
+//		while(iter.hasNext()){
+//			tuple = iter.next();
+//			clsDist[tuple.getCls()] += tuple.getWeight();
+//		}
+//
+//		int max = 0,count =0;
+//		for(int i = 0 ; i < noCls ; i++){
+//			if(clsDist[max] < clsDist[i])
+//				max = i;
+//			if(clsDist[i] > 0)
+//				count++;
+//		}
+//
+//		this.cls = max;
+//
+//		sameCls = (count <= 1);
+//	}
 
-		clsDist = new double[noCls];
-		for(int i =0; i< noCls; i++){
-			clsDist[i] = 0;
-		}
+//	public void setEntropy(){
+//
+//		double ent = 0;
+//
+//		for(int i =0; i< noCls; i++)
+//			ent += clsDist[i]
+//					* Math.log(clsDist[i]/weightedNoTuples);
+//
+//		entropy = -1.0 * ent / Math.log(2.0)/ weightedNoTuples;
+//	}
 
-		Tuple tuple = null;
-		Iterator<Tuple> iter = data.iterator();
-		while(iter.hasNext()){
-			tuple = iter.next();
-			clsDist[tuple.getCls()] += tuple.getWeight();
-		}
+//	public boolean isSingleCls(){
+//		return sameCls;
+//	}
 
-		int max = 0,count =0;
-		for(int i = 0 ; i < noCls ; i++){
-			if(clsDist[max] < clsDist[i])
-				max = i;
-			if(clsDist[i] > 0)
-				count++;
-		}
-
-		this.cls = max;
-
-		sameCls = (count <= 1);
+	public void setEntropy(double dispersion){
+		this.dispersion = dispersion;
+	}
+	
+	public double getDispersion(){
+		return dispersion;
 	}
 
-	public void setEntropy(){
-
-		double ent = 0;
-
-		for(int i =0; i< noCls; i++)
-			ent += clsDist[i]
-					* Math.log(clsDist[i]/weightedNoTuples);
-
-		entropy = -1.0 * ent / Math.log(2.0)/ weightedNoTuples;
-	}
-
-	public boolean isSingleCls(){
-		return sameCls;
-	}
-
-	public double getEnt(){
-		return entropy;
-	}
+//	public double getError(){
+//
+//		double count =0.0;
+//		for(int i = 0 ; i < clsDist.length ; i++)
+//			if(i != cls)
+//				count += clsDist[i];
+//
+//		return count;
+//
+//	}
 
 	public double getError(){
-
-		double count =0.0;
-		for(int i = 0 ; i < clsDist.length ; i++)
-			if(i != cls)
-				count += clsDist[i];
-
-		return count;
-
+		return TreeUtil.findError(clsDist, majorityCls);
 	}
-
+	
 	public void setHeight(int height){
 		this.height = height;
 	}
@@ -253,7 +289,7 @@ public class TreeNode{
 	public double [] getClsDist(){
 		return clsDist;
 	}
-
+	
 	public void clearChildren(){
 		children = null;
 		noChildren = -1;

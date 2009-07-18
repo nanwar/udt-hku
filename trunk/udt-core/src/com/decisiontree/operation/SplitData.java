@@ -22,7 +22,7 @@ package com.decisiontree.operation;
 
 /**
  * 
- * SplitData - Stores the split information, including attribute, split point and the correpsonding entropy
+ * SplitData - Stores the split information, including attribute, split point and the corresponding dispersion
  *
  * @author Smith Tsang
  * @since 0.8
@@ -30,34 +30,47 @@ package com.decisiontree.operation;
  */
 public class SplitData{
 	private int attrNum;
-	private double split;
-	private double entropy;
+	private double splitPt;
+	private double dispersion;
 
 	/**
 	 * Default Constructor 
 	 */
 	public SplitData(){
-		entropy = Double.POSITIVE_INFINITY;
+		dispersion = Double.POSITIVE_INFINITY;
 	}
 	
 	/**
 	 * Constructor with attribute number, split point and entropy
 	 * @param attrNum the attribute number
-	 * @param split the split point
-	 * @param entropy the entropy
+	 * @param splitPt the split point
+	 * @param dispersion the dispersion
 	 */
-	public SplitData(int attrNum, double split, double entropy){
+	public SplitData(int attrNum, double splitPt, double dispersion){
 		this.attrNum = attrNum;
-		this.split = split;
-		this.entropy = entropy;
+		this.splitPt = splitPt;
+		this.dispersion = dispersion;
 	}
 
 	/**
-	 * Set the split point corresponding to the attribute
-	 * @param split the split point
+	 * Setting the split data values at one time.
+	 * @param attrNum the attribute number
+	 * @param splitPt the split point
+	 * @param dispersion the dispersion
 	 */
-	public void setSplit(double split){
-		this.split = split;
+	public void setSplitData(int attrNum, double splitPt, double dispersion){
+		this.attrNum = attrNum;
+		this.splitPt = splitPt;
+		this.dispersion = dispersion;
+	}
+	
+	
+	/**
+	 * Set the split point corresponding to the attribute
+	 * @param splitPt the split point
+	 */
+	public void setSplitPt(double splitPt){
+		this.splitPt = splitPt;
 	}
 
 	/**
@@ -69,12 +82,13 @@ public class SplitData{
 	}
 	
 	/**
-	 * Get the split point correponding to the attribute
+	 * Get the split point corresponding to the attribute
 	 * @return the split point
 	 */
-	public double getSplit(){
-		return split;
+	public double getSplitPt(){
+		return splitPt;
 	}
+
 	
 	/**
 	 * Get the attribute number
@@ -85,19 +99,19 @@ public class SplitData{
 	}
 
 	/**
-	 * Set the entropy of the split point
-	 * @param ent the entropy
+	 * Set the dispersion of the split point
+	 * @param dispersion the dispersion
 	 */
-	public void setEnt(double ent){
-		entropy = ent;
+	public void setDispersion(double dispersion){
+		this.dispersion = dispersion;
 	}
 
 	/**
-	 * Gett the entropy of the split point
-	 * @return the entropy
+	 * Gett the dispersion of the split point
+	 * @return the dispersion
 	 */
-	public double getEnt(){
-		return entropy;
+	public double getDispersion(){
+		return dispersion;
 	}
 
 	/**
@@ -105,7 +119,7 @@ public class SplitData{
 	 * @return whether the split point is valid
 	 */
 	public boolean isValidSplit(){
-		return entropy != Double.POSITIVE_INFINITY;
+		return dispersion != Double.POSITIVE_INFINITY;
 	}
 
 }
