@@ -22,9 +22,9 @@ package com.decisiontree.function;
 
 import java.util.List;
 
-import com.decisiontree.build.TreeNode;
 import com.decisiontree.build.PointClassification;
 import com.decisiontree.build.PointTree;
+import com.decisiontree.build.TreeNode;
 import com.decisiontree.data.PointDataSet;
 import com.decisiontree.data.PointDataSetInit;
 import com.decisiontree.data.Tuple;

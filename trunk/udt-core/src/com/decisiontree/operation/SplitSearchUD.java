@@ -27,7 +27,6 @@ import java.util.List;
 
 import com.decisiontree.data.RangeAttrClass;
 import com.decisiontree.data.Tuple;
-import com.decisiontree.eval.DispersionMeasure;
 import com.decisiontree.param.GlobalParam;
 
 /**

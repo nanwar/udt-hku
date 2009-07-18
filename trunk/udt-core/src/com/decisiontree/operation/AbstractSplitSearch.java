@@ -1,6 +1,5 @@
 package com.decisiontree.operation;
 
-import com.decisiontree.eval.DispersionMeasure;
 
 public abstract class AbstractSplitSearch implements SplitSearch {
 

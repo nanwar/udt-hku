@@ -39,14 +39,7 @@ import com.decisiontree.function.SampleAvgDecisionTree;
 import com.decisiontree.function.SampleDecisionTree;
 import com.decisiontree.measure.Times;
 import com.decisiontree.operation.SplitSearch;
-import com.decisiontree.operation.SplitSearchBP;
-import com.decisiontree.operation.SplitSearchES;
 import com.decisiontree.operation.SplitSearchFactory;
-import com.decisiontree.operation.SplitSearchGP;
-import com.decisiontree.operation.SplitSearchLP;
-import com.decisiontree.operation.SplitSearchORI;
-import com.decisiontree.operation.SplitSearchUD;
-import com.decisiontree.operation.SplitSearchUnp;
 import com.decisiontree.param.GlobalParam;
 
 /**

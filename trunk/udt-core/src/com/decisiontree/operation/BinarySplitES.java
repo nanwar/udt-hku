@@ -26,7 +26,6 @@ import java.util.Arrays;
 import com.decisiontree.data.PointAttrClass;
 import com.decisiontree.data.SampleAttrClass;
 import com.decisiontree.eval.DispersionMeasure;
-import com.decisiontree.eval.DispersionMeasureFactory;
 import com.decisiontree.param.GlobalParam;
 
 /**
