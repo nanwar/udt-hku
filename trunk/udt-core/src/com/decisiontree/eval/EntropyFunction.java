@@ -24,7 +24,7 @@ import com.decisiontree.param.GlobalParam;
 
 /**
  *
- * Entropy
+ * EntropyFunction
  *
  * @author Smith Tsang
  * @since 0.9
