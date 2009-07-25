@@ -56,19 +56,19 @@ public class SampleDataGen extends RangeDataGen {
 
 	private long seed = GlobalParam.DEFAULT_SEED;
 
-	public SampleDataGen(String input, int noSamples, boolean varies) {
-		super(input, varies);
+	public SampleDataGen(String input, String nameFile, int noSamples, boolean varies) {
+		super(input, nameFile, varies);
 		setNoSamples(noSamples);
 	}
 
-	public SampleDataGen(String input, int noSamples, long seed, boolean varies) {
-		super(input, varies);
+	public SampleDataGen(String input, String nameFile, int noSamples, long seed, boolean varies) {
+		super(input, nameFile, varies);
 		setNoSamples(noSamples);
 		setSeed(seed);
 	}
 
-	public SampleDataGen(String input, int noSamples, int precision, long seed, boolean varies) {
-		super(input, precision, varies);
+	public SampleDataGen(String input, String nameFile, int noSamples, int precision, long seed, boolean varies) {
+		super(input, nameFile, precision, varies);
 		setNoSamples(noSamples);
 		setSeed(seed);
 	}
@@ -298,6 +298,7 @@ public class SampleDataGen extends RangeDataGen {
 			//default values
 			String training = null;
 			String testing = null;
+			String nameFile = null;
 			boolean test = false;
 			boolean varies = false;
 			double width = GlobalParam.DEFAULT_WIDTH;
@@ -318,6 +319,11 @@ public class SampleDataGen extends RangeDataGen {
 					continue;
 				}
 
+				if (args[i].equals("-f")) {
+					nameFile = args[++i];
+					continue;
+				}
+				
 				if (args[i].equals("-n")) {
 					noSamples = Integer.parseInt(args[++i]);
 				}
@@ -337,9 +343,13 @@ public class SampleDataGen extends RangeDataGen {
 						.println("Please input training set using -d option.");
 				System.exit(1);
 			}
+			
+			if(nameFile == null){
+				nameFile = training;
+			}
 
 			log.info("Start generation...");
-			SampleDataGen gen = new SampleDataGen(training, noSamples, seed, varies);
+			SampleDataGen gen = new SampleDataGen(training, nameFile, noSamples, seed, varies);
 			log.info("Initialization...");
 			double range[] = new double[gen.getNoAttr()];
 

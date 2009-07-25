@@ -55,6 +55,20 @@ public class PointDataSetInit extends DataSetInit {
 
 	}
 
+	/**
+	 * Constructor by input data file name
+	 * @param input the input data file name
+	 */
+	public PointDataSetInit(String input, String name) {
+
+		dataSet = new PointDataSet(input,findNoCls(name), findNoAttr(name));
+		dataSet.setClsNameList(findClsName(name));
+		preProcess(name);
+		dataSet.setNoTuples(countNoTuples(input));
+		storeData(input);
+
+	}
+	
 	@Override
 	public int countNoTuples(String input) {
 		return countNoTuples(input, POINT_FILE);

@@ -58,15 +58,15 @@ public class SampleAvgDecisionTree extends PointDecisionTree {
 		setNoSamples(noSamples);
 	}
 
-	protected PointDataSet generateDataSet(String training, int noSamples){
+	protected PointDataSet generateDataSet(String training, String nameFile, int noSamples){
 		SampleDataSetInit init = new SampleDataSetInit(training, noSamples, true);
 		return init.getDataSet();
 	}
 	
 	@Override
-	public double crossFold(String training) {
+	public double crossFold(String training, String nameFile) {
 
-		PointDataSet dataSet = generateDataSet(training, noSamples);
+		PointDataSet dataSet = generateDataSet(training, nameFile, noSamples);
 		
 		PointClassification classification = new PointClassification(dataSet, splitSearch);
 		return classification.crossAllFold(nodeSize, purity);

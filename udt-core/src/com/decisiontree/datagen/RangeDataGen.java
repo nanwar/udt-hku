@@ -61,7 +61,7 @@ public class RangeDataGen implements DataGen{
 
 	protected PointDataSet dataSet;
 
-	public RangeDataGen(String input, boolean varies) {
+	public RangeDataGen(String input, String nameFile, boolean varies) {
 		PointDataSetInit init = new PointDataSetInit(input);
 		dataSet = init.getDataSet();
 
@@ -72,9 +72,9 @@ public class RangeDataGen implements DataGen{
 		this.varies = varies;
 	}
 
-	public RangeDataGen(String input, int precision,
+	public RangeDataGen(String input, String nameFile, int precision,
 			boolean varies) {
-		PointDataSetInit init = new PointDataSetInit(input);
+		PointDataSetInit init = new PointDataSetInit(input, nameFile);
 		dataSet = init.getDataSet();
 		this.precisionArray = new int[dataSet.getNoAttr()];
 		for (int i = 0; i < precisionArray.length; i++)
@@ -328,6 +328,7 @@ public class RangeDataGen implements DataGen{
 			//default values
 			String training = null;
 			String testing = null;
+			String nameFile = null;
 			boolean test = false;
 			boolean varies = false;
 			double width = 0.1;
@@ -344,6 +345,11 @@ public class RangeDataGen implements DataGen{
 					testing = args[++i];
 					continue;
 				}
+				
+				if (args[i].equals("-f")) {
+					nameFile = args[++i];
+					continue;
+				}
 
 				if (args[i].equals("-p")) {
 					width = Double.parseDouble(args[++i]);
@@ -356,9 +362,12 @@ public class RangeDataGen implements DataGen{
 						.println("Please input training set using -d option.");
 				System.exit(1);
 			}
+			
+			if(nameFile == null)
+				nameFile = training;
 
 			log.info("Start generation...");
-			RangeDataGen gen = new RangeDataGen(training, varies);
+			RangeDataGen gen = new RangeDataGen(training, nameFile, varies);
 			log.info("Initialization...");
 			double range[] = new double[gen.getNoAttr()];
 

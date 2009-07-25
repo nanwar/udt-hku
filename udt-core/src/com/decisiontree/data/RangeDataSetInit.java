@@ -48,17 +48,32 @@ public class RangeDataSetInit extends DataSetInit{
 	}
 
 	public RangeDataSetInit(String input){
-		try{
+//		try{
 			dataSet = new RangeDataSet(input, findNoCls(input),findNoAttr(input));
 			dataSet.setClsNameList(findClsName(input));
 			preProcess(input);
+			dataSet.setNoTuples(countNoTuples(input));
 			storeData(input);
 
-		}
-		catch(Exception e){
-			System.err.println(e);
-			System.exit(1);
-		}		
+//		}
+//		catch(Exception e){
+//			System.err.println(e);
+//			System.exit(1);
+//		}		
+	}
+	
+	/**
+	 * Constructor by input data file name
+	 * @param input the input data file name
+	 */
+	public RangeDataSetInit(String input, String name) {
+
+		dataSet = new RangeDataSet(input,findNoCls(name), findNoAttr(name));
+		dataSet.setClsNameList(findClsName(name));
+		preProcess(name);
+		dataSet.setNoTuples(countNoTuples(input));
+		storeData(input);
+
 	}
 
 	@Override

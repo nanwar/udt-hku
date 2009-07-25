@@ -42,11 +42,6 @@ public class SampleDataSetInit extends DataSetInit{
 
 	private static final Logger log = Logger.getLogger(SampleDataSetInit.class);
 
-	@Override
-	public SampleDataSet getDataSet(){
-		return (SampleDataSet)dataSet;
-	}
-
 	public SampleDataSetInit(String input, int noSamples){
 		this(input, noSamples, false);
 	}
@@ -55,11 +50,28 @@ public class SampleDataSetInit extends DataSetInit{
 		dataSet = new SampleDataSet(input, findNoCls(input),findNoAttr(input), noSamples);
 		dataSet.setClsNameList(findClsName(input));
 		preProcess(input);
+		dataSet.setNoTuples(countNoTuples(input));
 		if(averaging){
 			storeData(input, averaging);
 		}
 		else storeData(input);
 	}
+	
+	public SampleDataSetInit(String input, String name, int noSamples){
+		this(input, name, noSamples, false);
+	}
+
+	public SampleDataSetInit(String input, String name, int noSamples, boolean averaging){
+		dataSet = new SampleDataSet(input, findNoCls(name),findNoAttr(name), noSamples);
+		dataSet.setClsNameList(findClsName(name));
+		preProcess(name);
+		dataSet.setNoTuples(countNoTuples(input));
+		if(averaging){
+			storeData(input, averaging);
+		}
+		else storeData(input);
+	}
+	
 	
 
 	@Override
@@ -110,7 +122,11 @@ public class SampleDataSetInit extends DataSetInit{
 	@Override
 	public void preProcess(String input) {
 		preProcess(input, SAMPLE_FILE);
-		
+	}
+	
+	@Override
+	public SampleDataSet getDataSet(){
+		return (SampleDataSet)dataSet;
 	}
 
 }
