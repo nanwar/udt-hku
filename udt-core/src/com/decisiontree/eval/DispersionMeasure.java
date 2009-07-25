@@ -22,7 +22,7 @@ package com.decisiontree.eval;
 
 /**
  *
- * Dispersion
+ * DispersionMeasure (Interface)
  *
  * @author Smith Tsang
  * @since 0.9
