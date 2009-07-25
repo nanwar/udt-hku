@@ -164,13 +164,13 @@ public abstract class Tree {
 		 
 		boolean singleCls =	TreeUtil.isSingleCls(clsDist);
 		if(singleCls){
-			log.debug("Level " + height + ":  Same Class - "+ treeNode.getCls());
+			log.debug("Level " + height + ":  Same Class - "+ treeNode.getMajorityCls());
 			treeNode.setType(TreeNode.LEAF);
 			return treeNode;
 		}
 
 		if( treeNode.getWeightedNoTuples() <= nodeSize  || treeNode.getPurity() - pruningThreshold > 1E-12){
-			log.debug("Level " + height + ":  Pruned - "+ treeNode.getCls());
+			log.debug("Level " + height + ":  Pruned - "+ treeNode.getMajorityCls());
 			treeNode.setType(TreeNode.LEAF);
 			return treeNode;
 		}
@@ -188,7 +188,7 @@ public abstract class Tree {
 
 		treeNode.setType(TreeNode.INTERAL);
 		treeNode.setAttrNum(attrNum);
-		treeNode.setNoChild(NO_PARTITION);
+		treeNode.setNoChildren(NO_PARTITION);
 		treeNode.setSplit(splitData.getSplitPt());
 
 		for(int i = 0 ; i < NO_PARTITION; i++){
@@ -302,7 +302,7 @@ public abstract class Tree {
 		if(tree.getType() == TreeNode.LEAF){
 			for(int i = 0; i < level; i++)
 				System.out.print("\t");
-			System.out.println(" " + dataSet.getClsName(tree.getCls()) + " ( " + tree.getWeightedNoTuples() + ", " + tree.getError() + " )");
+			System.out.println(" " + dataSet.getClsName(tree.getMajorityCls()) + " ( " + tree.getWeightedNoTuples() + ", " + tree.getError() + " )");
 			return;
 		}
 

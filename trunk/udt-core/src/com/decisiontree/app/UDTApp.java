@@ -50,83 +50,83 @@ class UDTApp {
 	public static final String OVERALL = "OVERALL";
 	public static final String CLEAN = "CLEAN";
 
-	/**
-	 * Generate interval-valued data from point data in training dataset
-	 * @param training the training dataset file
-	 * @param width the interval width (relative to domain)
-	 * @param varies whether the interval width varies
-	 * @deprecated
-	 */
-	private static void generateData(String training,
-			double width, boolean varies) {
-		generateData(training, null, width, varies);
-	}
-
-	/**
-	 * Generate interval-valued data from point data in training and testing dataset
-	 * @param training the training dataset file
-	 * @param testing the testing dataset file
-	 * @param width the interval width (relative to domain)
-	 * @param varies whether the interval width varies
-	 * @deprecated
-	 */
-	private static void generateData(String training, String testing,
-			double width, boolean varies) {
-
-		log.info("Generating interval uncertain data");
-
-		RangeDataGen gen = new RangeDataGen(training, varies);
-		double widths[] = new double[gen.getNoAttr()];
-
-		for (int i = 0; i < gen.getNoAttr(); i++)
-			widths[i] = width;
-
-		if(testing == null)
-		gen.storeGeneratedData(training, widths);
-		else
-			gen.storeGeneratedDataWithTest(training, testing, widths);
-	}
-
-	/**
-	 * Generate interval-valued sample-distributed data from point data in training dataset
-	 * @param training the training dataset file
-	 * @param noSamples the number of samples
-	 * @param width the interval width (relative to domain)
-	 * @param seed the random-generate seed number
-	 * @param varies whether the interval width varies
-	 * @deprecated
-	 */
-	private static void generateData(String training, int noSamples,
-			double width, long seed,  boolean varies) {
-		generateData(training, null, noSamples, width, seed,  varies);
-	}
-
-	/**
-	 * Generate interval-valued sample-distributed data from point data in training dataset
-	 * @param training the training dataset file
-	 * @param testing the testing dataset file
-	 * @param noSamples the number of samples
-	 * @param width the interval width (relative to domain)
-	 * @param seed the random-generate seed number
-	 * @param varies whether the interval width varies
-	 * @deprecated
-	 */
-	private static void generateData(String training, String testing,
-			int noSamples, double width, long seed, boolean varies) {
-
-		log.info("Generating sampled interval uncertain data");
-
-		SampleDataGen gen = new SampleDataGen(training, noSamples, seed, varies);
-		double widths[] = new double[gen.getNoAttr()];
-
-		for (int i = 0; i < gen.getNoAttr(); i++)
-			widths[i] = width;
-
-		if(testing == null)
-			gen.storeGeneratedData(training, widths);
-		else
-			gen.storeGeneratedDataWithTest(training, testing, widths);
-	}
+//	/**
+//	 * Generate interval-valued data from point data in training dataset
+//	 * @param training the training dataset file
+//	 * @param width the interval width (relative to domain)
+//	 * @param varies whether the interval width varies
+//	 * @deprecated
+//	 */
+//	private static void generateData(String training,
+//			double width, boolean varies) {
+//		generateData(training, null, width, varies);
+//	}
+//
+//	/**
+//	 * Generate interval-valued data from point data in training and testing dataset
+//	 * @param training the training dataset file
+//	 * @param testing the testing dataset file
+//	 * @param width the interval width (relative to domain)
+//	 * @param varies whether the interval width varies
+//	 * @deprecated
+//	 */
+//	private static void generateData(String training, String testing,
+//			double width, boolean varies) {
+//
+//		log.info("Generating interval uncertain data");
+//
+//		RangeDataGen gen = new RangeDataGen(training, varies);
+//		double widths[] = new double[gen.getNoAttr()];
+//
+//		for (int i = 0; i < gen.getNoAttr(); i++)
+//			widths[i] = width;
+//
+//		if(testing == null)
+//		gen.storeGeneratedData(training, widths);
+//		else
+//			gen.storeGeneratedDataWithTest(training, testing, widths);
+//	}
+//
+//	/**
+//	 * Generate interval-valued sample-distributed data from point data in training dataset
+//	 * @param training the training dataset file
+//	 * @param noSamples the number of samples
+//	 * @param width the interval width (relative to domain)
+//	 * @param seed the random-generate seed number
+//	 * @param varies whether the interval width varies
+//	 * @deprecated
+//	 */
+//	private static void generateData(String training, int noSamples,
+//			double width, long seed,  boolean varies) {
+//		generateData(training, null, noSamples, width, seed,  varies);
+//	}
+//
+//	/**
+//	 * Generate interval-valued sample-distributed data from point data in training dataset
+//	 * @param training the training dataset file
+//	 * @param testing the testing dataset file
+//	 * @param noSamples the number of samples
+//	 * @param width the interval width (relative to domain)
+//	 * @param seed the random-generate seed number
+//	 * @param varies whether the interval width varies
+//	 * @deprecated
+//	 */
+//	private static void generateData(String training, String testing,
+//			int noSamples, double width, long seed, boolean varies) {
+//
+//		log.info("Generating sampled interval uncertain data");
+//
+//		SampleDataGen gen = new SampleDataGen(training, noSamples, seed, varies);
+//		double widths[] = new double[gen.getNoAttr()];
+//
+//		for (int i = 0; i < gen.getNoAttr(); i++)
+//			widths[i] = width;
+//
+//		if(testing == null)
+//			gen.storeGeneratedData(training, widths);
+//		else
+//			gen.storeGeneratedDataWithTest(training, testing, widths);
+//	}
 
 
 	/**
@@ -167,6 +167,7 @@ class UDTApp {
 			// default values
 			String training = null;
 			String testing = null;
+			String nameFile = null;
 			int noSamples = GlobalParam.DEFAULT_NO_SAMPLES;
 			double nodeSize = GlobalParam.DEFAULT_NODESIZE;
 			double pruningThreshold = GlobalParam.DEFAULT_THRESHOLD;
@@ -206,6 +207,11 @@ class UDTApp {
 
 					else if(param.equals("-test") || param.equals("-t")){
 						testing = value;
+						continue;
+					}
+					
+					else if(param.equals("-name") || param.equals("-f")){
+						nameFile = value;
 						continue;
 					}
 
@@ -286,19 +292,28 @@ class UDTApp {
 				System.exit(1);
 			}
 
+//			// if testing is not specified
+//			if(testing == null){
+//				testing = training;
+//			}
+			
+			// if name file is not specified
+			if(nameFile == null){
+				nameFile = training;
+			}
 
 			UDTFunctions functions = new UDTFunctions();
 
 			if(mode.equals(GEN) ){
 				System.out.println("You are running generate mode.");
 				System.out.println("The generate data would be stored in the same folder of the source data file.");
-				functions.generateMode(training, testing, algorithm, noSamples, width, seed, varies);
+				functions.generateMode(training, testing, nameFile, algorithm, noSamples, width, seed, varies);
 			}
 
 			if(mode.equals(BUILD) ){
 				System.out.println("You are running build mode.");
 
-				String result = functions.buildMode(training, testing, algorithm, type, nodeSize, pruningThreshold);
+				String result = functions.buildMode(training, testing, nameFile, algorithm, type, nodeSize, pruningThreshold);
 				String [] splitResult = result.split(",");
 				if(type.equals(DecisionTree.BUILD)){
 					log.info("Timing...");
@@ -306,7 +321,6 @@ class UDTApp {
 					System.out.println("Building Time: " );
 					System.out.println( "\tUserTime: " + splitResult[3]);
 					System.out.println( "\tSystemTime: " + splitResult[4]);
-//					end.difference(start).printTime();
 					System.out.println("No of Entropy Calculation: " + splitResult[2]);
 
 				}else if(type.equals(DecisionTree.ACCUR)){
@@ -331,13 +345,13 @@ class UDTApp {
 			if( mode.equals(OVERALL)){ // OVERALL Allows multiple trials and file save for data.
 				System.out.println("You are running overall mode. Reminded that the generated data would NOT be cleaned.");
 				if(saveToFile){
-					functions.overallMode(training, testing, algorithm, type, noSamples, width, seed, varies,
+					functions.overallMode(training, testing, nameFile, algorithm, type, noSamples, width, seed, varies,
 							nodeSize, pruningThreshold,noTrials,resultFileName);
 					System.out.println("The result data is saved in " + resultFileName +".");
 
 				}else{
 					System.out.println("The results are as follows:");
-					List<String> resultList = functions.overallMode(training, testing, algorithm, type, noSamples, width, seed, varies, nodeSize, pruningThreshold, noTrials);
+					List<String> resultList = functions.overallMode(training, testing, nameFile, algorithm, type, noSamples, width, seed, varies, nodeSize, pruningThreshold, noTrials);
 					for(int i = 0; i < resultList.size(); i++){
 						System.out.println(resultList.get(i));
 					}
@@ -348,7 +362,7 @@ class UDTApp {
 			System.out.println("The job has finished successfully.");
 		}catch(Exception e){
 			e.printStackTrace();
-			log.info("Internal Errors. The Program Terminates");
+			log.error("Internal Errors. The Program Terminates", e);
 			System.out.println("Internal Errors. Please check if your input is incorrect.");
 			System.exit(1);
 		}

@@ -52,7 +52,6 @@ public abstract class DataSetInit {
 	public static String CONTINUOUS = "continuous";
 	
 	protected DataSet dataSet;
-	
 
 	/**
 	 * Find the number of attributes form input dataset property file
@@ -187,7 +186,7 @@ public abstract class DataSetInit {
 					dataSet.setContinous(i, false);
 			}
 
-			dataSet.setNoTuples(countNoTuples(input, fileType));
+//			dataSet.setNoTuples(countNoTuples(input, fileType));
 
 		} catch (IOException e) {
 			e.printStackTrace();

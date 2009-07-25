@@ -22,9 +22,11 @@ package com.decisiontree.function;
 
 import java.util.List;
 
+import com.decisiontree.build.RangeClassification;
 import com.decisiontree.build.SampleClassification;
 import com.decisiontree.build.SampleTree;
 import com.decisiontree.build.TreeNode;
+import com.decisiontree.data.RangeDataSet;
 import com.decisiontree.data.SampleDataSet;
 import com.decisiontree.data.SampleDataSetInit;
 import com.decisiontree.data.Tuple;
@@ -63,20 +65,14 @@ public class SampleDecisionTree extends DecisionTree {
 	}
 
 
-	private SampleDataSet generateDataSet(String training, int noSamples){
-		SampleDataSetInit init = new SampleDataSetInit(training, noSamples);
+	private SampleDataSet generateDataSet(String training, String nameFile, int noSamples){
+		SampleDataSetInit init = new SampleDataSetInit(training, nameFile, noSamples);
 		return init.getDataSet();
 	}
-	
-	@Override
-	public void buildAndSaveTree(String training, String path) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
-	public TreeNode buildTree(String training) {
-		SampleDataSet dataSet = generateDataSet(training, getNoSamples());
+	public TreeNode buildTree(String training, String nameFile) {
+		SampleDataSet dataSet = generateDataSet(training, nameFile, getNoSamples());
 		
 		SampleTree tree = new SampleTree(dataSet, getSplitSearch());
 		
@@ -87,16 +83,16 @@ public class SampleDecisionTree extends DecisionTree {
 	}
 
 	@Override
-	public double crossFold(String training) {
-		SampleDataSet dataSet = generateDataSet(training, getNoSamples());
+	public double crossFold(String training, String nameFile) {
+		SampleDataSet dataSet = generateDataSet(training, nameFile, getNoSamples());
 
 		SampleClassification classification = new SampleClassification(dataSet, splitSearch);
 		return classification.crossAllFold(nodeSize, purity);
 	}
 
 	@Override
-	public double findAccuracy(String training) {
-		SampleDataSet dataSet = generateDataSet(training, getNoSamples());
+	public double findAccuracy(String training, String nameFile) {
+		SampleDataSet dataSet = generateDataSet(training, nameFile, getNoSamples());
 		
 		SampleTree tree = new SampleTree(dataSet,splitSearch);
 
@@ -111,26 +107,45 @@ public class SampleDecisionTree extends DecisionTree {
 	}
 
 	@Override
-	public double findAccuracy(String training, String testing) {
-		SampleDataSet dataSet = generateDataSet(training, getNoSamples());
+	public double findAccuracy(String training, String testing, String nameFile) {
+		SampleDataSet dataSet = generateDataSet(training, nameFile, getNoSamples());
 		
 		SampleTree tree = new SampleTree(dataSet,splitSearch);
 
 		tree.constructFinalTree(false);
 		
-		SampleDataSet testDataSet = generateDataSet(testing, getNoSamples());
-		SampleClassification test = new SampleClassification(dataSet, splitSearch);
-
-		List<Tuple> testSet =  testDataSet.getData();
-
-		return test.ClassifyAll(tree.getRoot(), testSet);
+		return findAccuracyByTree(tree.getRoot(), testing, nameFile);
+		
+//		SampleDataSet testDataSet = generateDataSet(testing, nameFile, getNoSamples());
+//		SampleClassification test = new SampleClassification(dataSet, splitSearch);
+//
+//		List<Tuple> testSet =  testDataSet.getData();
+//
+//		return test.ClassifyAll(tree.getRoot(), testSet);
 
 	}
 
 	@Override
-	public double findAccuracyByTree(String path, String testing) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double findAccuracyByTree(String path, String testing, String nameFile) {
+		TreeNode treeRoot = getTreeFromFile(path);
+		if(treeRoot == null) return 0;
+		
+//		SampleDataSet testDataSet = generateDataSet(testing, getNoSamples());
+//		SampleClassification test = new SampleClassification(testDataSet, splitSearch);
+//
+//		List<Tuple> testSet =  testDataSet.getData();
+//		return test.ClassifyAll(treeRoot, testSet);
+		return findAccuracyByTree(treeRoot, testing, nameFile);
+	}
+	
+	@Override
+	protected double findAccuracyByTree(TreeNode treeRoot, String testing,
+			String nameFile) {
+		SampleDataSet testDataSet = generateDataSet(testing, nameFile, getNoSamples());
+		SampleClassification test = new SampleClassification(testDataSet, splitSearch);
+
+		List<Tuple> testSet =  testDataSet.getData();
+		return test.ClassifyAll(treeRoot, testSet);
 	}
 
 
@@ -142,5 +157,8 @@ public class SampleDecisionTree extends DecisionTree {
 	public void setNoSamples(int noSamples) {
 		this.noSamples = noSamples;
 	}
+
+
+
 
 }

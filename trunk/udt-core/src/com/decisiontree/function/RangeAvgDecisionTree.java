@@ -44,15 +44,15 @@ public class RangeAvgDecisionTree extends PointDecisionTree {
 	}
 
 	@Override
-	protected PointDataSet generateDataSet(String training) {
-		RangeDataSetInit init = new RangeDataSetInit(training);
+	protected PointDataSet generateDataSet(String training, String nameFile) {
+		RangeDataSetInit init = new RangeDataSetInit(training, nameFile);
 		return init.getDataSet();
 	}
 	
 	@Override
-	public double crossFold(String training) {
+	public double crossFold(String training, String nameFile) {
 
-		PointDataSet dataSet = generateDataSet(training);
+		PointDataSet dataSet = generateDataSet(training, nameFile);
 		
 		PointClassification classification = new PointClassification(dataSet, splitSearch);
 		return classification.crossAllFold(nodeSize, purity);

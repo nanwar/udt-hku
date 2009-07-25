@@ -22,12 +22,16 @@ package com.decisiontree.function;
 
 import java.util.List;
 
+import com.decisiontree.build.PointClassification;
 import com.decisiontree.build.RangeClassification;
 import com.decisiontree.build.RangeTree;
 import com.decisiontree.build.TreeNode;
+import com.decisiontree.data.PointDataSet;
 import com.decisiontree.data.RangeDataSet;
 import com.decisiontree.data.RangeDataSetInit;
 import com.decisiontree.data.Tuple;
+import com.decisiontree.exceptions.DecisionTreeFileException;
+import com.decisiontree.file.DecisionTreeStorage;
 import com.decisiontree.operation.SplitSearch;
 
 /**
@@ -50,20 +54,15 @@ public class RangeDecisionTree extends DecisionTree {
 		super(splitSearch, nodeSize, pruningThreshold);
 	}
 	
-	private RangeDataSet generateDataSet(String training){
-		RangeDataSetInit init = new RangeDataSetInit(training);
+	private RangeDataSet generateDataSet(String training, String nameFile){
+		RangeDataSetInit init = new RangeDataSetInit(training, nameFile);
 		return init.getDataSet();
 	}
 	
-	@Override
-	public void buildAndSaveTree(String training, String path) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
-	public TreeNode buildTree(String training) {
-		RangeDataSet dataSet = generateDataSet(training);
+	public TreeNode buildTree(String training, String nameFile) {
+		RangeDataSet dataSet = generateDataSet(training, nameFile);
 		
 		RangeTree tree = new RangeTree(dataSet, getSplitSearch());
 		
@@ -74,51 +73,66 @@ public class RangeDecisionTree extends DecisionTree {
 	}
 
 	@Override
-	public double crossFold(String training) {
-		RangeDataSet dataSet = generateDataSet(training);
+	public double crossFold(String training, String nameFile) {
+		RangeDataSet dataSet = generateDataSet(training, nameFile);
 
 		RangeClassification classification = new RangeClassification(dataSet, splitSearch);
 		return classification.crossAllFold(nodeSize, purity);
 	}
 
 	@Override
-	public double findAccuracy(String training) {
-		RangeDataSet dataSet = generateDataSet(training);
-		
+	public double findAccuracy(String training, String nameFile) {
+		RangeDataSet dataSet = generateDataSet(training, nameFile);
 		RangeTree tree = new RangeTree(dataSet,splitSearch);
-
 		tree.constructFinalTree(false);
-
+		
 		RangeClassification test = new RangeClassification(dataSet, splitSearch);
-
 		List<Tuple> testSet =  dataSet.getData();
 
 		return test.ClassifyAll(tree.getRoot(), testSet);
 
 	}
 
+	protected double findAccuracyByTree(TreeNode treeRoot, String testing, String nameFile){
+		RangeDataSet testDataSet = generateDataSet(testing, nameFile);
+		RangeClassification test = new RangeClassification(testDataSet, splitSearch);
+
+		List<Tuple> testSet =  testDataSet.getData();
+		return test.ClassifyAll(treeRoot, testSet);		
+	}
+	
+	
 	@Override
-	public double findAccuracy(String training, String testing) {
-		RangeDataSet dataSet = generateDataSet(training);
+	public double findAccuracy(String training, String testing, String nameFile) {
+		RangeDataSet dataSet = generateDataSet(training, nameFile);
 		
 		RangeTree tree = new RangeTree(dataSet,splitSearch);
 
 		tree.constructFinalTree(false);
+		return findAccuracyByTree(tree.getRoot(), testing, nameFile);
 		
-		RangeDataSet testDB = generateDataSet(testing);
-		RangeClassification test = new RangeClassification(dataSet, splitSearch);
-
-		List<Tuple> testSet =  testDB.getData();
-
-		return test.ClassifyAll(tree.getRoot(), testSet);
+//		RangeDataSet testDataSet = generateDataSet(testing, nameFile);
+//		RangeClassification test = new RangeClassification(testDataSet, splitSearch);
+//
+//		List<Tuple> testSet =  testDataSet.getData();
+//
+//		return test.ClassifyAll(tree.getRoot(), testSet);
 
 	}
+	
 
 
 	@Override
-	public double findAccuracyByTree(String path, String testing) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double findAccuracyByTree(String path, String testing, String nameFile) {
+		TreeNode treeRoot = getTreeFromFile(path);
+		if(treeRoot == null) return 0;
+	
+		return findAccuracyByTree(treeRoot, testing, nameFile);
+//		RangeDataSet testDataSet = generateDataSet(testing, nameFile);
+//		RangeClassification test = new RangeClassification(testDataSet, splitSearch);
+//
+//		List<Tuple> testSet =  testDataSet.getData();
+//		return test.ClassifyAll(treeRoot, testSet);
 	}
 
 }

@@ -33,7 +33,9 @@ import com.decisiontree.datagen.RangeDataGen;
 import com.decisiontree.datagen.SampleDataCleaner;
 import com.decisiontree.datagen.SampleDataGen;
 import com.decisiontree.eval.DispersionMeasure;
+import com.decisiontree.file.FileUtil;
 import com.decisiontree.function.DecisionTree;
+import com.decisiontree.function.DecisionTreeFactory;
 import com.decisiontree.function.PointDecisionTree;
 import com.decisiontree.function.RangeAvgDecisionTree;
 import com.decisiontree.function.RangeDecisionTree;
@@ -62,9 +64,9 @@ public class UDTFunctions {
 	 * @param width the interval width (relative to domain)
 	 * @param varies whether the interval width varies
 	 */
-	private void generateData(String training,
+	private void generateData(String training, String nameFile,
 			double width, boolean varies) {
-		generateData(training, null, width, varies);
+		generateData(training, null, nameFile, width, varies);
 	}
 
 	/**
@@ -74,19 +76,19 @@ public class UDTFunctions {
 	 * @param width the interval width (relative to domain)
 	 * @param varies whether the interval width varies
 	 */
-	private void generateData(String training, String testing,
+	private void generateData(String training, String testing, String nameFile,
 			double width, boolean varies) {
 		
 		log.info("Generating interval uncertain data");
 
-		RangeDataGen gen = new RangeDataGen(training, varies);
+		RangeDataGen gen = new RangeDataGen(training, nameFile, varies);
 		double widths[] = new double[gen.getNoAttr()];
 
 		for (int i = 0; i < gen.getNoAttr(); i++)
 			widths[i] = width;
 
 		if(testing == null)
-		gen.storeGeneratedData(training, widths);
+			gen.storeGeneratedData(training, widths);
 		else
 			gen.storeGeneratedDataWithTest(training, testing, widths);
 	}
@@ -99,7 +101,7 @@ public class UDTFunctions {
 	 * @param seed the random-generate seed number
 	 * @param varies whether the interval width varies
 	 */
-	private void generateData(String training, int noSamples,
+	private void generateData(String training, String nameFile, int noSamples,
 			double width, long seed,  boolean varies) {
 		generateData(training, null, noSamples, width, seed,  varies);
 	}
@@ -113,12 +115,12 @@ public class UDTFunctions {
 	 * @param seed the random-generate seed number
 	 * @param varies whether the interval width varies
 	 */
-	private void generateData(String training, String testing,
+	private void generateData(String training, String testing, String nameFile,
 			int noSamples, double width, long seed, boolean varies) {
 		
 		log.info("Generating sampled interval uncertain data");
 
-		SampleDataGen gen = new SampleDataGen(training, noSamples, seed, varies);
+		SampleDataGen gen = new SampleDataGen(training, nameFile, noSamples, seed, varies);
 		double widths[] = new double[gen.getNoAttr()];
 
 		for (int i = 0; i < gen.getNoAttr(); i++)
@@ -133,16 +135,17 @@ public class UDTFunctions {
 
 
 	/**
-	 * 
-	 * @param training
-	 * @param testing
-	 * @param algorithm
-	 * @param noSamples
-	 * @param width
-	 * @param seed
-	 * @param varies
+	 * Generate data mode with different algorithms and settings
+	 * @param training the training dataset file
+	 * @param testing the testing dataset file
+	 * @param nameFile the property file
+	 * @param algorithm the algorithm
+	 * @param noSamples the number of samples
+	 * @param width the width of the interval
+	 * @param seed the seed of the random guassian samples
+	 * @param varies whether the interval width varies
 	 */
-    public void generateMode(String training, String testing, String algorithm, int noSamples, double width, long seed, boolean varies){
+    public void generateMode(String training, String testing, String nameFile, String algorithm, int noSamples, double width, long seed, boolean varies){
 //		System.out.println("You are running generate mode.");
 //		System.out.println("The generate data would be stored in the same folder of the source data file.");
 		log.info("Generating Uncertain Data...");
@@ -150,38 +153,23 @@ public class UDTFunctions {
 			log.info("No Uncertain Data Generation Required.");
 		if(algorithm.equals(SplitSearch.UDTUD) || algorithm.equals(SplitSearch.AVGUD)){
 			if(testing == null)
-				generateData(training, width, varies);
-			else generateData(training, testing, width, varies);
+				generateData(training, nameFile, width, varies);
+			else 
+			generateData(training, testing, nameFile, width, varies);
 		}
 		else{
 			if(testing == null)
-				generateData(training, noSamples, width, seed, varies);
-			else generateData(training, testing, noSamples, width, seed, varies);
+				generateData(training, testing, noSamples, width, seed, varies);
+			else 
+			generateData(training, testing, nameFile, noSamples, width, seed, varies);
 		}
     }
     
-    @Deprecated
-    private SplitSearch createSplitSearch(String algorithm){
-    	return null;
-    }
+ 
+    
 
     
-    private DecisionTree createDecisionTree(String algorithm, SplitSearch splitSearch, double nodeSize, double pruningThreshold){
-    	DecisionTree decisionTree = null;
-    	if(algorithm.equals(SplitSearch.AVG))
-    	 	decisionTree = new SampleAvgDecisionTree(splitSearch, nodeSize, pruningThreshold);
-    	 		else if(algorithm.equals(SplitSearch.UDTUD))
-    	 			decisionTree = new RangeDecisionTree(splitSearch, nodeSize, pruningThreshold);
-    			else if (algorithm.equals(SplitSearch.POINT))
-    				decisionTree = new PointDecisionTree(splitSearch, nodeSize, pruningThreshold);
-    	 		else if(algorithm.equals(SplitSearch.AVGUD))
-    	 			decisionTree = new RangeAvgDecisionTree(splitSearch, nodeSize, pruningThreshold);
-    	 		else
-    	 			decisionTree = new SampleDecisionTree(splitSearch, nodeSize, pruningThreshold);
-		return decisionTree;
-    	
-    }
-    public String buildMode(String training, String testing, String algorithm, String type,  double nodeSize, double pruningThreshold){
+    public String buildMode(String training, String testing, String nameFile, String algorithm, String type,  double nodeSize, double pruningThreshold){
 
     	// Currently using entropy
     	SplitSearch splitSearch = SplitSearchFactory.createSplitSearch(algorithm, DispersionMeasure.ENTROPY); 
@@ -192,15 +180,14 @@ public class UDTFunctions {
 		
 		final Times start = new Times();
 
-		DecisionTree decisionTree = createDecisionTree(algorithm, splitSearch, nodeSize, pruningThreshold);
+		DecisionTree decisionTree = DecisionTreeFactory.createDecisionTree(algorithm, splitSearch, nodeSize, pruningThreshold);
 		
 		String result = "";
 
-		
 		if(type.equals(DecisionTree.BUILD)){
 			log.info("Timing...");
 
-			decisionTree.buildTree(training);
+			decisionTree.buildTree(training, nameFile);
 			final Times end = new Times();
 
 			System.out.println("Building Time: " );
@@ -215,8 +202,8 @@ public class UDTFunctions {
 			double accuracy = 0.0;
 			
 			if(training == null)
-				accuracy = decisionTree.findAccuracy(training);
-			else accuracy = decisionTree.findAccuracy(training, testing);
+				accuracy = decisionTree.findAccuracy(training, nameFile);
+			else accuracy = decisionTree.findAccuracy(training, testing, nameFile);
 			
 			accuracy = Math.rint(accuracy *10000)/10000;
 			result = GlobalParam.getNoEntCal() + "," +accuracy;
@@ -224,7 +211,7 @@ public class UDTFunctions {
 //			return accuracy + "";
 		}else if(type.equals(DecisionTree.XFOLD)){
 			log.info("Finding Accuracy by crossfold");
-			double accuracy = decisionTree.crossFold(training);
+			double accuracy = decisionTree.crossFold(training, nameFile);
 			
 			accuracy = Math.rint(accuracy *10000)/10000;
 			result = GlobalParam.getNoEntCal() + "," + accuracy;
@@ -247,11 +234,11 @@ public class UDTFunctions {
 
     }
     
-    public String overallMode(String training, String testing, String algorithm, String type, int noSamples, double width, long seed, boolean varies,
+    public String overallMode(String training, String testing, String nameFile,String algorithm, String type, int noSamples, double width, long seed, boolean varies,
     		double nodeSize, double pruningThreshold/*, int trial*/){
     	
-		generateMode(training,testing,algorithm,noSamples,width,seed,varies);
-		String result = buildMode(training, testing, algorithm, type, nodeSize, pruningThreshold);
+		generateMode(training,testing,nameFile,algorithm,noSamples,width,seed,varies);
+		String result = buildMode(training, testing, nameFile, algorithm, type, nodeSize, pruningThreshold);
 		GlobalParam.clearStoredValues();
 		
 		return result;
@@ -259,30 +246,24 @@ public class UDTFunctions {
     
     }
     
-    public List<String> overallMode(String training, String testing, String algorithm, String type, int noSamples, double width, long seed, boolean varies,
+    public List<String> overallMode(String training, String testing, String nameFile, String algorithm, String type, int noSamples, double width, long seed, boolean varies,
     		double nodeSize, double pruningThreshold, int noTrials){
     	List<String> resultList = new ArrayList<String>(noTrials);
     	for(int i =0; i < noTrials; i++)
     		resultList.add(algorithm + ","+ i + "," +
-    				overallMode(training,testing,algorithm,type,noSamples,width,seed+i,varies,nodeSize,pruningThreshold));
+    				overallMode(training,testing,nameFile,algorithm,type,noSamples,width,seed+i,varies,nodeSize,pruningThreshold));
     		
     	return resultList;
     	
     }
     
     
-    public void overallMode(String training, String testing, String algorithm, String type, int noSamples, double width, long seed, boolean varies,
+    public void overallMode(String training, String testing, String nameFile, String algorithm, String type, int noSamples, double width, long seed, boolean varies,
     		double nodeSize, double pruningThreshold, int noTrials, String resultFileName) throws IOException{
 //    	System.out.println("You are running overall mode. Reminded that the generated data would NOT be cleaned.");
 		BufferedWriter writer = null;
 //		if(saveToFile){
-		File resultFile = new File(resultFileName);
-		if(!resultFile.exists()){
-			if(resultFile.getParent() != null){
-				resultFile.getParentFile().mkdirs();
-			}
-			resultFile.createNewFile();
-		}
+		FileUtil.createFileWithDirectory(resultFileName);
 		writer = new BufferedWriter(new FileWriter(resultFileName));
 		writer.write("Decision Tree Build Type = " + type );
 		writer.newLine();
@@ -291,7 +272,7 @@ public class UDTFunctions {
 //		}
 		for(int i = 0 ; i < noTrials ; i++){
 			writer.write(algorithm + "," + i + "," + 
-					overallMode(training,testing,algorithm,type,noSamples,width,seed+i,varies,nodeSize,pruningThreshold));
+					overallMode(training,testing, nameFile, algorithm,type,noSamples,width,seed+i,varies,nodeSize,pruningThreshold));
 			writer.newLine();
 		}
 		

@@ -49,21 +49,17 @@ public class PointDecisionTree extends DecisionTree {
 	}
 
 	
-	protected PointDataSet generateDataSet(String training){
-		PointDataSetInit init = new PointDataSetInit(training);
+	protected PointDataSet generateDataSet(String training, String nameFile){
+		PointDataSetInit init = new PointDataSetInit(training, nameFile);
 		return init.getDataSet();
 	}
 
-	@Override
-	public void buildAndSaveTree(String training, String path) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	
 	@Override
-	public TreeNode buildTree(String training) {
+	public TreeNode buildTree(String training, String nameFile) {
 		
-		PointDataSet dataSet = generateDataSet(training);
+		PointDataSet dataSet = generateDataSet(training, nameFile);
 		
 		PointTree tree = new PointTree(dataSet, getSplitSearch(),nodeSize, purity);
 		
@@ -74,9 +70,9 @@ public class PointDecisionTree extends DecisionTree {
 	}
 
 	@Override
-	public double crossFold(String training) {
+	public double crossFold(String training, String nameFile) {
 
-		PointDataSet dataSet = generateDataSet(training);
+		PointDataSet dataSet = generateDataSet(training, nameFile);
 		
 		PointClassification classification = new PointClassification(dataSet, splitSearch);
 		return classification.crossAllFold(nodeSize, purity);
@@ -84,26 +80,27 @@ public class PointDecisionTree extends DecisionTree {
 	}
 
 	@Override
-	public double findAccuracy(String training, String testing) {
+	public double findAccuracy(String training, String testing, String nameFile) {
 		
-		PointDataSet dataSet = generateDataSet(training);
+		PointDataSet dataSet = generateDataSet(training, nameFile);
 		
 		PointTree tree = new PointTree(dataSet,splitSearch, nodeSize, purity);
 
 		tree.constructFinalTree(false);
 		
-		PointDataSet testDataSet = generateDataSet(testing);
-		PointClassification test = new PointClassification(dataSet, splitSearch);
-
-		List<Tuple> testSet =  testDataSet.getData();
-		return test.ClassifyAll(tree.getRoot(), testSet);
+//		PointDataSet testDataSet = generateDataSet(testing, nameFile);
+//		PointClassification test = new PointClassification(dataSet, splitSearch);
+//
+//		List<Tuple> testSet =  testDataSet.getData();
+//		return test.ClassifyAll(tree.getRoot(), testSet);
+		return findAccuracyByTree(tree.getRoot(), training, nameFile);
 
 	}
 
 	@Override
-	public double findAccuracy(String training) {
+	public double findAccuracy(String training, String nameFile) {
 
-		PointDataSet dataSet = generateDataSet(training);
+		PointDataSet dataSet = generateDataSet(training, nameFile);
 		
 		PointTree tree = new PointTree(dataSet,splitSearch);
 
@@ -117,9 +114,28 @@ public class PointDecisionTree extends DecisionTree {
 	}
 
 	@Override
-	public double findAccuracyByTree(String path, String testing) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double findAccuracyByTree(String path, String testing, String nameFile) {
+
+		TreeNode treeRoot = getTreeFromFile(path);
+		if(treeRoot == null) return 0;
+		
+//		PointDataSet testDataSet = generateDataSet(testing, nameFile);
+//		PointClassification test = new PointClassification(testDataSet, splitSearch);
+//
+//		List<Tuple> testSet =  testDataSet.getData();
+//		return test.ClassifyAll(treeRoot, testSet);
+		return findAccuracyByTree(treeRoot, testing, nameFile);
+
+	}
+
+	@Override
+	protected double findAccuracyByTree(TreeNode treeRoot, String testing,
+			String nameFile) {
+		PointDataSet testDataSet = generateDataSet(testing, nameFile);
+		PointClassification test = new PointClassification(testDataSet, splitSearch);
+
+		List<Tuple> testSet =  testDataSet.getData();
+		return test.ClassifyAll(treeRoot, testSet);
 	}
 
 

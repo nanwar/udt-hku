@@ -125,7 +125,7 @@ public class TreeNode{
 		this.parent = parent;
 	}
 
-	public void setNoChild(int noChild){
+	public void setNoChildren(int noChild){
 		if(noChild < 0){
 			log.error("Invalid number of children,");
 			return;
@@ -154,7 +154,7 @@ public class TreeNode{
 		return noChildren;
 	}
 
-	public int getCls(){
+	public int getMajorityCls(){
 		return majorityCls;
 	}
 
