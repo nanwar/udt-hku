@@ -42,10 +42,10 @@ public class PointDecisionTree extends DecisionTree {
 
 	public PointDecisionTree(SplitSearch splitSearch){
 		super(splitSearch);
-}
+	}
 	
-	public PointDecisionTree(SplitSearch splitSearch, double nodeSize, double pruningThreshold) {
-		super(splitSearch, nodeSize, pruningThreshold);
+	public PointDecisionTree(SplitSearch splitSearch, double nodeSize, double purityThreshold) {
+		super(splitSearch, nodeSize, purityThreshold);
 	}
 
 	
@@ -87,12 +87,7 @@ public class PointDecisionTree extends DecisionTree {
 		PointTree tree = new PointTree(dataSet,splitSearch, nodeSize, purity);
 
 		tree.constructFinalTree(false);
-		
-//		PointDataSet testDataSet = generateDataSet(testing, nameFile);
-//		PointClassification test = new PointClassification(dataSet, splitSearch);
-//
-//		List<Tuple> testSet =  testDataSet.getData();
-//		return test.ClassifyAll(tree.getRoot(), testSet);
+
 		return findAccuracyByTree(tree.getRoot(), training, nameFile);
 
 	}
@@ -118,12 +113,7 @@ public class PointDecisionTree extends DecisionTree {
 
 		TreeNode treeRoot = getTreeFromFile(path);
 		if(treeRoot == null) return 0;
-		
-//		PointDataSet testDataSet = generateDataSet(testing, nameFile);
-//		PointClassification test = new PointClassification(testDataSet, splitSearch);
-//
-//		List<Tuple> testSet =  testDataSet.getData();
-//		return test.ClassifyAll(treeRoot, testSet);
+
 		return findAccuracyByTree(treeRoot, testing, nameFile);
 
 	}

@@ -50,8 +50,8 @@ public class RangeDecisionTree extends DecisionTree {
 	}
 
 	
-	public RangeDecisionTree(SplitSearch splitSearch, double nodeSize, double pruningThreshold) {
-		super(splitSearch, nodeSize, pruningThreshold);
+	public RangeDecisionTree(SplitSearch splitSearch, double nodeSize, double purityThreshold) {
+		super(splitSearch, nodeSize, purityThreshold);
 	}
 	
 	private RangeDataSet generateDataSet(String training, String nameFile){

@@ -26,6 +26,7 @@ import com.decisiontree.build.TreeNode;
 import com.decisiontree.exceptions.DecisionTreeFileException;
 import com.decisiontree.file.DecisionTreeStorage;
 import com.decisiontree.operation.SplitSearch;
+import com.decisiontree.param.GlobalParam;
 
 /**
  * 
@@ -39,14 +40,14 @@ public abstract class DecisionTree {
 	
 	protected static final Logger log = Logger.getLogger(DecisionTree.class);
 	
-	public static final String BUILD = "TIME"; 
+	public static final String BUILD = "BUILD"; 
 	public static final String ACCUR = "ACCUR";
 	public static final String XFOLD = "XFOLD";
 
 	protected SplitSearch splitSearch;
 	
-	protected double nodeSize = 1;
-	protected double purity = 0.99;
+	protected double nodeSize = GlobalParam.DEFAULT_NODESIZE;
+	protected double purity = GlobalParam.DEFAULT_PURITY_THRESHOLD;
 	
 	/**
 	 * Constructor by the algorithm (SplitSearch) to find the best split point
@@ -74,14 +75,16 @@ public abstract class DecisionTree {
 	 * @param nameFile the property file
 	 * @param path the path to store the decision tree
 	 */
-	public void buildAndSaveTree(String training, String nameFile, String path)  {
+	public boolean buildAndSaveTree(String training, String nameFile, String path)  {
 		TreeNode tree = buildTree(training, nameFile);
 		DecisionTreeStorage treeStorage = new DecisionTreeStorage();
 		try {
 			treeStorage.saveTreeToFile(path, tree);
 		} catch (DecisionTreeFileException e) {
 			log.error("Fail to save tree to the given path.",e);
+			return false;
 		}
+		return true;
 		
 	}
 	

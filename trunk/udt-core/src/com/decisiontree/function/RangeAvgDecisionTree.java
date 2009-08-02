@@ -35,8 +35,8 @@ import com.decisiontree.operation.SplitSearch;
  */
 public class RangeAvgDecisionTree extends PointDecisionTree {
 
-	public RangeAvgDecisionTree(SplitSearch splitSearch, double nodeSize, double pruningThreshold) {
-		super(splitSearch, nodeSize, pruningThreshold);
+	public RangeAvgDecisionTree(SplitSearch splitSearch, double nodeSize, double purityThreshold) {
+		super(splitSearch, nodeSize, purityThreshold);
 	}
 
 	public RangeAvgDecisionTree(SplitSearch splitSearch) {
