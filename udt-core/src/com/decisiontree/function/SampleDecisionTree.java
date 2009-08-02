@@ -55,12 +55,12 @@ public class SampleDecisionTree extends DecisionTree {
 		setNoSamples(noSamples);
 	}
 
-	public SampleDecisionTree(SplitSearch splitSearch, double nodeSize, double pruningThreshold) {
-		super(splitSearch, nodeSize, pruningThreshold);
+	public SampleDecisionTree(SplitSearch splitSearch, double nodeSize, double purityThreshold) {
+		super(splitSearch, nodeSize, purityThreshold);
 	}
 	
-	public SampleDecisionTree(SplitSearch splitSearch, int noSamples, double nodeSize, double pruningThreshold) {
-		this(splitSearch, nodeSize, pruningThreshold);
+	public SampleDecisionTree(SplitSearch splitSearch, int noSamples, double nodeSize, double purityThreshold) {
+		this(splitSearch, nodeSize, purityThreshold);
 		setNoSamples(noSamples);
 	}
 
