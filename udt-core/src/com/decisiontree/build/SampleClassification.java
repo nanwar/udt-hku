@@ -94,11 +94,11 @@ public class SampleClassification extends Classification {
 	}
 
 	@Override
-	public double crossFold( int fold, double nodeSize, double pruningThreshold){
+	public double crossFold( int fold, double nodeSize, double purityThreshold){
 		
 		List<Tuple> train = getTrainData(getDataSet().getData(), fold);
 
-		SampleTree dTree = new SampleTree(getDataSet(), splitSearch, nodeSize, pruningThreshold);
+		SampleTree dTree = new SampleTree(getDataSet(), splitSearch, nodeSize, purityThreshold);
 		TreeNode tree = dTree.buildDTree(train,0);
 		
 		List<Tuple> test = getTestData(getDataSet().getData(), fold);
