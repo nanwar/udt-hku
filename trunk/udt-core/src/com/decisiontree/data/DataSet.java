@@ -31,9 +31,9 @@ import java.util.List;
  *
  */
 public interface DataSet {
-	public static final int POINT = 0;
-	public static final int ERROR = 1;
-	public static final int RANGE = 3;
+	public static final String POINT = "POINT";
+	public static final String ERROR = "ERROR";
+	public static final String RANGE = "RANGE";
 
 	public static final boolean CONTINUOUS = true;
 	public static final boolean DISCRETE = false;
