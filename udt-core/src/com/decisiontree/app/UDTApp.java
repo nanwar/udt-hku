@@ -44,89 +44,13 @@ class UDTApp {
 
 	private static Logger log = Logger.getLogger(UDTApp.class);
 
-
-	public static final String GEN = "GEN";
-	public static final String BUILD = "BUILD";
-	public static final String OVERALL = "OVERALL";
-	public static final String CLEAN = "CLEAN";
-
-//	/**
-//	 * Generate interval-valued data from point data in training dataset
-//	 * @param training the training dataset file
-//	 * @param width the interval width (relative to domain)
-//	 * @param varies whether the interval width varies
-//	 * @deprecated
-//	 */
-//	private static void generateData(String training,
-//			double width, boolean varies) {
-//		generateData(training, null, width, varies);
-//	}
-//
-//	/**
-//	 * Generate interval-valued data from point data in training and testing dataset
-//	 * @param training the training dataset file
-//	 * @param testing the testing dataset file
-//	 * @param width the interval width (relative to domain)
-//	 * @param varies whether the interval width varies
-//	 * @deprecated
-//	 */
-//	private static void generateData(String training, String testing,
-//			double width, boolean varies) {
-//
-//		log.info("Generating interval uncertain data");
-//
-//		RangeDataGen gen = new RangeDataGen(training, varies);
-//		double widths[] = new double[gen.getNoAttr()];
-//
-//		for (int i = 0; i < gen.getNoAttr(); i++)
-//			widths[i] = width;
-//
-//		if(testing == null)
-//		gen.storeGeneratedData(training, widths);
-//		else
-//			gen.storeGeneratedDataWithTest(training, testing, widths);
-//	}
-//
-//	/**
-//	 * Generate interval-valued sample-distributed data from point data in training dataset
-//	 * @param training the training dataset file
-//	 * @param noSamples the number of samples
-//	 * @param width the interval width (relative to domain)
-//	 * @param seed the random-generate seed number
-//	 * @param varies whether the interval width varies
-//	 * @deprecated
-//	 */
-//	private static void generateData(String training, int noSamples,
-//			double width, long seed,  boolean varies) {
-//		generateData(training, null, noSamples, width, seed,  varies);
-//	}
-//
-//	/**
-//	 * Generate interval-valued sample-distributed data from point data in training dataset
-//	 * @param training the training dataset file
-//	 * @param testing the testing dataset file
-//	 * @param noSamples the number of samples
-//	 * @param width the interval width (relative to domain)
-//	 * @param seed the random-generate seed number
-//	 * @param varies whether the interval width varies
-//	 * @deprecated
-//	 */
-//	private static void generateData(String training, String testing,
-//			int noSamples, double width, long seed, boolean varies) {
-//
-//		log.info("Generating sampled interval uncertain data");
-//
-//		SampleDataGen gen = new SampleDataGen(training, noSamples, seed, varies);
-//		double widths[] = new double[gen.getNoAttr()];
-//
-//		for (int i = 0; i < gen.getNoAttr(); i++)
-//			widths[i] = width;
-//
-//		if(testing == null)
-//			gen.storeGeneratedData(training, widths);
-//		else
-//			gen.storeGeneratedDataWithTest(training, testing, widths);
-//	}
+	private static final String GEN = "GEN";
+	private static final String BUILD = "BUILD";
+	private static final String BUILDSAVE = "BUILDSAVE";
+	private static final String OVERALL = "OVERALL";
+	private static final String CLEAN = "CLEAN";
+	private static final String TESTING = "TESTING";
+	private static final String CLASSIFY = "CLASSIFY";
 
 
 	/**
@@ -170,7 +94,7 @@ class UDTApp {
 			String nameFile = null;
 			int noSamples = GlobalParam.DEFAULT_NO_SAMPLES;
 			double nodeSize = GlobalParam.DEFAULT_NODESIZE;
-			double pruningThreshold = GlobalParam.DEFAULT_THRESHOLD;
+			double purityThreshold = GlobalParam.DEFAULT_PURITY_THRESHOLD;
 
 			String mode = BUILD;
 			String type = DecisionTree.BUILD;
@@ -181,7 +105,12 @@ class UDTApp {
 			long seed = GlobalParam.DEFAULT_SEED;
 
 			boolean varies = false; //NOT SUPPORT IN THIS VERSION
+			
+			// For saving tree and classify by tree
+			boolean saveTree = false;
+			String treeFile = GlobalParam.TREE_FILE;
 
+			// for overall mode only
 			int noTrials = 1;
 			boolean saveToFile = false;
 			String resultFileName = GlobalParam.RESULT_FILE;
@@ -197,6 +126,10 @@ class UDTApp {
 							mode = OVERALL;
 						else if(value.equalsIgnoreCase("build"))
 							mode = BUILD;
+						else if(value.equalsIgnoreCase("buildsave"))
+							mode = BUILDSAVE;
+						else if(value.equalsIgnoreCase("classify"))
+							mode = TESTING;
 						else if(value.equalsIgnoreCase("clean"))
 							mode = CLEAN;
 					}
@@ -210,7 +143,7 @@ class UDTApp {
 						continue;
 					}
 					
-					else if(param.equals("-name") || param.equals("-f")){
+					else if(param.equals("-property") || param.equals("-f")){
 						nameFile = value;
 						continue;
 					}
@@ -240,25 +173,34 @@ class UDTApp {
 							algorithm = SplitSearch.POINT;
 					}
 
+					if(mode.equals(BUILDSAVE) || mode.equals(TESTING)){
+
+						if(param.equals("-tree") || mode.equals("-r")){
+							saveTree = true;
+							treeFile = value;
+						}
+					}
 
 					if(mode.equals(BUILD) || mode.equals(OVERALL)){
+						
 						if(param.equals("-type") || param.equals("-y")){
 
-								if(value.equalsIgnoreCase("xfold"))
-									type = DecisionTree.XFOLD;
-								else if (value.equalsIgnoreCase("accuracy"))
-									type = DecisionTree.ACCUR;
-								else type = DecisionTree.BUILD;
-
+							if(value.equalsIgnoreCase("xfold"))
+								type = DecisionTree.XFOLD;
+							else if (value.equalsIgnoreCase("accuracy"))
+								type = DecisionTree.ACCUR;
+							else type = DecisionTree.BUILD;
 						}
-
-						else if(param.equals("-nodesize") || param.equals("-n")){
+					}
+					if(mode.equals(BUILD) || mode.equals(OVERALL) || mode.equals(BUILDSAVE)){
+						
+						if(param.equals("-nodesize") || param.equals("-n")){
 							nodeSize = Double.parseDouble(value);
 							if(nodeSize < GlobalParam.DEFAULT_NODESIZE) nodeSize = GlobalParam.DEFAULT_NODESIZE;
 						}
 						else if(param.equals("-purity") || param.equals("-h")){
-							pruningThreshold = Double.parseDouble(value);
-							if(pruningThreshold > GlobalParam.DEFAULT_THRESHOLD) pruningThreshold = GlobalParam.DEFAULT_THRESHOLD;
+							purityThreshold = Double.parseDouble(value);
+							if(purityThreshold > GlobalParam.DEFAULT_PURITY_THRESHOLD) purityThreshold = GlobalParam.DEFAULT_PURITY_THRESHOLD;
 						}
 
 
@@ -275,7 +217,7 @@ class UDTApp {
 					if(mode.equals(OVERALL)){
 						if (param.equals("-trial") || param.equals("-l"))
 							noTrials = Integer.parseInt(value);
-						if (param.equals("-save") || param.equals("-v")){
+						else if (param.equals("-save") || param.equals("-v")){
 							saveToFile = true;
 							resultFileName = value;
 						}
@@ -288,7 +230,7 @@ class UDTApp {
 			// if training data file is not specified
 			if(training == null){
 				log.error("No training set is specified.");
-				System.out.println("Please input training set using -d or -dataset option.");
+				System.err.println("Please input training set using -d or -dataset option.");
 				System.exit(1);
 			}
 
@@ -310,10 +252,10 @@ class UDTApp {
 				functions.generateMode(training, testing, nameFile, algorithm, noSamples, width, seed, varies);
 			}
 
-			if(mode.equals(BUILD) ){
+			else if(mode.equals(BUILD) ){
 				System.out.println("You are running build mode.");
 
-				String result = functions.buildMode(training, testing, nameFile, algorithm, type, nodeSize, pruningThreshold);
+				String result = functions.buildMode(training, testing, nameFile, algorithm, type, nodeSize, purityThreshold);
 				String [] splitResult = result.split(",");
 				if(type.equals(DecisionTree.BUILD)){
 					log.info("Timing...");
@@ -328,13 +270,28 @@ class UDTApp {
 
 					System.out.println("Testing Accuracy: " + splitResult[1]);
 				}else if(type.equals(DecisionTree.XFOLD)){
-					log.info("Finding Accuracy by crossfold");
+					log.info("Finding Accuracy by crossfold...");
 					System.out.println("Cross-Fold Accuracy: " + splitResult[1]);
 				}
 
 			}
-			if(mode.equals(CLEAN)){
-				System.out.println("You are running clean mode. The operation cannot be rollbacks.");
+			else if(mode.equals(BUILDSAVE)){
+				// TODO : implement
+				System.out.println("You are running build and save mode.");
+				if( functions.buildAndSaveMode(training, nameFile, algorithm,nodeSize, purityThreshold, treeFile))
+					System.out.println("The file is successfully saved in " + treeFile + ".");
+				
+			}
+			else if(mode.equals(TESTING)){
+				// TODO: implement
+				System.out.println("You are running build and save mode.");
+			}
+			else if(mode.equals(CLASSIFY)){
+				// TODO: to be implement in next release
+			}
+			
+			else if(mode.equals(CLEAN)){
+				System.out.println("You are running clean mode. The operation cannot be reverted.");
 
 				functions.cleanMode(training, testing);
 
@@ -346,12 +303,13 @@ class UDTApp {
 				System.out.println("You are running overall mode. Reminded that the generated data would NOT be cleaned.");
 				if(saveToFile){
 					functions.overallMode(training, testing, nameFile, algorithm, type, noSamples, width, seed, varies,
-							nodeSize, pruningThreshold,noTrials,resultFileName);
+							nodeSize, purityThreshold,noTrials,resultFileName);
 					System.out.println("The result data is saved in " + resultFileName +".");
 
 				}else{
 					System.out.println("The results are as follows:");
-					List<String> resultList = functions.overallMode(training, testing, nameFile, algorithm, type, noSamples, width, seed, varies, nodeSize, pruningThreshold, noTrials);
+					List<String> resultList = functions.overallMode(training, testing, nameFile, 
+							algorithm, type, noSamples, width, seed, varies, nodeSize, purityThreshold, noTrials);
 					for(int i = 0; i < resultList.size(); i++){
 						System.out.println(resultList.get(i));
 					}
@@ -361,9 +319,8 @@ class UDTApp {
 			log.info("The program terminates successfully.");
 			System.out.println("The job has finished successfully.");
 		}catch(Exception e){
-			e.printStackTrace();
-			log.error("Internal Errors. The Program Terminates", e);
-			System.out.println("Internal Errors. Please check if your input is incorrect.");
+			log.error("Internal errors occur. The program terminates.", e);
+			System.err.println("Internal Errors. Please check if your input is incorrect.");
 			System.exit(1);
 		}
 	}
