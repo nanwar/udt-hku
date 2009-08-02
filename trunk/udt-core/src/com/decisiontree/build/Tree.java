@@ -47,7 +47,7 @@ public abstract class Tree {
 	protected DataSet dataSet;
 
 	public double nodeSize = GlobalParam.DEFAULT_NODESIZE;
-	public double pruningThreshold = GlobalParam.DEFAULT_THRESHOLD;
+	public double purityThreshold = GlobalParam.DEFAULT_PURITY_THRESHOLD;
 
 	public SplitSearch splitSearch = null;
 
@@ -69,7 +69,7 @@ public abstract class Tree {
 	public Tree(DataSet dataSet, double nodeSize, double purity){
 		this(dataSet);
 		this.nodeSize = nodeSize;
-		this.pruningThreshold = purity;
+		this.purityThreshold = purity;
 	}
 
 	/**
@@ -169,7 +169,7 @@ public abstract class Tree {
 			return treeNode;
 		}
 
-		if( treeNode.getWeightedNoTuples() <= nodeSize  || treeNode.getPurity() - pruningThreshold > 1E-12){
+		if( treeNode.getWeightedNoTuples() <= nodeSize  || treeNode.getPurity() - purityThreshold > 1E-12){
 			log.debug("Level " + height + ":  Pruned - "+ treeNode.getMajorityCls());
 			treeNode.setType(TreeNode.LEAF);
 			return treeNode;

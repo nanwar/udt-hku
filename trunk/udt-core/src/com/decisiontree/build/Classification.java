@@ -156,22 +156,22 @@ public abstract class Classification {
 	 * Doing cross-fold validation for the fold given by fold number
 	 * @param fold the fold number
 	 * @param nodeSize the min tree node size
-	 * @param pruningThreshold the purity of the node for the tree to stop
+	 * @param purityThreshold the purity of the node for the tree to stop
 	 * @return percentage of tuples that are correctly classified
 	 */
-	protected abstract double crossFold(int fold, double nodeSize, double pruningThreshold);
+	protected abstract double crossFold(int fold, double nodeSize, double purityThreshold);
 	
 	/**
 	 * Doing cross-fold validation for all the folds
 	 * @param nodeSize
-	 * @param pruningThreshold
+	 * @param purityThreshold
 	 * @return the overall classifcation accuracy
 	 */
-	public double crossAllFold(double nodeSize, double pruningThreshold){
+	public double crossAllFold(double nodeSize, double purityThreshold){
 		
 		double totalPercent = 0.0;
 		for(int i = 0; i < GlobalParam.NOFOLD; i++){
-			totalPercent +=  crossFold(i, nodeSize, pruningThreshold);	
+			totalPercent +=  crossFold(i, nodeSize, purityThreshold);	
 		}
 		
 		return totalPercent/GlobalParam.NOFOLD;

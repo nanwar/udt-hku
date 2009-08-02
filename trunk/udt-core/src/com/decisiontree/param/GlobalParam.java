@@ -48,7 +48,7 @@ public class GlobalParam{
 	public static final double DEFAULT_WIDTH = 0.1;
 	
 	public static final double DEFAULT_NODESIZE = 1;
-	public static final double DEFAULT_THRESHOLD = 0.99;
+	public static final double DEFAULT_PURITY_THRESHOLD = 0.99;
 
 	public static String SAMPLE_PATH = "_PDF/"; 
 	public static final String SAMPLE_TUPLE = "T"; 
@@ -63,6 +63,8 @@ public class GlobalParam{
 	public static final String SEPERATOR = ",";
 
 	public static final String RESULT_FILE = "result/result.rst";
+
+	public static final String TREE_FILE = "tree/tree.udt";
 	
 	private static int noNode = 0;
 	
