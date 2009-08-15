@@ -22,11 +22,9 @@ package com.decisiontree.function;
 
 import java.util.List;
 
-import com.decisiontree.build.RangeClassification;
 import com.decisiontree.build.SampleClassification;
 import com.decisiontree.build.SampleTree;
 import com.decisiontree.build.TreeNode;
-import com.decisiontree.data.RangeDataSet;
 import com.decisiontree.data.SampleDataSet;
 import com.decisiontree.data.SampleDataSetInit;
 import com.decisiontree.data.Tuple;

@@ -21,7 +21,6 @@
 package com.decisiontree.ui;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,11 +35,6 @@ import com.decisiontree.eval.DispersionMeasure;
 import com.decisiontree.file.FileUtil;
 import com.decisiontree.function.DecisionTree;
 import com.decisiontree.function.DecisionTreeFactory;
-import com.decisiontree.function.PointDecisionTree;
-import com.decisiontree.function.RangeAvgDecisionTree;
-import com.decisiontree.function.RangeDecisionTree;
-import com.decisiontree.function.SampleAvgDecisionTree;
-import com.decisiontree.function.SampleDecisionTree;
 import com.decisiontree.measure.Times;
 import com.decisiontree.operation.SplitSearch;
 import com.decisiontree.operation.SplitSearchFactory;

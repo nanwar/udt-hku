@@ -22,16 +22,12 @@ package com.decisiontree.function;
 
 import java.util.List;
 
-import com.decisiontree.build.PointClassification;
 import com.decisiontree.build.RangeClassification;
 import com.decisiontree.build.RangeTree;
 import com.decisiontree.build.TreeNode;
-import com.decisiontree.data.PointDataSet;
 import com.decisiontree.data.RangeDataSet;
 import com.decisiontree.data.RangeDataSetInit;
 import com.decisiontree.data.Tuple;
-import com.decisiontree.exceptions.DecisionTreeFileException;
-import com.decisiontree.file.DecisionTreeStorage;
 import com.decisiontree.operation.SplitSearch;
 
 /**
