@@ -25,8 +25,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import com.decisiontree.datagen.RangeDataGen;
-import com.decisiontree.datagen.SampleDataGen;
 import com.decisiontree.function.DecisionTree;
 import com.decisiontree.operation.SplitSearch;
 import com.decisiontree.param.GlobalParam;
@@ -105,9 +103,9 @@ class UDTApp {
 			long seed = GlobalParam.DEFAULT_SEED;
 
 			boolean varies = false; //NOT SUPPORT IN THIS VERSION
-			
+
 			// For saving tree and classify by tree
-			boolean saveTree = false;
+//			boolean saveTree = false;
 			String treeFile = GlobalParam.TREE_FILE;
 
 			// for overall mode only
@@ -128,8 +126,10 @@ class UDTApp {
 							mode = BUILD;
 						else if(value.equalsIgnoreCase("buildsave"))
 							mode = BUILDSAVE;
-						else if(value.equalsIgnoreCase("classify"))
+						else if(value.equalsIgnoreCase("testing"))
 							mode = TESTING;
+						else if(value.equalsIgnoreCase("classify"))
+							mode = CLASSIFY;
 						else if(value.equalsIgnoreCase("clean"))
 							mode = CLEAN;
 					}
@@ -142,7 +142,7 @@ class UDTApp {
 						testing = value;
 						continue;
 					}
-					
+
 					else if(param.equals("-property") || param.equals("-f")){
 						nameFile = value;
 						continue;
@@ -176,13 +176,13 @@ class UDTApp {
 					if(mode.equals(BUILDSAVE) || mode.equals(TESTING)){
 
 						if(param.equals("-tree") || mode.equals("-r")){
-							saveTree = true;
+//							saveTree = true;
 							treeFile = value;
 						}
 					}
 
 					if(mode.equals(BUILD) || mode.equals(OVERALL)){
-						
+
 						if(param.equals("-type") || param.equals("-y")){
 
 							if(value.equalsIgnoreCase("xfold"))
@@ -193,7 +193,7 @@ class UDTApp {
 						}
 					}
 					if(mode.equals(BUILD) || mode.equals(OVERALL) || mode.equals(BUILDSAVE)){
-						
+
 						if(param.equals("-nodesize") || param.equals("-n")){
 							nodeSize = Double.parseDouble(value);
 							if(nodeSize < GlobalParam.DEFAULT_NODESIZE) nodeSize = GlobalParam.DEFAULT_NODESIZE;
@@ -228,7 +228,7 @@ class UDTApp {
 			}
 
 			// if training data file is not specified
-			if(training == null){
+			if(training.equals(null)){
 				log.error("No training set is specified.");
 				System.err.println("Please input training set using -d or -dataset option.");
 				System.exit(1);
@@ -238,25 +238,27 @@ class UDTApp {
 //			if(testing == null){
 //				testing = training;
 //			}
-			
+
 			// if name file is not specified
-			if(nameFile == null){
+			if(nameFile.equals(null)){
 				nameFile = training;
 			}
 
 			UDTFunctions functions = new UDTFunctions();
 
 			if(mode.equals(GEN) ){
+				log.info("Running Generate Mode.");
 				System.out.println("You are running generate mode.");
 				System.out.println("The generate data would be stored in the same folder of the source data file.");
 				functions.generateMode(training, testing, nameFile, algorithm, noSamples, width, seed, varies);
 			}
 
 			else if(mode.equals(BUILD) ){
+				log.info("Running Build Mode.");
 				System.out.println("You are running build mode.");
 
 				String result = functions.buildMode(training, testing, nameFile, algorithm, type, nodeSize, purityThreshold);
-				String [] splitResult = result.split(",");
+				String [] splitResult = result.split(GlobalParam.SEPERATOR);
 				if(type.equals(DecisionTree.BUILD)){
 					log.info("Timing...");
 
@@ -277,20 +279,29 @@ class UDTApp {
 			}
 			else if(mode.equals(BUILDSAVE)){
 				// TODO : implement
+				log.info("Running Build And Save Mode.");
 				System.out.println("You are running build and save mode.");
 				if( functions.buildAndSaveMode(training, nameFile, algorithm,nodeSize, purityThreshold, treeFile))
 					System.out.println("The file is successfully saved in " + treeFile + ".");
-				
+
 			}
 			else if(mode.equals(TESTING)){
 				// TODO: implement
-				System.out.println("You are running build and save mode.");
+				log.info("Running Testing Mode.");
+				System.out.println("You are running testing mode.");
+				String result = functions.testingMode(training, nameFile, algorithm, treeFile);
+				String [] splitResult = result.split(GlobalParam.SEPERATOR);
+				System.out.println("Testing Accuracy: " + splitResult[1]);
 			}
 			else if(mode.equals(CLASSIFY)){
 				// TODO: to be implement in next release
+				log.info("Runing Classify Mode");
+				System.out.println("You are running classify mode.");
+				log.warn("Classify function has not implemented yet. ");
 			}
-			
+
 			else if(mode.equals(CLEAN)){
+				log.info("Runing Clean Mode");
 				System.out.println("You are running clean mode. The operation cannot be reverted.");
 
 				functions.cleanMode(training, testing);
@@ -300,6 +311,7 @@ class UDTApp {
 			}
 
 			if( mode.equals(OVERALL)){ // OVERALL Allows multiple trials and file save for data.
+				log.info("Running Overall Mode" );
 				System.out.println("You are running overall mode. Reminded that the generated data would NOT be cleaned.");
 				if(saveToFile){
 					functions.overallMode(training, testing, nameFile, algorithm, type, noSamples, width, seed, varies,
@@ -308,7 +320,7 @@ class UDTApp {
 
 				}else{
 					System.out.println("The results are as follows:");
-					List<String> resultList = functions.overallMode(training, testing, nameFile, 
+					List<String> resultList = functions.overallMode(training, testing, nameFile,
 							algorithm, type, noSamples, width, seed, varies, nodeSize, purityThreshold, noTrials);
 					for(int i = 0; i < resultList.size(); i++){
 						System.out.println(resultList.get(i));

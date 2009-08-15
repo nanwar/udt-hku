@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 import com.decisiontree.param.GlobalParam;
 
 /**
- * 
+ *
  * PointDataSetInit class - Initializes a PointDB object.
  *
  * @author Smith Tsang
@@ -41,7 +41,7 @@ import com.decisiontree.param.GlobalParam;
 public class PointDataSetInit extends DataSetInit {
 
 	private static Logger log = Logger.getLogger(PointDataSetInit.class);
-	
+
 	/**
 	 * Constructor by input data file name
 	 * @param input the input data file name
@@ -51,6 +51,7 @@ public class PointDataSetInit extends DataSetInit {
 		dataSet = new PointDataSet(input,findNoCls(input), findNoAttr(input));
 		dataSet.setClsNameList(findClsName(input));
 		preProcess(input);
+		dataSet.setNoTuples(countNoTuples(input));
 		storeData(input);
 
 	}
@@ -68,7 +69,7 @@ public class PointDataSetInit extends DataSetInit {
 		storeData(input);
 
 	}
-	
+
 	@Override
 	public int countNoTuples(String input) {
 		return countNoTuples(input, POINT_FILE);
@@ -79,7 +80,7 @@ public class PointDataSetInit extends DataSetInit {
 	@Override
 	public void preProcess(String input) {
 		preProcess(input,POINT_FILE);
-		
+
 	}
 
 

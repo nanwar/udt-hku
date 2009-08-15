@@ -33,7 +33,7 @@ import com.decisiontree.param.GlobalParam;
  *
  */
 public class TreeNode{
-	
+
 	public static Logger log = Logger.getLogger(TreeNode.class);
 
 	public static final int INTERAL = 0;
@@ -78,7 +78,7 @@ public class TreeNode{
 		setEntropy(dispersion);
 //		if(parent == null) this.height = 0;
 	}
-	
+
 
 
 //	public TreeNode(List<Tuple> data, TreeNode parent, int noCls){
@@ -141,7 +141,7 @@ public class TreeNode{
 	public void setMajorityCls(int majorityCls){
 		this.majorityCls = majorityCls;
 	}
-	
+
 //	public List<Tuple> getData(){
 //		return data;
 //	}
@@ -173,10 +173,10 @@ public class TreeNode{
         public void setSplit(double split){
 		this.split = split;
 	}
-        
+
     private void setWeightedNoTuples(double weightedNoTuples) {
     	this.weightedNoTuples = weightedNoTuples;
-    		
+
     }
 
 	public double getWeightedNoTuples(){
@@ -199,15 +199,15 @@ public class TreeNode{
 	}
 
 
-	public int majorityCls(){
-
-		return majorityCls;
-	}
+//	public int majorityCls(){
+//
+//		return majorityCls;
+//	}
 
 	public void setClsDist(double [] clsDist){
 		this.clsDist = clsDist;
 	}
-	
+
 //	public void setClsDist(){
 //
 //		clsDist = new double[noCls];
@@ -253,7 +253,7 @@ public class TreeNode{
 	public void setEntropy(double dispersion){
 		this.dispersion = dispersion;
 	}
-	
+
 	public double getDispersion(){
 		return dispersion;
 	}
@@ -272,7 +272,7 @@ public class TreeNode{
 	public double getError(){
 		return TreeUtil.findError(clsDist, majorityCls);
 	}
-	
+
 	public void setHeight(int height){
 		this.height = height;
 	}
@@ -283,7 +283,7 @@ public class TreeNode{
 	public double [] getClsDist(){
 		return clsDist;
 	}
-	
+
 	public void clearChildren(){
 		children = null;
 		noChildren = -1;

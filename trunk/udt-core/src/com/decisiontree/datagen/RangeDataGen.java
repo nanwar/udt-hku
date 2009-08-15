@@ -62,7 +62,7 @@ public class RangeDataGen implements DataGen{
 	protected PointDataSet dataSet;
 
 	public RangeDataGen(String input, String nameFile, boolean varies) {
-		PointDataSetInit init = new PointDataSetInit(input);
+		PointDataSetInit init = new PointDataSetInit(input, nameFile);
 		dataSet = init.getDataSet();
 
 		precisionArray = new int[dataSet.getNoAttr()];
@@ -189,7 +189,6 @@ public class RangeDataGen implements DataGen{
 				if (!dataSet.isContinuous(k))
 					continue;
 				if (width != null) {
-
 					log.info("Interval Width: " + width[k]);
 					setAttrRange(k, width[k] * dataSet.getDomainSize(k));
 				}
@@ -345,7 +344,7 @@ public class RangeDataGen implements DataGen{
 					testing = args[++i];
 					continue;
 				}
-				
+
 				if (args[i].equals("-f")) {
 					nameFile = args[++i];
 					continue;
@@ -362,7 +361,7 @@ public class RangeDataGen implements DataGen{
 						.println("Please input training set using -d option.");
 				System.exit(1);
 			}
-			
+
 			if(nameFile == null)
 				nameFile = training;
 

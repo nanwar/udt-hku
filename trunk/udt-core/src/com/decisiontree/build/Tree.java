@@ -154,14 +154,16 @@ public abstract class Tree {
 		double [] clsDist = Tuple.computeClsDist(data, dataSet.getNoCls());
 		double weightedNoTuples = Tuple.countWeightedTuples(data);
 		double dispersion = splitSearch.findDispersion(clsDist,weightedNoTuples);
-		
+		log.debug("Node info: " + weightedNoTuples + " " + dispersion + " " + height);
+
 		TreeNode treeNode = new TreeNode(clsDist, weightedNoTuples, dispersion);
 //		TreeNode treeNode = new TreeNode(data, null, dataSet.getNoCls());
 		GlobalParam.incrNoNode();
 
 //		treeNode.setHeight(height);
 //		log.debug("Total Tuple at level " + height + ": " + treeNode.getWeightedNoTuples());
-		 
+
+		treeNode.setMajorityCls(TreeUtil.findMajorityCls(clsDist));
 		boolean singleCls =	TreeUtil.isSingleCls(clsDist);
 		if(singleCls){
 			log.debug("Level " + height + ":  Same Class - "+ treeNode.getMajorityCls());
