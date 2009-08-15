@@ -55,9 +55,9 @@ import com.decisiontree.param.GlobalParam;
  *
  */
 public class UDTFunctions {
-	
+
 	public static Logger log = Logger.getLogger(UDTFunctions.class);
-	
+
 	/**
 	 * Generate interval-valued data from point data in training dataset
 	 * @param training the training dataset file
@@ -70,7 +70,7 @@ public class UDTFunctions {
 	}
 
 	/**
-	 * Generate interval-valued data from point data in training and testing dataset 
+	 * Generate interval-valued data from point data in training and testing dataset
 	 * @param training the training dataset file
 	 * @param testing the testing dataset file
 	 * @param width the interval width (relative to domain)
@@ -78,7 +78,7 @@ public class UDTFunctions {
 	 */
 	private void generateData(String training, String testing, String nameFile,
 			double width, boolean varies) {
-		
+
 		log.info("Generating interval uncertain data");
 
 		RangeDataGen gen = new RangeDataGen(training, nameFile, varies);
@@ -103,7 +103,7 @@ public class UDTFunctions {
 	 */
 	private void generateData(String training, String nameFile, int noSamples,
 			double width, long seed,  boolean varies) {
-		generateData(training, null, noSamples, width, seed,  varies);
+		generateData(training, null, nameFile, noSamples, width, seed,  varies);
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class UDTFunctions {
 	 */
 	private void generateData(String training, String testing, String nameFile,
 			int noSamples, double width, long seed, boolean varies) {
-		
+
 		log.info("Generating sampled interval uncertain data");
 
 		SampleDataGen gen = new SampleDataGen(training, nameFile, noSamples, seed, varies);
@@ -128,7 +128,7 @@ public class UDTFunctions {
 
 		if(testing == null)
 			gen.storeGeneratedData(training, widths);
-		else 
+		else
 			gen.storeGeneratedDataWithTest(training, testing, widths);
 	}
 
@@ -153,21 +153,21 @@ public class UDTFunctions {
 		if(algorithm.equals(SplitSearch.UDTUD) || algorithm.equals(SplitSearch.AVGUD)){
 			if(testing == null)
 				generateData(training, nameFile, width, varies);
-			else 
+			else
 			generateData(training, testing, nameFile, width, varies);
 		}
 		else{
 			if(testing == null)
-				generateData(training, testing, noSamples, width, seed, varies);
-			else 
+				generateData(training, nameFile, noSamples, width, seed, varies);
+			else
 			generateData(training, testing, nameFile, noSamples, width, seed, varies);
 		}
     }
-    
- 
+
+
     public boolean buildAndSaveMode(String training, String nameFile, String algorithm, double nodeSize, double purityThreshold, String treeFile){
     	// Currently using entropy
-    	SplitSearch splitSearch = SplitSearchFactory.createSplitSearch(algorithm, DispersionMeasure.ENTROPY); 
+    	SplitSearch splitSearch = SplitSearchFactory.createSplitSearch(algorithm, DispersionMeasure.ENTROPY);
     	if(splitSearch == null){
     		log.error("Incorrect algorithm specified.");
     		return false;
@@ -176,23 +176,23 @@ public class UDTFunctions {
 		DecisionTree decisionTree = DecisionTreeFactory.createDecisionTree(algorithm, splitSearch, nodeSize, purityThreshold);
 
 		return decisionTree.buildAndSaveTree(training, nameFile, treeFile);
-			
+
     }
 
-    
+
     public String buildMode(String training, String testing, String nameFile, String algorithm, String type,  double nodeSize, double purityThreshold){
 
     	// Currently using entropy
-    	SplitSearch splitSearch = SplitSearchFactory.createSplitSearch(algorithm, DispersionMeasure.ENTROPY); 
+    	SplitSearch splitSearch = SplitSearchFactory.createSplitSearch(algorithm, DispersionMeasure.ENTROPY);
     	if(splitSearch == null){
     		log.error("Incorrect algorithm specified.");
     		return null;
     	}
-		
+
 		final Times start = new Times();
 
 		DecisionTree decisionTree = DecisionTreeFactory.createDecisionTree(algorithm, splitSearch, nodeSize, purityThreshold);
-		
+
 		String result = "";
 
 		if(type.equals(DecisionTree.BUILD)){
@@ -203,24 +203,24 @@ public class UDTFunctions {
 
 			System.out.println("Building Time: " );
 			end.difference(start).printTime();
-			
+
 			result = GlobalParam.getNoEntCal() +"," + end.getUserTime() + "," + end.getSystemTime();
-			
+
 		}else if(type.equals(DecisionTree.ACCUR)){
 			log.info("Finding Accuracy...");
 			double accuracy = 0.0;
-			
-			if(training == null)
+
+			if(testing == null)
 				accuracy = decisionTree.findAccuracy(training, nameFile);
 			else accuracy = decisionTree.findAccuracy(training, testing, nameFile);
-			
+
 			accuracy = Math.rint(accuracy *10000)/10000;
 			result = GlobalParam.getNoEntCal() + "," +accuracy;
 
 		}else if(type.equals(DecisionTree.XFOLD)){
 			log.info("Finding Accuracy by crossfold");
 			double accuracy = decisionTree.crossFold(training, nameFile);
-			
+
 			accuracy = Math.rint(accuracy *10000)/10000;
 			result = GlobalParam.getNoEntCal() + "," + accuracy;
 
@@ -228,62 +228,62 @@ public class UDTFunctions {
 		return result;
 
     }
-    
+
     public String testingMode(String testing, String nameFile, String algorithm, String treeFile){
     	// Currently using entropy
-    	SplitSearch splitSearch = SplitSearchFactory.createSplitSearch(algorithm, DispersionMeasure.ENTROPY); 
+    	SplitSearch splitSearch = SplitSearchFactory.createSplitSearch(algorithm, DispersionMeasure.ENTROPY);
     	if(splitSearch == null){
     		log.error("Incorrect algorithm specified.");
     		return null;
     	}
 
 		DecisionTree decisionTree = DecisionTreeFactory.createDecisionTree(algorithm, splitSearch);
-		
+
 		log.info("Finding Accuracy...");
-		double accuracy = decisionTree.findAccuracyByTree(testing, nameFile, treeFile);
-		
+		double accuracy = decisionTree.findAccuracyByTree(treeFile, testing, nameFile);
+
 		accuracy = Math.rint(accuracy *10000)/10000;
 		return GlobalParam.getNoEntCal() + "," +accuracy;
     }
-    
+
     public String classifyMode(String dataFile, String nameFile, String treeFile){
     	// TODO: to be implemented in the next version
     	return null;
     }
 
     public void cleanMode(String training, String testing){
-    	
+
 		SampleDataCleaner cleaner = new SampleDataCleaner();
 		if(testing == null)
 			cleaner.cleanGeneratedData(training);
 		else cleaner.cleanGeneratedDataWithTest(training, testing);
-		
+
 
     }
-    
+
     public String overallMode(String training, String testing, String nameFile,String algorithm, String type, int noSamples, double width, long seed, boolean varies,
     		double nodeSize, double purityThreshold){
-    	
+
 		generateMode(training,testing,nameFile,algorithm,noSamples,width,seed,varies);
 		String result = buildMode(training, testing, nameFile, algorithm, type, nodeSize, purityThreshold);
 		GlobalParam.clearStoredValues();
-		
+
 		return result;
-    
+
     }
-    
+
     public List<String> overallMode(String training, String testing, String nameFile, String algorithm, String type, int noSamples, double width, long seed, boolean varies,
     		double nodeSize, double purityThreshold, int noTrials){
     	List<String> resultList = new ArrayList<String>(noTrials);
     	for(int i =0; i < noTrials; i++)
     		resultList.add(algorithm + ","+ i + "," +
     				overallMode(training,testing,nameFile,algorithm,type,noSamples,width,seed+i,varies,nodeSize,purityThreshold));
-    		
+
     	return resultList;
-    	
+
     }
-    
-    
+
+
     public void overallMode(String training, String testing, String nameFile, String algorithm, String type, int noSamples, double width, long seed, boolean varies,
     		double nodeSize, double purityThreshold, int noTrials, String resultFileName) throws IOException{
     	BufferedWriter writer = null;
@@ -292,17 +292,19 @@ public class UDTFunctions {
 			writer = new BufferedWriter(new FileWriter(resultFileName));
 			writer.write("Decision Tree Build Type = " + type );
 			writer.newLine();
-			writer.write("Algorithm,Trail,NoEntropyCal,UserTime,SystemTime");
+			if(type.equals(DecisionTree.BUILD))
+				writer.write("Algorithm,Trail,NoEntropyCal,UserTime,SystemTime");
+			else writer.write("Algorithm,Trial,NoEntropyCal,Accuracy");
 			writer.newLine();
-	
+
 			for(int i = 0 ; i < noTrials ; i++){
-				writer.write(algorithm + "," + i + "," + 
+				writer.write(algorithm + "," + i + "," +
 						overallMode(training,testing, nameFile, algorithm,type,noSamples,width,seed+i,varies,nodeSize,purityThreshold));
 				writer.newLine();
 			}
 		}
 		finally{
-			if(writer != null) 
+			if(writer != null)
 				writer.close();
 		}
     }
