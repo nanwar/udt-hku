@@ -105,7 +105,6 @@ class UDTApp {
 			boolean varies = false; //NOT SUPPORT IN THIS VERSION
 
 			// For saving tree and classify by tree
-//			boolean saveTree = false;
 			String treeFile = GlobalParam.TREE_FILE;
 
 			// for overall mode only
@@ -176,7 +175,6 @@ class UDTApp {
 					if(mode.equals(BUILDSAVE) || mode.equals(TESTING)){
 
 						if(param.equals("-tree") || mode.equals("-r")){
-//							saveTree = true;
 							treeFile = value;
 						}
 					}
@@ -234,10 +232,6 @@ class UDTApp {
 				System.exit(1);
 			}
 
-//			// if testing is not specified
-//			if(testing == null){
-//				testing = training;
-//			}
 
 			// if name file is not specified
 			if(nameFile.equals(null)){

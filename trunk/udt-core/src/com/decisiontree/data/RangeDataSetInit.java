@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 import com.decisiontree.param.GlobalParam;
 
 /**
- * 
+ *
  * RangeDataSetInit - Initializes a RangeDataSet object.
  *
  * @author Smith Tsang
@@ -39,7 +39,7 @@ import com.decisiontree.param.GlobalParam;
  *
  */
 public class RangeDataSetInit extends DataSetInit{
-	
+
 	private static Logger log = Logger.getLogger(RangeDataSetInit.class);
 
 	@Override
@@ -48,20 +48,15 @@ public class RangeDataSetInit extends DataSetInit{
 	}
 
 	public RangeDataSetInit(String input){
-//		try{
+
 			dataSet = new RangeDataSet(input, findNoCls(input),findNoAttr(input));
 			dataSet.setClsNameList(findClsName(input));
 			preProcess(input);
 			dataSet.setNoTuples(countNoTuples(input));
 			storeData(input);
 
-//		}
-//		catch(Exception e){
-//			System.err.println(e);
-//			System.exit(1);
-//		}		
 	}
-	
+
 	/**
 	 * Constructor by input data file name
 	 * @param input the input data file name
@@ -84,20 +79,20 @@ public class RangeDataSetInit extends DataSetInit{
 	@Override
 	public void preProcess(String input) {
 		preProcess(input, RANGE_FILE);
-		
+
 	}
 
 	@Override
 	public void storeData(String input) {
 		RangeDataSet db = getDataSet();
-		
+
 		BufferedReader reader = null;
 		try{
-		
+
 			int noTuples = db.getNoTuples();
-			
+
 			reader = new BufferedReader(new FileReader(input + RANGE_FILE));
-			
+
 			String data = "";
 			List <Tuple> t = new ArrayList<Tuple>(noTuples);
 			for(int i =0; (data = reader.readLine()) != null && i < noTuples; i++){
@@ -106,7 +101,7 @@ public class RangeDataSetInit extends DataSetInit{
 				db.setClsDistribution(cls);
 				t.add(new RangeTuple(data, db.getNoAttr(), cls));
 			}
-			
+
 			db.setData(t);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -119,7 +114,7 @@ public class RangeDataSetInit extends DataSetInit{
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 
 
