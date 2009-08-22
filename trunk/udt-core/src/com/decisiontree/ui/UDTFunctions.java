@@ -189,16 +189,17 @@ public class UDTFunctions {
 
 		String result = "";
 
-		if(type.equals(DecisionTree.BUILD)){
+		if(type.equals(DecisionTree.TIME)){
 			log.info("Timing...");
 
 			decisionTree.buildTree(training, nameFile);
 			final Times end = new Times();
 
 			System.out.println("Building Time: " );
-			end.difference(start).printTime();
+			final Times sub = end.difference(start);
+			sub.printTime();
 
-			result = GlobalParam.getNoEntCal() +"," + end.getUserTime() + "," + end.getSystemTime();
+			result = GlobalParam.getNoEntCal() +"," + sub.getUserTimeInSeconds() + "," + sub.getSystemTimeInSeconds();
 
 		}else if(type.equals(DecisionTree.ACCUR)){
 			log.info("Finding Accuracy...");
@@ -286,7 +287,7 @@ public class UDTFunctions {
 			writer = new BufferedWriter(new FileWriter(resultFileName));
 			writer.write("Decision Tree Build Type = " + type );
 			writer.newLine();
-			if(type.equals(DecisionTree.BUILD))
+			if(type.equals(DecisionTree.TIME))
 				writer.write("Algorithm,Trail,NoEntropyCal,UserTime,SystemTime");
 			else writer.write("Algorithm,Trial,NoEntropyCal,Accuracy");
 			writer.newLine();
