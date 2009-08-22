@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ import com.decisiontree.operation.SplitSearch;
 import com.decisiontree.param.GlobalParam;
 
 /**
- * 
+ *
  * DecisionTree (Abstract class) - builds a decision tree for given dataset files.
  *
  * @author Smith Tsang
@@ -37,18 +37,18 @@ import com.decisiontree.param.GlobalParam;
  *
  */
 public abstract class DecisionTree {
-	
+
 	protected static final Logger log = Logger.getLogger(DecisionTree.class);
-	
-	public static final String BUILD = "BUILD"; 
+
+	public static final String TIME = "TIME";
 	public static final String ACCUR = "ACCUR";
 	public static final String XFOLD = "XFOLD";
 
 	protected SplitSearch splitSearch;
-	
+
 	protected double nodeSize = GlobalParam.DEFAULT_NODESIZE;
 	protected double purity = GlobalParam.DEFAULT_PURITY_THRESHOLD;
-	
+
 	/**
 	 * Constructor by the algorithm (SplitSearch) to find the best split point
 	 * @param splitSearch the SplitSearch object
@@ -56,10 +56,10 @@ public abstract class DecisionTree {
 	public DecisionTree(SplitSearch splitSearch){
 		setSplitSearch(splitSearch);
 	}
-	
+
 	/**
 	 * Constructor by the algorithm (SplitSearch) to find the best split point and the pre-pruning parameter
-	 * @param splitSearch the SplitSearch object 
+	 * @param splitSearch the SplitSearch object
 	 * @param nodeSize the size of the node for the tree to stop
 	 * @param purity the purity of the node for the tree to stop
 	 */
@@ -85,10 +85,10 @@ public abstract class DecisionTree {
 			return false;
 		}
 		return true;
-		
+
 	}
-	
-	
+
+
 //	/**
 //	 * Building and saving a decision treefrom a given training data file
 //	 * @param training the training dataset file
@@ -103,10 +103,10 @@ public abstract class DecisionTree {
 //		} catch (DecisionTreeFileException e) {
 //			log.error("Fail to save tree to the given path.",e);
 //		}
-//		
+//
 //	}
 //	public abstract void buildAndSaveTree(String training, String path);
-	
+
 //	/**
 //	 * Building a deciison tree from the given training data file
 //	 * @param training the training dataset file
@@ -125,9 +125,9 @@ public abstract class DecisionTree {
 	 * @return the root node of the decision tree
 	 */
 	public abstract TreeNode buildTree(String training, String nameFile);
-	
+
 //	/**
-//	 * Generate the decision tree by a set of training data and finding the accuracy 
+//	 * Generate the decision tree by a set of training data and finding the accuracy
 //	 * of testing the same set of data (Self-classifying)
 //	 * @param training the training dataset file
 //	 * @return the accuracy
@@ -136,18 +136,18 @@ public abstract class DecisionTree {
 //	public double findAccuracy(String training){
 //		return findAccuracy(training, training);
 //	}
-	
+
 	/**
-	 * Generate the decision tree by a set of training data and finding the accuracy 
+	 * Generate the decision tree by a set of training data and finding the accuracy
 	 * of testing the same set of data (Self-classifying)
 	 * @param training the training dataset file
 	 * @param nameFile the property file
 	 * @return the classification accuracy
 	 */
 	public abstract double findAccuracy(String training, String nameFile);
-	
+
 	/**
-	 * Generate the decision tree by a set of training data and finding the accuracy 
+	 * Generate the decision tree by a set of training data and finding the accuracy
 	 * of testing a set of testin data file
 	 * @param training the training data file
 	 * @param testing the testing data
@@ -155,8 +155,8 @@ public abstract class DecisionTree {
 	 * @return the classification accuracy
 	 */
 	public abstract double findAccuracy(String training, String testing, String nameFile);
-	
-	
+
+
 	/**
 	 * Find the classification accuracy using the given tree stored in given path
 	 * @param path the path of the tree
@@ -165,7 +165,7 @@ public abstract class DecisionTree {
 	 * @return the classification accuracy
 	 */
 	public abstract double findAccuracyByTree(String path, String testing, String nameFile);
-	
+
 	/**
 	 * Find the classification accuracy using the given tree stored in given path
 	 * @param treeRoot the tree denoted by tree root
@@ -174,7 +174,7 @@ public abstract class DecisionTree {
 	 * @return the classification accuracy
 	 */
 	protected abstract double findAccuracyByTree(TreeNode treeRoot, String testing, String nameFile);
-	
+
 	/**
 	 * Find the cross-fold validataion accuracy
 	 * @param training the training data file
@@ -230,7 +230,7 @@ public abstract class DecisionTree {
 	public void setPurity(double purity) {
 		this.purity = purity;
 	}
-	
+
 	/**
 	 * Getting the tree form the given file path
 	 * @param path the given file path
