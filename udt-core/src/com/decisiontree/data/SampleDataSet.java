@@ -27,7 +27,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.decisiontree.datagen.SampleByteArrayConvertor;
+import com.decisiontree.convertor.SampleByteArrayConvertor;
 import com.decisiontree.param.GlobalParam;
 
 /**

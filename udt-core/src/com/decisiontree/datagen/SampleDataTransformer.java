@@ -20,6 +20,7 @@
  */
 package com.decisiontree.datagen;
 
+import com.decisiontree.convertor.SampleByteArrayConvertor;
 import com.decisiontree.data.Sample;
 
 /**

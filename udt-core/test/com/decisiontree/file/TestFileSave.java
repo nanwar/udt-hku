@@ -1,8 +1,5 @@
 package com.decisiontree.file;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import com.decisiontree.build.TreeNode;
 import com.decisiontree.exceptions.DecisionTreeFileException;
 
