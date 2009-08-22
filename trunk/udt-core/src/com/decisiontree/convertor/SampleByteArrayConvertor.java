@@ -18,44 +18,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.decisiontree.build;
+package com.decisiontree.convertor;
 
 /**
  *
- * TreeUtil - Calculate tree related computations
+ * SampleByteArrayConvertor
  *
  * @author Smith Tsang
  * @since 0.9
+ *
  */
-public class TreeUtil {
+public class SampleByteArrayConvertor {
 
-	public static boolean isSingleCls(double [] clsDist){
-		int count = 0;
-		for(int i = 0; i < clsDist.length; i++){
-			if(clsDist[i] > 0) count++;
-			if(count > 1) return false;
+	public static byte[] doubleToByteArray(double d) {
+
+		byte[] b = new byte[8];
+		long l = Double.doubleToRawLongBits(d);
+		for (int i = 0; i < 8; i++) {
+			b[i] = new Long(l).byteValue();
+			l = l >> 8;
 		}
-		return true;
+		return b;
 	}
 
-	public static int findMajorityCls(double [] clsDist){
-		int max = 0;
-		for(int i = 1 ; i < clsDist.length ; i++){
-			if(clsDist[max] < clsDist[i])
-				max = i;
+
+	public static double byteArrayToDouble(byte[] b) {
+
+		long accum = 0;
+		int i = 0;
+		for (int shiftBy = 0; shiftBy < 64; shiftBy += 8) {
+			accum |= ((long) (b[i] & 0xff)) << shiftBy;
+			i++;
 		}
-		return max;
-	}
-
-	public static double findError(double [] clsDist, int majorityCls){
-
-		double count =0.0;
-		for(int i = 0 ; i < clsDist.length ; i++)
-			if(i != majorityCls)
-				count += clsDist[i];
-
-		return count;
-
+		return Double.longBitsToDouble(accum);
 	}
 
 

@@ -22,20 +22,18 @@ package com.decisiontree.eval;
 
 import org.apache.log4j.Logger;
 
-import com.decisiontree.operation.SplitSearchFactory;
-
 /**
 *
-* DispersionFactory
+* DispersionMeasureFactory
 *
 * @author Smith Tsang
 * @since 0.9
 *
 */
 public class DispersionMeasureFactory {
-	
-	public static Logger log = Logger.getLogger(SplitSearchFactory.class);
-	
+
+	public static Logger log = Logger.getLogger(DispersionMeasureFactory.class);
+
 	public static DispersionMeasure createDispersionMeasure(String dispersionStr){
 		DispersionMeasure dispersion = null;
 		if(dispersionStr == DispersionMeasure.ENTROPY)

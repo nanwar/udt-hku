@@ -35,6 +35,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.decisiontree.convertor.SampleByteArrayConvertor;
 import com.decisiontree.data.PointAttribute;
 import com.decisiontree.data.Range;
 import com.decisiontree.data.RangeAttribute;
