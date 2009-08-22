@@ -67,7 +67,7 @@ There would be a pre-compiled jar file available for you in the directory.
 Or you can compile your own jar file by the source code:
 
 mkdir <directory>
-javac -classpath lib/log4j-1.2.15.jar  src/com/decisiontree/**/*.java  -d <directory>
+javac -classpath lib/log4j-1.2.15.jar:lib/xstream-1.3.1.jar:lib/xpp3_min-1.1.4c.jar  src/com/decisiontree/**/*.java  -d <directory>
 jar cvf udt_0.9.jar -C <directory> .
 rm -r <directory>
 
@@ -82,18 +82,23 @@ The software currently consists of a command-line version.
 The program can be executed in a terminal by the following commands if your program
 jar file is named as udt_0.9.jar:
 
-java -classpath lib/log4j-1.2.15.jar:udt_0.9.jar com.decisiontree.app.UDTApp
+java -classpath lib/log4j-1.2.15.jar:lib/xstream-1.3.1.jar:lib/xpp3_min-1.1.4c.jar:udt_0.9.jar com.decisiontree.app.UDTApp
 
 The followings are the commands of the software:
 
+ -file <value>		Using properties file instead of command line arguments.
+ 					See section "Properties files".
+
+ -P <value>			same as file.
+
  -mode <value>  	The decision tree building mode. The available mode include:
-					gen		- 	Generate uncertain data.
-					build   - 	Build decision tree - getting timing and statistics.
-					buildSave -	Build decision tree and save it in a given tree.
-					testing	-	Testing test data by decision tree saved in file.
-					clean   - 	Clean generated uncertain data
+					GEN		- 	Generate uncertain data.
+					BUILD   - 	Build decision tree - getting timing and statistics.
+					BUILDSAVE -	Build decision tree and save it in a given tree.
+					TESTING	-	Testing test data by decision tree saved in file.
+					CLEAN   - 	Clean generated uncertain data
 								(The operation cannot be roll-backed!)
-					overall - 	Generate uncertain data and build the decision tree.
+					OVERALL - 	Generate uncertain data and build the decision tree.
                            	  	This mode allow result to be save in files.
 
  -m <value>			Same as -mode.
@@ -257,3 +262,8 @@ and store the result in file
 
 Note: 	Please make sure the commands are type correctly before executing the program.
 		Otherwise, it is possible to corrupt your data and results.
+
+===== Using Ant =====
+
+===== Using Properties File =====
+
