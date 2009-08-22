@@ -1,8 +1,8 @@
 /**
  * Decision Tree Classification With Uncertain Data (UDT)
- * Copyright (C) 2009, The Database Group, 
+ * Copyright (C) 2009, The Database Group,
  * Department of Computer Science, The University of Hong Kong
- * 
+ *
  * This file is part of UDT.
  *
  * UDT is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ import java.lang.management.ThreadMXBean;
 import org.apache.log4j.Logger;
 
 /**
- * 
+ *
  * Times - Measures and stores wallclock time, user time and system time.
  *
  * @author Dr. Lee Sau-dan
@@ -37,6 +37,7 @@ import org.apache.log4j.Logger;
 public class Times {
     private static final Logger log = Logger.getLogger(Times.class);
 
+    private static double SIGFIG = 1000.0;
 
     private static final ThreadMXBean threadMX =
 	ManagementFactory.getThreadMXBean();
@@ -46,7 +47,7 @@ public class Times {
     }
 
     private long cpuTime, userTime, wallclockTime;
-    
+
     /**
      * Constructor by the given Times object
      * @param that a Times object to be copied
@@ -71,12 +72,12 @@ public class Times {
 
     /**
      * Constructor fot initializing to current time
-     * 
+     *
      */
     public Times(){
     	this(true);
     }
-    
+
     /**
      * Constructor with update parameter
      * @param update true to initialize to current time, false to initialize a zero time
@@ -90,18 +91,18 @@ public class Times {
      * Get the cpu time of the system (user time + system time) in nanoseconds
      * @return the cpu time in nanoseconds
      */
-    public long getCpuTime() { 
-    	return cpuTime; 
+    public long getCpuTime() {
+    	return cpuTime;
     }
 
     /**
      * Get the user time of the system in nanoseconds
      * @return the user time in nanoseconds
      */
-    public long getUserTime() { 
-    	return userTime; 
+    public long getUserTime() {
+    	return userTime;
     }
-    
+
     /**
      * Get the system time of the system in nanoseconds
      * @return the system time in nanoseconds
@@ -114,44 +115,44 @@ public class Times {
      * Get Wallclock Time in nanosecond
      * @return the wallclock time in nanoseconds
      */
-    public long getWallclockTime() { 
-    	return wallclockTime; 
+    public long getWallclockTime() {
+    	return wallclockTime;
     }
-    
+
     /**
      * Get Wallclock Time in nseconds
      * @return the wallclock time in seconds
      */
-    public double getWallclockTimeInSeconds() { 
-    	return Math.rint(wallclockTime/1000000)/1000.0; 
+    public double getWallclockTimeInSeconds() {
+    	return Math.rint(wallclockTime/SIGFIG*SIGFIG)/SIGFIG;
     }
 
-    
+
     /**
      * Get the cpu time of the system (user time + system time)
      * @return the cpu time in seconds
      */
-    public double getCpuTimeInSeconds() { 
-    	return Math.rint(cpuTime/1000000)/1000.0; 
+    public double getCpuTimeInSeconds() {
+    	return Math.rint(cpuTime/SIGFIG*SIGFIG)/SIGFIG;
     }
 
     /**
      * Get the user time of the system
      * @return the user time in seconds
      */
-    public double  getUserTimeInSeconds() { 
-    	return Math.rint(userTime/1000000)/1000.0; 
+    public double  getUserTimeInSeconds() {
+    	return Math.rint(userTime/SIGFIG*SIGFIG)/SIGFIG;
     }
-    
+
     /**
      * Get the system time of the system
      * @return the system time in seconds
      */
     public double getSystemTimeInSeconds(){
-    	return getCpuTimeInSeconds() - getUserTimeInSeconds();
+    	return Math.rint((getCpuTimeInSeconds() - getUserTimeInSeconds())*SIGFIG)/SIGFIG;
     }
 
-    
+
     /**
      * Set the Times to current time
      *
@@ -171,7 +172,7 @@ public class Times {
 		userTime -= times.userTime;
 		wallclockTime -= times.wallclockTime;
     }
-    
+
     /**
      * Find the difference of the current time and another time and store in a new Time
      * @param oldTimes the reference times
@@ -182,7 +183,7 @@ public class Times {
     	difference.subtract(oldTimes);
     	return difference;
     }
-    
+
     /**
      *  Print wallclock time, user time and system time in seconds
      *
