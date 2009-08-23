@@ -41,28 +41,28 @@ And in Bibtex.
    }
 
 
-For enquires on the software, you can contact through email to Smith Tsang by
+For enquiries on the software, you can contact through email to Smith Tsang by
 pktsang@cs.hku.hk or smithtsang@gmail.com.
 
 
 ==== System Requirements ====
 The software is recommended to run on a system of the following requirements
-- Intel Pentinum 4 PC or above
+- Intel Pentium 4 PC or above
 - 2GB or above of main memory
-- Linux System, e.g. Ubuntu Linux 8.04.
+- Linux System, e.g., Ubuntu Linux 8.04.
 - Sun JavaSE JDK 6.0
 If you are experienced out of memory error during execution for Java VM, you may increase
-the heap size of the Java VM using -Xms and -Xmx VM arguments. (e.g. java -Xms512m -Xmx1024m <program>)
+the heap size of the Java VM using -Xms and -Xmx VM arguments. (e.g., java -Xms512m -Xmx1024m <program>)
 For details, please refer to Sun JavaSE documentations.
 
 ==== Installing the Software ====
 To install the software is simple. After you download the software (e.g., UDT_0.9.tar.gz),
-extract it by using a unpacking software or by the following command in a linux terminal
+extract it by using a unpacking software or by the following command in a Linux terminal
 (make sure in the terminal, you are in the directory of your software, e.g. the home directory ~/)
 
 tar -xzvf UDT_0.9.tar.gz <directory>
 
-You may unpack the software in any directory you want, e.g. in '~/UDT_0.9'.
+You may unpack the software in any directory you want, e.g., in '~/UDT_0.9'.
 There would be a pre-compiled jar file available for you in the directory.
 Or you can compile your own jar file by the source code:
 
@@ -135,19 +135,19 @@ The followings are the commands of the software:
  -a <value>			Same as -algorithm.
 
 
-The commands for build and overall mode.
+The commands for BUIL and OVERALL mode.
 
  -type <value>		The build type of the software
- 					xfold 			- 	Doing cross-fold validation for dataset and return the accuracy
- 					accuracy 		- 	Build the decision tree using the dataset
+ 					XFOLD 			- 	Doing cross-fold validation for dataset and return the accuracy
+ 					ACCURACY 		- 	Build the decision tree using the dataset
  										and get the accuracy using the training set.
- 					time (or build) - 	Build the decision tree, record the building time informations
+ 					TIME			 - 	Build the decision tree, record the building time informations
  										and number of entropy calculations.
  										(Printing and store the decision tree is currently NOT available.)
 
  -t <value>			Same as -type
 
- The commands for build, buildsave and overall mode.
+ The commands for BUILD, BUILDSAVE and OVERALL mode.
 
  -nodesize <value>	The pruning node size of pre-pruning. The decision tree building would stop if
  					the node size is smaller than or equal to the given value.
@@ -159,9 +159,9 @@ The commands for build and overall mode.
 
  -p <value>			Same as -purity.
 
-The commands for buildsave and testing mode.
+The commands for BUILDSAVE and TESTING mode.
 
- -tree <value>		The file name to save the build tree (for buildsave mode) or that saved the tree
+ -tree <value>		The file name to save the build tree (for BUILDSAVE mode) or that saved the tree
  					(for testing mode).
 
 The commands for gen and overall mode.
@@ -181,7 +181,37 @@ The commands for overall mode ONLY.
 
  -t <value>			Same as -trial.
 
- -save <value>		Saving the result in a file given.
+ -save <value>		The file to save the result.
+ 
+===== Using Properties File =====
+Instead of writing a long list of command line arguments, you may use properties file instead.  
+The properties file is a text file represented by a number of lines. Each line is of the following format.
+
+<name>=<value>
+
+where <name> is the properties name and value is the value given to that property.
+Here is the list of properties name that can use for the program, each represent an argument.
+
+udt.mode		the mode of the program, e.g., OVERALL 
+udt.dataset 	the dataset file to be use, e.g., datasets/iris/iris (no .data is needed)
+udt.testset  	the test dataset if needed, e.g., datasets/pen/test  (no .data is needed)
+udt.property  	the dataset properties file, e.g., datasets/iris/iris (no .name is needed)
+udt.nosamples  	the number of samples, e.g., 100
+udt.algorithm  	the algorithm to be used for tree building, e.g., UDTES
+udt.type		the build type of the program, e.g, TIME
+udt.nodesize	the pruning node size of pre-pruning, e.g., 1
+udt.purity		the pruning purity of the node of pre-pruning, e.g., 0.99
+udt.tree		the file to save the tree, e.g., tree/tree.udt (any accessible path)
+udt.width		the width of the generated interval relative to domain size, e.g., 0.01
+udt.seed		the seed value to generate the Gaussian samples for the intervals, e.g., 100
+udt.trial		the number of trials of tree building
+udt.save		the file to save tree building result, e.g., result/result.rst
+
+To use run.properties as the properties file, use the following command line arguments:
+-file run.properties
+
+Other arguments would be ignored if -file/ -P is issued.
+Please make sure the values are typed correctly, otherwise unexpected output would occur.
 
 ==== Pre-structured Datasets ====
 There 10 pre-structured datasets: (Please refer to the ICDE paper for more details).
@@ -208,16 +238,16 @@ School of Information and Computer Science.
 
 
 ==== File Format for dataset ====
-Propery file: (.name)
-The first line would be the class sepeated by comma (e.g., play, not play).
+Property file: (.name)
+The first line would be the class separated by comma (e.g., play, not play).
 The each line from the second line would represent an attribute. The attribute name would come first
 while the attribute values would come after the colon. If the attribute is continuous, a keyword continuous
 should be written after the colon. If it is a categorical attribute (NOT IMPLEMETED), the attribute
-values are seperated by comma. (e.g. Temperature:continuous or Outlook:Smart,Sporty,Formal)
+values are separated by comma. (e.g. Temperature:continuous or Outlook:Smart,Sporty,Formal)
 The number of classes and attribute are not restricted.
 
 Dataset file:
-Each line represents a tuple, each attribute is comma seperated, the last value is the class label of the tuple
+Each line represents a tuple, each attribute is comma separated, the last value is the class label of the tuple
 (e.g., Smart,0.05,2.4,play represents the tuple having 3 attributes, with the first one is categorical,
 the second and third one are point-valued.)
 
@@ -234,36 +264,55 @@ Sample dataset (.sample) - 	Same as .range, but sample data has the samples for 
 							the last sample in each file would be of weight of 1.0. The name of the sample for each attribute
 							value is 'TiAj' where i is the tuple number and j is the attribute number.
 
-Nore: 	The sample data transformer is currently unavailable, but will be added for future release.
+Note: 	The sample data transformer is currently unavailable, but will be added for future release.
 
 ==== Execution Examples ====
-
 Generating interval-valued sample-distributed data for iris dataset of relative width of 0.1 and of 100 samples:
-	-dataset datasets/iris/iris -property dataset/iris/iris -mode gen -width 0.1 -algorithmn UDT -sample 100 -seed 20
+	-dataset datasets/iris/iris -property dataset/iris/iris -mode GEN -width 0.1 -algorithm UDT -sample 100 -seed 20
 
 Building interval-valued sample-distributed data for vehicle dataset (of 100 samples) using cross-fold validation.
-	-dataset datasets/vehicle/vehicle -property datasets/vehicle/vehicle -mode build -type xfold -algorithm UDTES
+	-dataset datasets/vehicle/vehicle -property datasets/vehicle/vehicle -mode BUILD -type XFOLD -algorithm UDTES
 	-nodesize 1 -threshold 0.99
 
 Building and Saving tree of interval-valued sample-distributed data for seg dataset (of 100 samples)
-	-dataset datasets/seg/seg -property dataset/seg/seg -mode buildsave -algorithm UDTES -nodesize 5 -threshold 0.95 -tree tree/seg1.udt
+	-dataset datasets/seg/seg -property dataset/seg/seg -mode BUILDSAVE -algorithm UDTES -nodesize 5 -threshold 0.95 -tree tree/seg1.udt
 
 Testing tree of interval-valued sample-distributed data for glass dataset (assume the file tree/glass1.udt exists)
 	-dataset datasets/glass/glass -property datasets/glass/glass -algorithm UDT -tree tree/glass1.udt
 
 Cleaning interval-valued sample-distributed data for iris dataset using cross-fold validation
-	-dataset datasets/iris/iris -mode clean -algorithm UDT
+	-dataset datasets/iris/iris -mode CLEAN -algorithm UDT
 
 Overall mode for interval-valued sample-distributed data for vehicle dataset using accuracy running 50 times
 and store the result in file
-	-dataset datasets/pen/pen -test datasets/pen/test -property dataset/pen/pen -mode overall -type accuracy -algorithm UDT
+	-dataset datasets/pen/pen -test datasets/pen/test -property dataset/pen/pen -mode OVERALL -type ACCURACY -algorithm UDT
 	-sample 100 -nodesize 1 -threshold 0.99 -seed 500 -width 0.05 -trial 50 -save result/result.rst
 
 
 Note: 	Please make sure the commands are type correctly before executing the program.
 		Otherwise, it is possible to corrupt your data and results.
 
+
 ===== Using Ant =====
+You may use Ant as an aid to do compile, clean and run the program.
 
-===== Using Properties File =====
+The followings are the commands:
+ant build compile		compile classes
+ant build jar			build jar file, done with compile
+ant build run			run the program, done with compile and jar
+ant build cleanjar		clean jar file
+ant build cleangen		clean generated uncertain data.
+ant build				default command, represent clean with run
 
+Command line arguments for run, default
+-Dargs="<arguments>"	<arguments> are command line arguments of the program
+-Dvmarg="<arguments>"	<arguments> are JVM arguments, e.g., setting max heap size -Xmx512m as 512mb
+
+Command line arguments for cleangen:
+-Ddata.dir=<value>		<value> is the directory where database data are placed (default: datasets/)
+-Ddata.jap=<value>		<value> is the directory of japaneseVowel that should not be removed. (default: japaneseVowel/)
+
+Command line arguments for jar and cleanjar
+-Djar.dir=<value>		<value> is the directory of the jar file (default: current directory)
+
+You may modified build.xml for modified or new commands.
