@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="udt-core" basedir="." default="main">
+<project name="udt-0.9" basedir="." default="main">
     <description>
         UDT Version 0.9 Build file
     </description>
