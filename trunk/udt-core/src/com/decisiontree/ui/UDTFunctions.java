@@ -42,7 +42,7 @@ import com.decisiontree.param.GlobalParam;
 
 /**
  *
- * UDTFunctions
+ * UDTFunctions - as an interface to assist UDTApp to run the programs
  *
  * @author Smith Tsang
  * @since 0.9
