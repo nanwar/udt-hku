@@ -17,7 +17,7 @@
 	<property name="data.dir"	 value="datasets"/>
 	<property name="data.jap"	 value="japaneseVowel" />
 
-	<property name="arguments" 	 value="" />
+	<property name="args" 	 value="" />
 	<property name="vmargs" 	 value="" />
 
 	<path id="classpath">
@@ -79,7 +79,7 @@
                 <path location="${jar.dir}/${ant.project.name}.jar"/>
             </classpath>
         	<jvmarg line="${vmargs}" />
-            <arg line="${arguments}" />
+            <arg line="${args}" />
         </java>
     </target>
 
