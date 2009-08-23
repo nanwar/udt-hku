@@ -37,77 +37,28 @@ import com.decisiontree.exceptions.DecisionTreeFileException;
 import com.thoughtworks.xstream.XStream;
 
 /**
- * 
+ *
  * DecisionTreeStorage - saving the tree and reading the tree from files.
- * 
+ *
  * @author Smith Tsang
  * @since 0.9
  *
  */
 public class DecisionTreeStorage {
-	
-//	private TreeNodeExtended convertTreetoTreeWrapper(TreeNodeExtended tree, int number){
-//
-//		if(tree == null) return null;
-//
-//		TreeNodeExtended treeWrapper = new TreeNodeExtended(tree, number);
-//		if(tree.getType() == TreeNode.LEAF){
-//			return treeWrapper;
-////			treeWrapper.setParentNum(tree.getParent());
-//		}
-//		for(int i = 0; i < tree.getNoChildren(); i++){
-//			int childNum = number*tree.getNoChildren()+i;
-//			TreeNodeExtended childNode = convertTreetoTreeWrapper(tree.getChild(i), childNum);
-//			childNode.setParentNum(number);
-//			treeWrapper.addChild(childNum);
-//		}
-//		
-//		return treeWrapper;
-//	}
-	
-	
-//	private Map<Integer, TreeNodeExtended> convertTreeWrapperToWrapperMap(TreeNodeExtended treeWrapper){
-//		Map<Integer,TreeNodeExtended> treeMap = new TreeMap<Integer, TreeNodeExtended>();
-//		
-//		treeMap.put(treeWrapper.getNodeNum(), treeWrapper);
-//		
-//		return treeMap;
-//	}
 
-	
 	private XStream xstream = new XStream();
 	private static Logger log = Logger.getLogger(DecisionTreeStorage.class);
-	
-//	private void convertTreeToMap(Map<Integer, TreeNode> treeNodeMap, 
-//			TreeNode tree, int number){
-//		if(treeNodeMap == null)
-//			return;
-//		treeNodeMap.put(number, tree);
-//		if(tree.getType() == TreeNode.LEAF){
-//			return;
-//		}
-//		for(int i = 0; i < tree.getNoChildren(); i++){
-//			TreeNode childTree = tree.getChild(i);
-//			convertTreeToMap(treeNodeMap, childTree, number* tree.getNoChildren() + i);
-//		}
-//	}
-//	
-//	private Map<Integer, TreeNode> getTreeMap(TreeNode tree){
-//		Map<Integer,TreeNode> treeMap = new TreeMap<Integer, TreeNode>();
-//
-//		convertTreeToMap(treeMap,tree,1);
-//		return treeMap;
-//	}
+
 
 	private void creatFileAndDirectory(String fileName) throws IOException{
 		File file = new File(fileName);
 		if(!file.exists()){
-			if(file.getParentFile()!= null) 
+			if(file.getParentFile()!= null)
 				file.getParentFile().mkdirs();
 			file.createNewFile();
 		}
 	}
-	
+
 	public void saveTreeToFile(String fileName, TreeNode tree) throws DecisionTreeFileException{
 
 		try{
@@ -118,9 +69,9 @@ public class DecisionTreeStorage {
 			throw new DecisionTreeFileException(e);
 		}
 	}
-	
+
 	private void saveTreeToWriter(OutputStream outputStream, TreeNode tree) throws DecisionTreeFileException{
-		
+
 		ObjectOutputStream out = null;
 		try{
 			out = xstream.createObjectOutputStream(outputStream);
@@ -136,9 +87,9 @@ public class DecisionTreeStorage {
 			}
 		}
 	}
-	
+
 	public TreeNode readTreeFromFile(String fileName) throws DecisionTreeFileException{
-		
+
 		try {
 			return readTreeFromReader(new FileInputStream(fileName));
 		} catch (FileNotFoundException e) {
@@ -146,8 +97,8 @@ public class DecisionTreeStorage {
 			throw new DecisionTreeFileException(e);
 		}
 	}
-	
-	public TreeNode readTreeFromReader(InputStream inputStream) throws DecisionTreeFileException{
+
+	private TreeNode readTreeFromReader(InputStream inputStream) throws DecisionTreeFileException{
 
 		ObjectInputStream in = null ;
 		try{
@@ -164,10 +115,10 @@ public class DecisionTreeStorage {
 				if(in!=null) in.close();
 			}catch(IOException e){
 				log.error(e.getMessage(),e);
-				throw new DecisionTreeFileException(e);				
+				throw new DecisionTreeFileException(e);
 			}
 		}
-		
+
 	}
-	
+
 }
