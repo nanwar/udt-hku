@@ -55,15 +55,6 @@ class UDTApp {
 	private static final String TESTING = "TESTING";
 	private static final String CLASSIFY = "CLASSIFY";
 
-//
-//	private static final String GENMODE = "gen";
-//	private static final String BUILDMODE = "build";
-//	private static final String BUILDSAVEMODE = "buildsave";
-//	private static final String OVERALLMODE = "overall";
-//	private static final String TESTINGMODE = "testing";
-//	private static final String CLASSIFYMODE = "classify";
-//	private static final String CLEANMODE = "clean";
-
 	private static final int NOTRIALS = 1;
 
 	// default values
