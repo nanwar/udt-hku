@@ -15,7 +15,7 @@
 	<property name="lib.dir"     value="lib"/>
 
 	<property name="data.dir"	 value="datasets"/>
-	<property name="data.jap"	 value="japaneseVowel" />
+	<property name="data.jap"	 value="japan" />
 
 	<property name="args" 	 value="" />
 	<property name="vmargs" 	 value="" />
