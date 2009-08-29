@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="udt-0.9" basedir="." default="main">
+    <description>
+        UDT Version 0.9 Build file
+    </description>
+
+    <property name="src.dir"     value="src"/>
+
+    <property name="build.dir"   value="target"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir"     value="."/>
+
+    <property name="main-class"  value="com.decisiontree.app.UDTApp"/>
+
+	<property name="lib.dir"     value="lib"/>
+
+	<property name="data.dir"	 value="datasets"/>
+	<property name="data.jap"	 value="japan" />
+
+	<property name="args" 	 value="" />
+	<property name="vmargs" 	 value="" />
+
+	<path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+
+	<!-- clean class files -->
+    <target name="clean">
+        <delete dir="${build.dir}" includeemptydirs="true"/>
+    </target>
+
+	<!-- compile class -->
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+    </target>
+
+	<!-- creating jar package -->
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+	<!-- remove the generated data -->
+	<target name="cleangen">
+        <delete dir="${data.dir}" includeemptydirs="true">
+        	<exclude name="**/${data.jap}/**/*" />
+        	<exclude name="**/**/*.data" />
+        	<exclude name="**/**/*.names" />
+        	<exclude name="**/**/*.test"/>
+        </delete>
+	</target>
+
+	<!-- remove the generated jar -->
+	<target name="cleanjar">
+		<delete file="${jar.dir}/${ant.project.name}.jar" />
+	</target>
+
+	<!-- just a test -->
+    <target name="testrun" depends="jar">
+        <java fork="true" classname="${main-class}">
+            <classpath>
+                <path refid="classpath"/>
+                <path location="${jar.dir}/${ant.project.name}.jar"/>
+            </classpath>
+        </java>
+    </target>
+
+	<!-- run the program -->
+    <target name="run" depends="jar">
+        <java fork="true" classname="${main-class}">
+            <classpath>
+                <path refid="classpath"/>
+                <path location="${jar.dir}/${ant.project.name}.jar"/>
+            </classpath>
+        	<jvmarg line="${vmargs}" />
+            <arg line="${args}" />
+        </java>
+    </target>
+
+	<!-- clean and build jar-->
+    <target name="clean-build" depends="clean,jar"/>
+
+	<!-- main -->
+    <target name="main" depends="clean, run"/>
+
+</project>
