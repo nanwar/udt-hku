@@ -41,7 +41,7 @@ And in Bibtex.
    }
 
 
-For enquiries on the software, you can contact through email to Smith Tsang by
+For enquiries on the software, you may contact through email to Smith Tsang by
 pktsang@cs.hku.hk or smithtsang@gmail.com.
 
 
@@ -51,13 +51,13 @@ The software is recommended to run on a system of the following requirements
 - 2GB or above of main memory
 - Linux System, e.g., Ubuntu Linux 8.04.
 - Sun JavaSE JDK 6.0
-If you are experienced out of memory error during execution for Java VM, you may increase
-the heap size of the Java VM using -Xms and -Xmx VM arguments. (e.g., java -Xms512m -Xmx1024m <program>)
+If you experience out of memory error during the execution for Java VM, you may increase
+the heap size of the Java VM using the -Xms and -Xmx VM arguments. (e.g., java -Xms512m -Xmx1024m <program>)
 For details, please refer to Sun JavaSE documentations.
 
 ==== Installing the Software ====
 To install the software is simple. After you download the software (e.g., UDT_0.9.tar.gz),
-extract it by using a unpacking software or by the following command in a Linux terminal
+extract it by using an unpacking software or by the following command in a Linux terminal
 (make sure in the terminal, you are in the directory of your software, e.g. the home directory ~/)
 
 tar -xzvf UDT_0.9.tar.gz <directory>
@@ -135,7 +135,7 @@ The followings are the commands of the software:
  -a <value>			Same as -algorithm.
 
 
-The commands for BUIL and OVERALL mode.
+The commands for BUILD and OVERALL mode.
 
  -type <value>		The build type of the software
  					XFOLD 			- 	Doing cross-fold validation for dataset and return the accuracy
@@ -315,4 +315,4 @@ Command line arguments for cleangen:
 Command line arguments for jar and cleanjar
 -Djar.dir=<value>		<value> is the directory of the jar file (default: current directory)
 
-You may modified build.xml for modified or new commands.
+You may modify build.xml for modified or new commands.
